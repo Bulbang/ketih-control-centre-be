@@ -4,7 +4,8 @@ import httpEventNormalizer from '@middy/http-event-normalizer'
 import httpHeaderNormalizer from '@middy/http-header-normalizer'
 import middyJsonBodyParser from '@middy/http-json-body-parser'
 import { Handler } from 'aws-lambda'
-import { apiResponseBuilder } from './apiResponseBuilder'
+import { apiGatewayResponseBuilder } from './apiGatewayResponseBuilder'
+import { apiGatewayErrorHandler } from './apiResponseBuilder'
 
 export const middyfy = (handler: Handler) => {
     return middy(handler)
@@ -12,5 +13,6 @@ export const middyfy = (handler: Handler) => {
         .use(doNotWaitForEmptyEventLoop())
         .use(httpEventNormalizer())
         .use(httpHeaderNormalizer())
-        .use(apiResponseBuilder())
+        .use(apiGatewayErrorHandler())
+        .use(apiGatewayResponseBuilder())
 }

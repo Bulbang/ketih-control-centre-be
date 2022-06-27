@@ -7,7 +7,7 @@ const serverlessConfiguration: AWS = {
   frameworkVersion: '3',
   plugins: ['serverless-esbuild'],
   provider: {
-    stage: "dev",
+    stage: '${opt:stage, "dev"}',
     name: 'aws',
     runtime: 'nodejs14.x',
     apiGateway: {

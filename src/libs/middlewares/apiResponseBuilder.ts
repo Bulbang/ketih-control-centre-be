@@ -2,7 +2,7 @@ import { isBoom } from '@hapi/boom'
 import middy from '@middy/core'
 import { APIGatewayProxyResult } from 'aws-lambda'
 
-export const apiResponseBuilder = <
+export const apiGatewayErrorHandler = <
     TEvent,
     TResponse extends APIGatewayProxyResult,
 >(
@@ -13,17 +13,6 @@ export const apiResponseBuilder = <
     }
 
     const options = Object.assign({}, defaults, opts)
-    const after: middy.MiddlewareFn<TEvent, APIGatewayProxyResult> = async (
-        handler,
-    ) => {
-        if (!handler.response.statusCode) {
-            const { response } = handler
-            handler.response = {
-                statusCode: 200,
-                body: JSON.stringify(response),
-            }
-        }
-    }
     const onError: middy.MiddlewareFn<TEvent, TResponse> = async (handler) => {
         const { error } = handler
         if (typeof options.logger === 'function') {
@@ -45,6 +34,5 @@ export const apiResponseBuilder = <
     }
     return {
         onError,
-        after,
     }
 }
