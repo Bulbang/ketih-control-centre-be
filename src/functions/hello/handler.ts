@@ -10,7 +10,7 @@ const hello: ValidatedEventAPIGatewayProxyEvent<
     // throw badRequest('Error handling test')
     
     return {
-        message: `Hello World!`,
+                message: `Hello World!`,
         eventBody: event.body,
     }
 }
