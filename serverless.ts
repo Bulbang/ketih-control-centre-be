@@ -3,7 +3,7 @@ import type { AWS } from '@serverless/typescript';
 import hello from '@functions/hello';
 
 const serverlessConfiguration: AWS = {
-  service: 'ketih-control-centre-be',
+  service: 'keith-control-centre-be',
   frameworkVersion: '3',
   plugins: ['serverless-esbuild'],
   provider: {
