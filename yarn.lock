@@ -32,6 +32,18 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
+"@hapi/boom@^10.0.0":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@hapi/boom/-/boom-10.0.0.tgz#3624831d0a26b3378423b246f50eacea16e04a08"
+  integrity sha512-1YVs9tLHhypBqqinKQRqh7FUERIolarQApO37OWkzD+z6y6USi871Sv746zBPKcIOBuI6g6y4FrwX87mmJ90Gg==
+  dependencies:
+    "@hapi/hoek" "10.x.x"
+
+"@hapi/hoek@10.x.x":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-10.0.0.tgz#b17be58febab7dbc60cde5f522da197ccde12713"
+  integrity sha512-CeNFz1JcLZ5xE8Vc9aau37cgHw9bxXqSDK/D55GF2GAOv0n0XjyyjSodHtKahB7A1tV3FlgCpijp3zkSITmBdA==
+
 "@humanwhocodes/config-array@^0.9.2":
   version "0.9.5"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.9.5.tgz#2cbaf9a89460da24b5ca6531b8bbfc23e1df50c7"
@@ -80,6 +92,21 @@
   version "2.5.7"
   resolved "https://registry.yarnpkg.com/@middy/core/-/core-2.5.7.tgz#a1b3eff68881ff66b14b5051255791f7cbd3b471"
   integrity sha512-KX5Ud0SP+pol6PGkYtMCH4goHobs1XJo3OvEUwdiZUIjZgo56Q08nLu5N7Bs6P+FwGTQHA+hlQ3I5SZbfpO/jg==
+
+"@middy/do-not-wait-for-empty-event-loop@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@middy/do-not-wait-for-empty-event-loop/-/do-not-wait-for-empty-event-loop-3.1.0.tgz#93ee2c512dbee77e9ba4e7d84087d47519e396e2"
+  integrity sha512-WsLTlT2nJn3bxfHISeT9xTTgUnXteB6OjRbJ3lM2uOt/GOIIMBDYE8ilrxgMVuUUfSxrrYhv3oyZusNAWH8yxA==
+
+"@middy/http-event-normalizer@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@middy/http-event-normalizer/-/http-event-normalizer-3.1.0.tgz#355c0b8888fa4e3281b8a12cdb4a6cc8d8e858f6"
+  integrity sha512-sJN/7rseLdD/axC8zxzp6ivucehXGO5lZhY1i1/2oyw5ufCEnwGCIpFvY9lKjl2QYf9N4M16sXXv86U0cXQh7w==
+
+"@middy/http-header-normalizer@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@middy/http-header-normalizer/-/http-header-normalizer-3.1.0.tgz#68e570092db8ca258b9de96be0c1199600fb9e76"
+  integrity sha512-7ppM08uJTaS7ZSn++1xPw+HyAa/DVpN/glfv/4VusxJkSKCGKTdzlZNExrFnzhgZGyDFG0+jx1EIr6WBpjRzmQ==
 
 "@middy/http-json-body-parser@^2.5.3":
   version "2.5.7"

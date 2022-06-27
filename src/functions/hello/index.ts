@@ -4,6 +4,7 @@ import { LambdaConfig } from '@declarations/aws/funcs'
 
 const hello: LambdaConfig = {
     handler: `${handlerPath(__dirname)}/handler.main`,
+    
     events: [
         {
             http: {
@@ -14,9 +15,11 @@ const hello: LambdaConfig = {
                         'application/json': schema,
                     },
                 },
+                cors:true
             },
         },
     ],
+    
 }
 
 export default hello

@@ -1,16 +1,14 @@
-import type { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
-import { formatJSONResponse } from '@declarations/aws/api-gateway'
-import { middyfy } from '@libs/lambda'
+import type { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway';
+import { badRequest } from '@hapi/boom';
+import { middyfy } from '@libs/middlewares/middyfy';
+import schema from './schema';
 
-import schema from './schema'
+const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema, {message: string}> = async (event) => {
+  throw badRequest("Error handling test")
+  return {
+        message: `Hello World!`,
+        eventBody: event.body
+  };
+};
 
-const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
-    event,
-) => {
-    return formatJSONResponse({
-        message: `Hello ${event.body.name}, welcome to the exciting Serverless world!`,
-        event,
-    })
-}
-
-export const main = middyfy(hello)
+export const main = middyfy(hello);
