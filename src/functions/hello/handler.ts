@@ -7,7 +7,6 @@ const hello: ValidatedEventAPIGatewayProxyEvent<
     typeof schema,
     { message: string }
 > = async (event) => {
-
     // throw badRequest('Error handling test')
     return {
         message: `Hello World!`,

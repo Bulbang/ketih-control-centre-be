@@ -7,6 +7,15 @@
         "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}'",
         "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}'"
     },
+    "husky": {
+        "hooks": {
+          "pre-commit": "lint-staged"
+        }
+      },
+    "lint-staged": {
+        "**/*.{js,ts,json}": ["yarn lint", "yarn format"]
+    },
+
     "eslintConfig": {
         "root": true,
         "extends": [
@@ -37,6 +46,7 @@
         "eslint-config-typescript": "^3.0.0",
         "husky": "^8.0.1",
         "json-schema-to-ts": "^1.5.0",
+        "lint-staged": "^13.0.3",
         "prettier": "^2.7.1",
         "serverless": "^3.0.0",
         "serverless-esbuild": "^1.23.3",
