@@ -4,6 +4,7 @@
     "description": "Serverless aws-nodejs-typescript template",
     "main": "serverless.ts",
     "scripts": {
+        "husky-configure": "yarn husky install && yarn husky add .husky/pre-commit \"yarn --no-install lint-staged\"",
         "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}'",
         "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}'"
     },
