@@ -1,8 +1,10 @@
 import type { AWS } from '@serverless/typescript';
 
 import hello from '@functions/hello';
+import resources from './resources'
 
 const serverlessConfiguration: AWS = {
+  useDotenv: true,
   service: 'keith-control-centre-be',
   frameworkVersion: '3',
   plugins: ['serverless-esbuild'],
@@ -21,8 +23,10 @@ const serverlessConfiguration: AWS = {
   },
   // import the function via paths
   functions: { hello },
+  resources,
   package: { individually: true },
   custom: {
+    prefix: "${self:service}-${self:provider.stage}",
     esbuild: {
       bundle: true,
       minify: false,
