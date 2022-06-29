@@ -6,7 +6,11 @@
     "scripts": {
         "husky-configure": "yarn husky install && yarn husky add .husky/pre-commit \"yarn --no-install lint-staged\"",
         "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}'",
-        "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}'"
+        "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}'",
+        "migration:generate": "sh ./sh/migration-create.sh ./src/db/migrations",
+        "migration:run:to-latest": "ts-node src/db/migrateToLatest.ts",
+        "migration:run:up": "ts-node src/db/migrateUp.ts",
+        "migration:run:down": "ts-node src/db/migrateDown.ts"
     },
     "husky": {
         "hooks": {
@@ -34,7 +38,9 @@
         "@middy/do-not-wait-for-empty-event-loop": "^3.1.0",
         "@middy/http-event-normalizer": "^3.1.0",
         "@middy/http-header-normalizer": "^3.1.0",
-        "@middy/http-json-body-parser": "^2.5.3"
+        "@middy/http-json-body-parser": "^2.5.3",
+        "kysely": "^0.19.6",
+        "mysql2": "^2.3.3"
     },
     "devDependencies": {
         "@serverless/typescript": "^3.0.0",
