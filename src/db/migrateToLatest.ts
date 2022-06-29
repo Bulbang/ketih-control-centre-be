@@ -1,3 +1,3 @@
-import { migrateToLatest } from "./migrator";
+import { migrateToLatest } from './migrator'
 
 migrateToLatest()

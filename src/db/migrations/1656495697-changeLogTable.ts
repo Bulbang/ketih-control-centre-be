@@ -11,7 +11,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn('change_log_type', 'integer', (col) => col.notNull())
         .addColumn('change_log_status', 'integer', (col) => col.notNull())
         .addColumn('entity_id', 'integer', (col) => col)
-                                        .addColumn('record_id', 'integer', (col) => col.notNull())
+        .addColumn('record_id', 'integer', (col) => col.notNull())
         .addColumn('type_id', 'integer', (col) => col)
         .addColumn('log_detail', 'text', (col) => col.notNull())
         .addColumn('last_modified', 'timestamp', (col) => col.notNull())

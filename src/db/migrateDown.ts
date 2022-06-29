@@ -1,3 +1,3 @@
-import { migrateDown } from "./migrator";
+import { migrateDown } from './migrator'
 
 migrateDown()

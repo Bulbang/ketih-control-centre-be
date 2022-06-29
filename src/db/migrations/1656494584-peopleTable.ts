@@ -2,7 +2,8 @@ import { Kysely } from 'kysely'
 
 export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
-        .createTable('people').ifNotExists()
+        .createTable('people')
+        .ifNotExists()
         .addColumn('people_id', 'integer', (col) =>
             col.primaryKey().autoIncrement(),
         )
@@ -18,17 +19,11 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn('middle_name', 'varchar(100)', (col) => col)
         .addColumn('prefix', 'varchar(100)', (col) => col)
         .addColumn('suffix', 'varchar(100)', (col) => col)
-        .addColumn('phone_number_mobile', 'varchar(100)', (col) =>
-            col,
-        )
+        .addColumn('phone_number_mobile', 'varchar(100)', (col) => col)
         .addColumn('phone_number_home', 'varchar(100)', (col) => col)
         .addColumn('sms_allowed', 'boolean', (col) => col.notNull())
-        .addColumn('email_address_home', 'varchar(100)', (col) =>
-            col,
-        )
-        .addColumn('email_address_work', 'varchar(100)', (col) =>
-            col,
-        )
+        .addColumn('email_address_home', 'varchar(100)', (col) => col)
+        .addColumn('email_address_work', 'varchar(100)', (col) => col)
         .addColumn('manager', 'varchar(100)', (col) => col)
         .addColumn('business_unit', 'varchar(100)', (col) => col)
         .addColumn('business_function', 'varchar(100)', (col) => col)

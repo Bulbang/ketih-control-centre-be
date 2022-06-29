@@ -2,16 +2,16 @@ import { Database } from '@declarations/db/tables'
 import { FileMigrationProvider, Kysely, Migrator, MysqlDialect } from 'kysely'
 import { createPool } from 'mysql2'
 import { promises } from 'fs'
-import {join} from 'path'
+import { join } from 'path'
 
 const db = new Kysely<Database>({
     dialect: new MysqlDialect({
         pool: createPool({
-            database: "railway",
-            host: "containers-us-west-68.railway.app",
-            password: "CCgYOYMKZxaACLDxHvUQ",
-            user: "root",
-            port: 6873
+            database: 'railway',
+            host: 'containers-us-west-68.railway.app',
+            password: 'CCgYOYMKZxaACLDxHvUQ',
+            user: 'root',
+            port: 6873,
         }),
     }),
 })
@@ -19,7 +19,7 @@ const migrator = new Migrator({
     db,
     provider: new FileMigrationProvider({
         fs: promises,
-        path: {join},
+        path: { join },
         migrationFolder: './src/db/migrations',
     }),
 })
@@ -28,19 +28,21 @@ export const migrateToLatest = async () => {
     const { error, results } = await migrator.migrateToLatest()
 
     results?.forEach((it) => {
-      if (it.status === 'Success') {
-        console.log(`Migration "${it.migrationName}" was executed successfully`)
-      } else if (it.status === 'Error') {
-        console.error(`Failed to execute migration "${it.migrationName}"`)
-      }
+        if (it.status === 'Success') {
+            console.log(
+                `Migration "${it.migrationName}" was executed successfully`,
+            )
+        } else if (it.status === 'Error') {
+            console.error(`Failed to execute migration "${it.migrationName}"`)
+        }
     })
-  
+
     if (error) {
-      console.error('Failed to migrate')
-      console.error(error)
-      process.exit(1)
+        console.error('Failed to migrate')
+        console.error(error)
+        process.exit(1)
     }
-  
+
     await db.destroy()
 }
 
@@ -48,19 +50,21 @@ export const migrateUp = async () => {
     const { error, results } = await migrator.migrateUp()
 
     results?.forEach((it) => {
-      if (it.status === 'Success') {
-        console.log(`Migration up "${it.migrationName}" was executed successfully`)
-      } else if (it.status === 'Error') {
-        console.error(`Failed to execute migration "${it.migrationName}"`)
-      }
+        if (it.status === 'Success') {
+            console.log(
+                `Migration up "${it.migrationName}" was executed successfully`,
+            )
+        } else if (it.status === 'Error') {
+            console.error(`Failed to execute migration "${it.migrationName}"`)
+        }
     })
-  
+
     if (error) {
-      console.error('Failed to migrate')
-      console.error(error)
-      process.exit(1)
+        console.error('Failed to migrate')
+        console.error(error)
+        process.exit(1)
     }
-  
+
     await db.destroy()
 }
 
@@ -68,18 +72,20 @@ export const migrateDown = async () => {
     const { error, results } = await migrator.migrateDown()
 
     results?.forEach((it) => {
-      if (it.status === 'Success') {
-        console.log(`Migration down "${it.migrationName}" was executed successfully`)
-      } else if (it.status === 'Error') {
-        console.error(`Failed to execute migration "${it.migrationName}"`)
-      }
+        if (it.status === 'Success') {
+            console.log(
+                `Migration down "${it.migrationName}" was executed successfully`,
+            )
+        } else if (it.status === 'Error') {
+            console.error(`Failed to execute migration "${it.migrationName}"`)
+        }
     })
-  
+
     if (error) {
-      console.error('Failed to migrate')
-      console.error(error)
-      process.exit(1)
+        console.error('Failed to migrate')
+        console.error(error)
+        process.exit(1)
     }
-  
+
     await db.destroy()
 }

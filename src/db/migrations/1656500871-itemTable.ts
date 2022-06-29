@@ -2,7 +2,8 @@ import { Kysely } from 'kysely'
 
 export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
-        .createTable('item').ifNotExists()
+        .createTable('item')
+        .ifNotExists()
         .addColumn('item_id', 'integer', (col) =>
             col.primaryKey().autoIncrement(),
         )
@@ -16,11 +17,10 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn('managed_by', 'varchar(100)', (col) => col.notNull())
         .addColumn('owned_by', 'varchar(100)', (col) => col.notNull())
         .addColumn('last_modified', 'timestamp', (col) => col.notNull())
-       
+
         .execute()
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
     await db.schema.dropTable('item').execute()
-
 }

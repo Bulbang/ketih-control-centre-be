@@ -2,7 +2,8 @@ import { Kysely } from 'kysely'
 
 export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
-        .createTable('incident').ifNotExists()
+        .createTable('incident')
+        .ifNotExists()
         .addColumn('incident_id', 'integer', (col) =>
             col.primaryKey().autoIncrement(),
         )

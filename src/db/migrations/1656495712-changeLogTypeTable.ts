@@ -2,11 +2,14 @@ import { Kysely } from 'kysely'
 
 export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
-        .createTable('change_log_type').ifNotExists()
+        .createTable('change_log_type')
+        .ifNotExists()
         .addColumn('change_log_type_id', 'integer', (col) =>
             col.primaryKey().autoIncrement(),
         )
-        .addColumn('change_log_type_name', 'varchar(100)', (col) => col.notNull())
+        .addColumn('change_log_type_name', 'varchar(100)', (col) =>
+            col.notNull(),
+        )
         .execute()
 }
 
