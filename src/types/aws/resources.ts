@@ -1,3 +1,5 @@
+import { AwsResourceDependsOn, AwsResourceCondition } from "@serverless/typescript"
+
 export type AwsResources = {
     AWSTemplateFormatVersion?: string
     Conditions?: {
