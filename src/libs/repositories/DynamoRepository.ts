@@ -27,6 +27,7 @@ export class DynamoRepository {
                 Item: {
                     accessToken,
                     ...userData,
+                    createdAt: +new Date(),
                 },
             })
             .promise()

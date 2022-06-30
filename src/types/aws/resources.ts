@@ -1,4 +1,7 @@
-import { AwsResourceDependsOn, AwsResourceCondition } from "@serverless/typescript"
+import {
+    AwsResourceDependsOn,
+    AwsResourceCondition,
+} from '@serverless/typescript'
 
 export type AwsResources = {
     AWSTemplateFormatVersion?: string
@@ -29,7 +32,7 @@ export type AwsResources = {
          * This interface was referenced by `undefined`'s JSON-Schema definition
          * via the `patternProperty` "^[a-zA-Z0-9]{1,255}$".
          */
-    [k: string]: {
+        [k: string]: {
             Type: string
             Properties?: {
                 [k: string]: unknown
