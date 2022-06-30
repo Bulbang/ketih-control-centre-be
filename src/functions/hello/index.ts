@@ -4,7 +4,9 @@ import { LambdaConfig } from '@declarations/aws/funcs'
 
 const hello: LambdaConfig = {
     handler: `${handlerPath(__dirname)}/handler.main`,
-
+    environment: {
+        TABLE_NAME: { Ref: 'UsersTable' },
+    },
     events: [
         {
             http: {
@@ -14,6 +16,12 @@ const hello: LambdaConfig = {
                     schemas: {
                         'application/json': schema,
                     },
+                },
+                authorizer: {
+                    type: 'token',
+                    name: 'auth',
+                    identitySource: 'method.request.header.Authorization',
+                    resultTtlInSeconds: 0,
                 },
                 cors: true,
             },

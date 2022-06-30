@@ -38,6 +38,7 @@
         "@middy/http-event-normalizer": "^3.1.0",
         "@middy/http-header-normalizer": "^3.1.0",
         "@middy/http-json-body-parser": "^2.5.3",
+        "axios": "^0.27.2",
         "kysely": "^0.19.6",
         "mysql2": "^2.3.3"
     },
@@ -47,6 +48,7 @@
         "@types/node": "^14.14.25",
         "@typescript-eslint/eslint-plugin": "^5.29.0",
         "@typescript-eslint/parser": "^5.29.0",
+        "aws-sdk": "^2.1164.0",
         "esbuild": "^0.14.11",
         "eslint": "^8.18.0",
         "eslint-config-prettier": "^8.5.0",
