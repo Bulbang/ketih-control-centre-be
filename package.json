@@ -9,11 +9,12 @@
         "migration:generate": "sh ./sh/migration-create.sh ./src/db/migrations",
         "migration:run:to-latest": "ts-node src/db/migrateToLatest.ts",
         "migration:run:up": "ts-node src/db/migrateUp.ts",
-        "migration:run:down": "ts-node src/db/migrateDown.ts"
+        "migration:run:down": "ts-node src/db/migrateDown.ts",
+        "lambda:new": "sh ./sh/lambda-create.sh"
     },
     "husky": {
         "hooks": {
-            "pre-commit": "yarn format && git add"
+            "pre-commit": "yarn lint-staged"
         }
     },
     "lint-staged": {

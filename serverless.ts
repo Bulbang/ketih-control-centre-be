@@ -1,7 +1,6 @@
 import type { AWS } from '@serverless/typescript'
 
-import hello from '@functions/hello'
-import auth from '@functions/auth'
+import * as functions from '@functions/index'
 import resources from './resources'
 
 const serverlessConfiguration: AWS = {
@@ -34,7 +33,7 @@ const serverlessConfiguration: AWS = {
     },
 
     // import the function via paths
-    functions: { hello, auth },
+    functions,
     resources,
     package: { individually: true },
     custom: {

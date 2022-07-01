@@ -1,4 +1,4 @@
-import { handlerPath } from '@libs/handler-resolver'
+import { handlerPath } from '@libs/utils/handler-resolver'
 import { LambdaConfig } from '@declarations/aws/funcs'
 
 const auth: LambdaConfig = {

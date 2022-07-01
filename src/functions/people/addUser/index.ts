@@ -1,17 +1,22 @@
-import schema from '../people/editUser/schema'
+import schema from './schema'
 import { handlerPath } from '@libs/utils/handler-resolver'
 import { LambdaConfig } from '@declarations/aws/funcs'
 
-const hello: LambdaConfig = {
-    handler: `${handlerPath(__dirname)}/handler.main`,
+const addUser: LambdaConfig = {
+    handler: handlerPath(__dirname) + '/handler.main',
     environment: {
-        TABLE_NAME: { Ref: 'UsersTable' },
+        MYSQLUSER: '${env:MYSQLUSER}',
+        MYSQLPASSWORD: '${env:MYSQLPASSWORD}',
+        MYSQL_URL: '${env:MYSQL_URL}',
+        MYSQLPORT: '${env:MYSQLPORT}',
+        MYSQLHOST: '${env:MYSQLHOST}',
+        MYSQLDATABASE: '${env:MYSQLDATABASE}',
     },
     events: [
         {
             http: {
                 method: 'post',
-                path: 'hello',
+                path: 'users',
                 request: {
                     schemas: {
                         'application/json': schema,
@@ -29,4 +34,4 @@ const hello: LambdaConfig = {
     ],
 }
 
-export default hello
+export default addUser

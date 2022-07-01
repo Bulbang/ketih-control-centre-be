@@ -2,15 +2,15 @@ import { Kysely } from 'kysely'
 
 export async function up(db: Kysely<any>): Promise<void> {
     await Promise.all([
-        db.schema
-            .alterTable('work_order')
-            .addForeignKeyConstraint(
-                'event_xp_id_fk',
-                ['xp_event_id'],
-                'event',
-                ['event_id'],
-            )
-            .execute(),
+        // db.schema
+        //     .alterTable('work_order')
+        //     .addForeignKeyConstraint(
+        //         'event_xp_id_fk',
+        //         ['xp_event_id'],
+        //         'event',
+        //         ['event_id'],
+        //     )
+        //     .execute(),
         db.schema
             .alterTable('event')
             .addForeignKeyConstraint(
@@ -46,15 +46,15 @@ export async function up(db: Kysely<any>): Promise<void> {
             )
             .execute(),
 
-        db.schema
-            .alterTable('item')
-            .addForeignKeyConstraint(
-                'details_FK',
-                ['item_detail_id'],
-                'item_detail',
-                ['item_detail_id'],
-            )
-            .execute(),
+        // db.schema
+        //     .alterTable('item')
+        //     .addForeignKeyConstraint(
+        //         'details_FK',
+        //         ['item_detail_id'],
+        //         'item_detail',
+        //         ['item_detail_id'],
+        //     )
+        //     .execute(),
 
         db.schema
             .alterTable('item_detail')
@@ -67,10 +67,10 @@ export async function up(db: Kysely<any>): Promise<void> {
 
 export async function down(db: Kysely<any>): Promise<void> {
     await Promise.all([
-        db.schema
-            .alterTable('work_order')
-            .dropConstraint('event_xp_id_fk')
-            .execute(),
+        // db.schema
+        //     .alterTable('work_order')
+        //     .dropConstraint('event_xp_id_fk')
+        //     .execute(),
         db.schema
             .alterTable('event')
             .dropConstraint('work_order_id_FK')
@@ -86,7 +86,7 @@ export async function down(db: Kysely<any>): Promise<void> {
             .dropConstraint('status_FK')
             .execute(),
 
-        db.schema.alterTable('item').dropConstraint('details_FK').execute(),
+        // db.schema.alterTable('item').dropConstraint('details_FK').execute(),
 
         db.schema.alterTable('item_detail').dropConstraint('item_FK').execute(),
     ])

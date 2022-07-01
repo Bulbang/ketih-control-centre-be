@@ -1,2 +1,5 @@
-export { default as hello } from './hello'
+// export { default as hello } from './hello'
 export { default as auth } from './auth'
+export { default as getUsers } from './people/getUsers'
+export { default as editUser } from './people/editUser'
+export { default as addUser } from './people/addUser'

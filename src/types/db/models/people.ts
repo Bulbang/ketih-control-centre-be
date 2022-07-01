@@ -1,7 +1,5 @@
-import { Generated } from 'kysely'
-
-interface WorkOrderTable {
-    work_order_id: Generated<number>
+export interface WorkOrder {
+    work_order_id: number
     org_id: number
     xp_event_id: number
     client_work_order: string
@@ -29,11 +27,11 @@ interface WorkOrderTable {
     signature_required: number
     weekend_delivery: number
     expidited: number
-    last_modified: string
+    last_modified: number
 }
 
-interface EventTable {
-    event_id: Generated<number>
+export interface Event {
+    event_id: number
     company_id: number
     work_order_id: number
     requestor: string
@@ -42,11 +40,11 @@ interface EventTable {
     type: string
     event_date: number
     notes: string
-    last_modified: string
+    last_modified: number
 }
 
-interface IncidentTable {
-    incident_id: Generated<number>
+export interface Incident {
+    incident_id: number
     org_id: number
     event_id: number
     action: string
@@ -58,11 +56,11 @@ interface IncidentTable {
     start_date: number
     end_date: number
     notes: string
-    last_modified: string
+    last_modified: number
 }
 
-interface PeopleTable {
-    people_id: Generated<number>
+export interface People {
+    people_id: number
     org_id: number
     address_id: number
     service_id: number
@@ -86,10 +84,10 @@ interface PeopleTable {
     organization_name: string
     position_title: string
     status: string
-    last_modified: string
+    last_modified: number
 }
 
-interface ChangeLogTable {
+export interface ChangeLog {
     change_log_id
     org_id
     change_log_type
@@ -98,20 +96,20 @@ interface ChangeLogTable {
     record_id
     type_id
     log_detail
-    last_modified: string
+    last_modified
 }
 
-interface ChangeLogTypeTable {
+export interface ChangeLogType {
     change_log_type_id
     change_log_type_name
 }
 
-interface ChangeLogStatusTable {
+export interface ChangeLogStatus {
     change_log_status_id
     change_log_status_name
 }
 
-interface ItemTable {
+export interface Item {
     item_id
     item_detail_id
     org_id
@@ -122,10 +120,10 @@ interface ItemTable {
     operational_status
     managed_by
     owned_by
-    last_modified: string
+    last_modified
 }
 
-interface ItemDetailTable {
+export interface ItemDetail {
     item_detail_id
     item_id
     org_id
@@ -154,17 +152,5 @@ interface ItemDetailTable {
     drive_size
     drive_free_space
     total_memory_in_g
-    last_modified: string
-}
-
-export interface Database {
-    workOrder: WorkOrderTable
-    event: EventTable
-    incident: IncidentTable
-    people: PeopleTable
-    changeLog: ChangeLogTable
-    changeLogStatus: ChangeLogStatusTable
-    changeLogType: ChangeLogTypeTable
-    item: ItemTable
-    itemDetail: ItemDetailTable
+    last_modified
 }
