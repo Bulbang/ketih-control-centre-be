@@ -8,7 +8,7 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { getUserInfo } from '@libs/utils/getUserinfo'
 
 const dc = new DocumentClient()
-const { TABLE_NAME } = process.env
+const { TABLE_NAME, AUTH0_URL } = process.env
 const dynamoRepository = new DynamoRepository(dc, TABLE_NAME)
 
 const generatePolicy = (
@@ -44,7 +44,7 @@ const handler: APIGatewayTokenAuthorizerHandler = async (
     // If authToken don`t extist (or expired) we will record userData from auth0 by new authToken
     if (!user) {
         try {
-            const userData = await getUserInfo(authToken)
+            const userData = await getUserInfo(authToken, AUTH0_URL)
             await dynamoRepository.save(authToken, userData)
         } catch (error) {
             console.log(error.toString())
