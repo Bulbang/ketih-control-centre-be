@@ -11,6 +11,7 @@ export class PeopleRepository {
             .select('first_name')
             .select('last_name')
             .select('phone_number_mobile')
+            .select('phone_number_home')
             .select('country_code')
             .select('status')
             .select('business_unit')
