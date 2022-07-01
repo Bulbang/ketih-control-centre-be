@@ -158,13 +158,13 @@ interface ItemDetailTable {
 }
 
 export interface Database {
-    workOrder: WorkOrderTable
+    work_order: WorkOrderTable
     event: EventTable
     incident: IncidentTable
     people: PeopleTable
-    changeLog: ChangeLogTable
-    changeLogStatus: ChangeLogStatusTable
-    changeLogType: ChangeLogTypeTable
+    change_log: ChangeLogTable
+    change_log_status: ChangeLogStatusTable
+    change_log_type: ChangeLogTypeTable
     item: ItemTable
-    itemDetail: ItemDetailTable
+    item_detail: ItemDetailTable
 }

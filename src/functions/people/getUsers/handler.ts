@@ -6,9 +6,15 @@ import { createDbConnection } from '@libs/utils/createDbConnection'
 const db = createDbConnection()
 const peopleRepository = new PeopleRepository(db)
 
+type LambdaReturn = {
+    users: Awaited<ReturnType<typeof peopleRepository.getPeople>>
+    totalUsers: number
+    activeMembers: number
+}
+
 const getUsers: ValidatedEventAPIGatewayProxyEvent<
     undefined,
-    { users: Awaited<ReturnType<typeof peopleRepository.getPeople>> }
+    LambdaReturn
 > = async (_) => {
     const users = await peopleRepository.getPeople()
     return {

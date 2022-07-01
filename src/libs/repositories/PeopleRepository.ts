@@ -1,9 +1,7 @@
 import { Database } from '@declarations/db/tables'
-import { Kysely } from 'kysely'
+import { SQLRepository } from './SQLRepository'
 
-export class PeopleRepository {
-    constructor(private _db: Kysely<Database>) {}
-
+export class PeopleRepository extends SQLRepository<Database> {
     getPeople = async () => {
         return this._db
             .selectFrom('people')
