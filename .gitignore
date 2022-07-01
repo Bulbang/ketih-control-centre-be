@@ -6,6 +6,6 @@ jspm_packages
 .serverless
 
 yarn-error.log
-
+.env
 # esbuild directories
 .esbuild
