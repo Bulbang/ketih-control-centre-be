@@ -7,13 +7,11 @@ import schema from './schema'
 const db = createDbConnection()
 const peopleRepository = new PeopleRepository(db)
 
-const addUser: ValidatedEventAPIGatewayProxyEvent<
-    typeof schema,
-    { message: string }
-> = async (event) => {
+const addUser: ValidatedEventAPIGatewayProxyEvent<typeof schema, void> = async (
+    event,
+) => {
     const { body } = event
     await peopleRepository.addUser(body)
-    return { message: 'User Added succesfully' }
 }
 
 export const main = middyfy(addUser)

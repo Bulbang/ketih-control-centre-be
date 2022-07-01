@@ -9,13 +9,11 @@ const peopleRepository = new PeopleRepository(db)
 
 const editUser: ValidatedEventAPIGatewayProxyEvent<
     typeof schema,
-    { message: string }
+    void
 > = async (event) => {
     const { body } = event
     const { id } = event.pathParameters
     await peopleRepository.updateUser(+id, body)
-
-    return { message: 'Updated successfully' }
 }
 
 export const main = middyfy(editUser)
