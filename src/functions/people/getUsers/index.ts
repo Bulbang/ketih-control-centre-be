@@ -1,16 +1,10 @@
 import { handlerPath } from '@libs/utils/handler-resolver'
 import { LambdaConfig } from '@declarations/aws/funcs'
+import { dbCredentials } from '@libs/utils/dbCredentials'
 
 const getUsers: LambdaConfig = {
     handler: handlerPath(__dirname) + '/handler.main',
-    environment: {
-        MYSQLUSER: '${env:MYSQLUSER}',
-        MYSQLPASSWORD: '${env:MYSQLPASSWORD}',
-        MYSQL_URL: '${env:MYSQL_URL}',
-        MYSQLPORT: '${env:MYSQLPORT}',
-        MYSQLHOST: '${env:MYSQLHOST}',
-        MYSQLDATABASE: '${env:MYSQLDATABASE}',
-    },
+    environment: dbCredentials,
     events: [
         {
             http: {

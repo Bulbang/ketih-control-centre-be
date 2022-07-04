@@ -8,9 +8,6 @@ const workOrderRepository = new WorkOrderRepository(db)
 
 type LambdaReturn = {
     requests: Awaited<ReturnType<typeof workOrderRepository.getWorkOrders>>
-    atRiskOfSLA: number
-    incidents: number
-    totalEvents: number
 }
 
 const requests: ValidatedEventAPIGatewayProxyEvent<
@@ -22,21 +19,6 @@ const requests: ValidatedEventAPIGatewayProxyEvent<
 
     return {
         requests,
-        totalEvents: requests.length,
-        atRiskOfSLA: requests.reduce(
-            (previousVal, request) =>
-                request.request_type.includes('Accidental Damage')
-                    ? previousVal + 1
-                    : previousVal,
-            0,
-        ),
-        incidents: requests.reduce(
-            (previousVal, request) =>
-                request.request_type.split('-').length > 1
-                    ? previousVal + 1
-                    : previousVal,
-            0,
-        ),
     }
 }
 

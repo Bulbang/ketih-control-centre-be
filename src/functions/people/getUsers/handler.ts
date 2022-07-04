@@ -20,9 +20,13 @@ const getUsers: ValidatedEventAPIGatewayProxyEvent<
     return {
         users,
         totalUsers: users.length,
-        activeMembers: users.reduce((counter, user) => {
-            return user.status === 'Active' ? counter + 1 : counter
-        }, 0),
+        activeMembers: users.reduce(
+            (counter, user) =>
+                user.status.toLocaleLowerCase() === 'active'
+                    ? counter + 1
+                    : counter,
+            0,
+        ),
     }
 }
 
