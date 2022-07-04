@@ -7,13 +7,15 @@ mkdir "$path/$lambda_name"
 touch "$path/$lambda_name/index.ts"
 touch "$path/$lambda_name/handler.ts"
 echo "import { middyfy } from '@libs/middlewares/middyfy'
-import { APIGatewayProxyHandler } from 'aws-lambda'
+import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
 
+type LambdaReturn = {
+    message: string
+}
 
-const $lambda_name: APIGatewayProxyHandler = async (event) => {
+const $lambda_name: ValidatedEventAPIGatewayProxyEvent<undefined, LambdaReturn> = async (event) => {
     return {
-        statusCode: 200,
-        body: JSON.stringify('hello in $lambda_name')
+        message: \"hello world\"
     }
 }
 

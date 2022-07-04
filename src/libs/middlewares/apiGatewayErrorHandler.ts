@@ -23,12 +23,18 @@ export const apiGatewayErrorHandler = <
             const { statusCode, payload: errorPayload } = error.output
             handler.response = Object.assign({}, handler.response, {
                 statusCode,
-                body: JSON.stringify(errorPayload.message),
+                body: JSON.stringify({
+                    status: 'ERROR',
+                    data: { message: errorPayload.message },
+                }),
             })
         } else {
             handler.response = Object.assign({}, handler.response, {
                 statusCode: 500,
-                body: JSON.stringify(error.message),
+                body: JSON.stringify({
+                    status: 'ERROR',
+                    data: { message: error.message },
+                }),
             })
         }
     }

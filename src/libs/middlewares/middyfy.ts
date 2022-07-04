@@ -5,7 +5,7 @@ import httpHeaderNormalizer from '@middy/http-header-normalizer'
 import middyJsonBodyParser from '@middy/http-json-body-parser'
 import { Handler } from 'aws-lambda'
 import { apiGatewayResponseBuilder } from './apiGatewayResponseBuilder'
-import { apiGatewayErrorHandler } from './apiResponseBuilder'
+import { apiGatewayErrorHandler } from './apiGatewayErrorHandler'
 
 export const middyfy = (handler: Handler) => {
     return middy(handler)

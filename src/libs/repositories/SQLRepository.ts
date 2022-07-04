@@ -1,5 +1,5 @@
 import { Kysely } from 'kysely'
 
-export class SQLRepository<DB> {
+export class MySQLRepository<DB> {
     constructor(protected _db: Kysely<DB>) {}
 }

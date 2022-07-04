@@ -1,19 +1,21 @@
 import { Database } from '@declarations/db/tables'
-import { SQLRepository } from './SQLRepository'
+import { MySQLRepository } from './SQLRepository'
 
-export class PeopleRepository extends SQLRepository<Database> {
+export class PeopleRepository extends MySQLRepository<Database> {
     getPeople = async () => {
         return this._db
             .selectFrom('people')
-            .select('people_id')
-            .select('first_name')
-            .select('last_name')
-            .select('phone_number_mobile')
-            .select('phone_number_home')
-            .select('country_code')
-            .select('status')
-            .select('business_unit')
-            .select('position_title')
+            .select([
+                'people_id',
+                'first_name',
+                'last_name',
+                'phone_number_mobile',
+                'phone_number_home',
+                'country_code',
+                'status',
+                'business_unit',
+                'position_title',
+            ])
             .execute()
     }
 
