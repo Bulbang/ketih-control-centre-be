@@ -7,11 +7,11 @@ import { join } from 'path'
 const db = new Kysely<Database>({
     dialect: new MysqlDialect({
         pool: createPool({
-            database: 'railway',
-            host: 'containers-us-west-68.railway.app',
-            password: 'CCgYOYMKZxaACLDxHvUQ',
-            user: 'root',
-            port: 6873,
+            database: '',
+            host: '',
+            password: '',
+            user: '',
+            port: 0000,
         }),
     }),
 })
