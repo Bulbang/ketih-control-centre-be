@@ -1,0 +1,83 @@
+@base=https://fcwsywnkp0.execute-api.us-east-1.amazonaws.com/test
+@auth0token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiaXNzIjoiaHR0cHM6Ly9kZXYtaDZwYWttZ2UudXMuYXV0aDAuY29tLyJ9.._T6BBpjOfTAhXJIg.F1fv5oKWV6hlGgqVNoofcvWcK0La987mnyjRClGvd8qQvYVMoBzF9VFWciiCil9GwYOPs-cW4HP8ijw-L4uD177bzdOoYyC7sMVI_OZpWP__YofOUg1lLowHfguOsv0gNNTY30B9QQldooCTGA2pVme9eBv21krH5Eekmt610HbAqklok9hqQEgmBnPkU7LzXleLdcGlOaBaPOTe-DEYX2FYTxyVIT3cx230Q8dHef7UbbgzlpUQkzzagpc4Po9ymGboxgC_Z8qfppBr1Qoju3f_8Os8RmPyeibYYj2LwjpEhtZnBBuFzHSLuYuhjIFEuXLaCSuMuw.QiUxTmcfvMfbQxZSfN7lfg
+### User Admin
+GET {{base}}/users
+Authorization: {{auth0token}}
+
+### User Admin
+# Body: - all values are optional
+#   "first_name": string,
+#   "last_name": string,
+#   "phone_number_mobile": string,
+#   "country_code": string,
+#   "status": string,
+#   "sms_allowed": number,
+#   "business_unit": string,
+#   "position_title": string
+POST {{base}}/users
+Authorization: {{auth0token}}
+Content-Type: application/json
+{
+  "first_name": "Lisa",
+  "last_name": "Cuddy",
+  "phone_number_mobile": "+38 (000) 000-0000",
+  "country_code": "UK",
+  "status": "Active",
+  "sms_allowed": 1,
+  "business_unit": "Seed BK-UK",
+  "position_title": "Admin"
+}
+
+### User Admin
+# Path Parameters:
+#   id: number - id of user that should be updated
+# Body: - all values are optional
+#   "first_name": string,
+#   "last_name": string,
+#   "phone_number_mobile": string,
+#   "country_code": string,
+#   "status": string,
+#   "sms_allowed": number,
+#   "business_unit": string,
+#   "position_title": string
+PUT {{base}}/users/:id
+Authorization: {{auth0token}}
+Content-Type: application/json
+    {
+      "first_name": "Gregory",
+      "last_name": "House",
+      "position_title": "Admin"
+    }
+
+### Requests
+# QueryString:
+#   last: number - the number of days for which the data is received
+GET {{base}}/requests?last
+Authorization: {{auth0token}}
+
+### Control Center
+# QueryString:
+#   last: number - the number of days for which the data is received
+GET {{base}}/requests/statistic?last
+Authorization: {{auth0token}}
+
+### Control Center / Incidents
+GET {{base}}/events/incidents
+Authorization: {{auth0token}}
+
+### Events
+GET {{base}}/events
+Authorization: {{auth0token}}
+
+### Changelog
+GET {{base}}/change-logs
+Authorization: {{auth0token}}
+
+### Items
+GET {{base}}/items/stock
+Authorization: {{auth0token}}
+
+### Items
+GET {{base}}/items/orders
+Authorization: {{auth0token}}
+

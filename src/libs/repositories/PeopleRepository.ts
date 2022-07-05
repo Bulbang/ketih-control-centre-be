@@ -2,8 +2,8 @@ import { Database } from '@declarations/db/tables'
 import { MySQLRepository } from './SQLRepository'
 
 export class PeopleRepository extends MySQLRepository<Database> {
-    getPeople = async () => {
-        return this._db
+    getPeople = async () =>
+        this._db
             .selectFrom('people')
             .select([
                 'people_id',
@@ -17,18 +17,16 @@ export class PeopleRepository extends MySQLRepository<Database> {
                 'position_title',
             ])
             .execute()
-    }
 
-    updateUser = async <UserSchema>(id: number, valuesToUpdate: UserSchema) => {
-        return this._db
+    updateUser = async <UserSchema>(id: number, valuesToUpdate: UserSchema) =>
+        this._db
             .updateTable('people')
             .set(valuesToUpdate)
             .where('people_id', '=', id)
             .execute()
-    }
 
-    addUser = async <UserSchema>(user: UserSchema) => {
-        return this._db
+    addUser = async <UserSchema>(user: UserSchema) =>
+        this._db
             .insertInto('people')
             .values({
                 ...user,
@@ -38,5 +36,4 @@ export class PeopleRepository extends MySQLRepository<Database> {
                     .replace('T', ' '),
             })
             .execute()
-    }
 }

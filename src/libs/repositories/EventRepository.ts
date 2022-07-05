@@ -2,8 +2,8 @@ import { Database } from '@declarations/db/tables'
 import { MySQLRepository } from './SQLRepository'
 
 export class EventRepository extends MySQLRepository<Database> {
-    getAllEvents = async () => {
-        return this._db
+    getAllEvents = async () =>
+        this._db
             .selectFrom('event')
             .select([
                 'event.event_id',
@@ -24,5 +24,4 @@ export class EventRepository extends MySQLRepository<Database> {
                 'incident.action as incident_action',
             ])
             .execute()
-    }
 }

@@ -2,8 +2,8 @@ import { Database } from '@declarations/db/tables'
 import { MySQLRepository } from './SQLRepository'
 
 export class IncidentRepository extends MySQLRepository<Database> {
-    getIncidents = async () => {
-        return this._db
+    getIncidents = async () =>
+        this._db
             .selectFrom('incident')
             .select([
                 'incident.incident_id',
@@ -19,5 +19,4 @@ export class IncidentRepository extends MySQLRepository<Database> {
             )
             .select('work_order.country as country')
             .execute()
-    }
 }

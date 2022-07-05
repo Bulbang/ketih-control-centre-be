@@ -3,8 +3,8 @@ import { sql } from 'kysely'
 import { MySQLRepository } from './SQLRepository'
 
 export class WorkOrderRepository extends MySQLRepository<Database> {
-    getWorkOrders = async (dayInterval?: number) => {
-        return this._db
+    getWorkOrders = async (dayInterval?: number) =>
+        this._db
             .selectFrom('work_order')
             .select([
                 'work_order_id',
@@ -20,7 +20,7 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
                 } DAY)`,
             )
             .execute()
-    }
+
     getWorkOrderStats = async (dayInterval: number) => {
         const orders = await this._db
             .selectFrom('work_order')

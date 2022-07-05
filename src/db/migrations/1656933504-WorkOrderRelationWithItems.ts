@@ -15,7 +15,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 export async function down(db: Kysely<any>): Promise<void> {
     await db.schema
         .alterTable('work_order')
-        .dropConstraint('item_id_FK')
+        .dropConstraint('itsm_id_FK')
         .execute()
     await db.schema.alterTable('work_order').dropColumn('itsm_id').execute()
 }

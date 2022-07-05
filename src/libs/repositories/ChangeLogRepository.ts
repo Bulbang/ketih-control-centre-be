@@ -2,8 +2,8 @@ import { Database } from '@declarations/db/tables'
 import { MySQLRepository } from './SQLRepository'
 
 export class ChangeLogRepository extends MySQLRepository<Database> {
-    getChangeLogs = async () => {
-        return this._db
+    getChangeLogs = async () =>
+        this._db
             .selectFrom('change_log')
             .select([
                 'change_log.change_log_id',
@@ -17,5 +17,4 @@ export class ChangeLogRepository extends MySQLRepository<Database> {
             )
             .select('change_log_type.change_log_type_name')
             .execute()
-    }
 }

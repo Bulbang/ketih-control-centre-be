@@ -112,14 +112,14 @@ interface ChangeLogStatusTable {
 }
 
 interface ItemTable {
-    item_id
-    item_detail_id
+    item_id: Generated<number>
+    item_detail_id: number
     org_id
     entity_id
     service_id
-    address
-    status
-    operational_status
+    address: string
+    status: string
+    operational_status: string
     managed_by
     owned_by
     last_modified: string

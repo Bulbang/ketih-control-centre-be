@@ -8,5 +8,5 @@ export { default as getIncidents } from './events/getIncidents'
 export { default as getEvents } from './events/getEvents'
 export { default as getChangeLogs } from './changeLogs'
 export { default as getRequestStats } from './requests/getRequestStats'
-
-export { default as items } from './items'
+export { default as getStock } from './items/getStock'
+export { default as getOrders } from './items/getOrders'
