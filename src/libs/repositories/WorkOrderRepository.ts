@@ -57,4 +57,36 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
             ),
         }
     }
+
+    getItemOverview = async () =>
+        this._db
+            .selectFrom('work_order')
+            .select([
+                this._db.fn.count('work_order_id').as('total'),
+                sql<number>`COUNT(IF(LOWER(shipping_status) = 'cancelled', 1, null))`.as(
+                    'cancelled',
+                ),
+                sql<number>`COUNT(IF(LOWER(shipping_status) = 'delivered', 1, null))`.as(
+                    'delivered',
+                ),
+                sql<number>`COUNT(IF(shipping_status is null, 1, null))`.as(
+                    'in_process',
+                ),
+                sql<number>`COUNT(IF(LOWER(shipping_status) = 'shipped', 1, null))`.as(
+                    'shipped',
+                ),
+                sql<number>`COUNT(IF(LOWER(shipping_status) = 'ordered', 1, null))`.as(
+                    'ordered',
+                ),
+                sql<string>`DATE_FORMAT(last_modified , '%m')*1-1`.as(
+                    'month_index',
+                ),
+            ])
+            .where(
+                sql`YEAR(last_modified)`,
+                '>',
+                sql`YEAR(DATE_SUB(NOW(), INTERVAL 1 YEAR))`,
+            )
+            .groupBy(sql`month_index`)
+            .execute()
 }

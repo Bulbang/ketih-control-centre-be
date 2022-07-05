@@ -81,3 +81,6 @@ Authorization: {{auth0token}}
 GET {{base}}/items/orders
 Authorization: {{auth0token}}
 
+### Items
+GET {{base}}/items/overview
+Authorization: {{auth0token}}
