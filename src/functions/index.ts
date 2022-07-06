@@ -1,5 +1,6 @@
 export { default as auth } from './auth'
 export { default as getUsers } from './people/getUsers'
+export { default as getStatistic } from './people/getStatistic'
 export { default as editUser } from './people/editUser'
 export { default as addUser } from './people/addUser'
 export { default as requests } from './requests/getRequests'
