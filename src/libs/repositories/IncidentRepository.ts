@@ -15,7 +15,11 @@ export class IncidentRepository extends MySQLRepository<Database> {
             .selectFrom('incident')
             .select(['incident.incident_id'])
             .leftJoin('event', 'event.event_id', 'incident.event_id')
-            .select(['event.type as event_type', 'event.event_id'])
+            .select([
+                'event.type as event_type',
+                'event.event_id',
+                'event.action',
+            ])
             .leftJoin(
                 'work_order',
                 'event.work_order_id',

@@ -13,7 +13,11 @@ export class EventRepository extends MySQLRepository<Database> {
     }) =>
         this._db
             .selectFrom('event')
-            .select(['event.event_id', 'event.type as event_type'])
+            .select([
+                'event.event_id',
+                'event.type as event_type',
+                'event.action',
+            ])
             .leftJoin(
                 'work_order',
                 'event.work_order_id',
