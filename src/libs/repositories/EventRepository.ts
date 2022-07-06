@@ -24,7 +24,11 @@ export class EventRepository extends MySQLRepository<Database> {
                 'work_order.work_order_id',
             )
             .leftJoin('country', 'work_order.country', 'country.country_code')
-            .select('country.country_name as country')
+            .select([
+                'country.country_name as country',
+                'country.latitude',
+                'country.longitude',
+            ])
             .leftJoin(
                 'event_classification',
                 'event.event_key',
