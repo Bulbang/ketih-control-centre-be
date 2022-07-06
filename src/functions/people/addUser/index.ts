@@ -1,11 +1,11 @@
 import schema from './schema'
 import { handlerPath } from '@libs/utils/handler-resolver'
 import { LambdaConfig } from '@declarations/aws/funcs'
-import { dbCredentials } from '@libs/utils/dbCredentials'
+import { mockDbCreds } from '@libs/utils/dbCredentials'
 
 const addUser: LambdaConfig = {
     handler: handlerPath(__dirname) + '/handler.main',
-    environment: dbCredentials,
+    environment: mockDbCreds,
     events: [
         {
             http: {

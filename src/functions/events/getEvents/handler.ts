@@ -8,26 +8,20 @@ const eventRepository = new EventRepository(db)
 
 type LambdaReturn = {
     events: Awaited<ReturnType<typeof eventRepository.getAllEvents>>
-    totalEvents: number
-    incidents: number
 }
 
 const getEvents: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
-> = async (_) => {
-    const events = await eventRepository.getAllEvents()
+> = async (event) => {
+    const { page, perPage } = event.queryStringParameters as unknown as {
+        page: number
+        perPage: number
+    }
+    const events = await eventRepository.getAllEvents({ perPage, page })
 
     return {
         events,
-        totalEvents: events.length,
-        incidents: events.reduce((prevVal, event) => {
-            if (event.incident_id) return prevVal + 1
-            delete event.incident_action
-            delete event.incident_id
-            delete event.incident_notes
-            return prevVal
-        }, 0),
     }
 }
 

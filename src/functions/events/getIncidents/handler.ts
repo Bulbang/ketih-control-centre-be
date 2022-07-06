@@ -13,8 +13,13 @@ type LambdaReturn = {
 const events: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
-> = async (_) => {
-    const incidents = await incidentRepository.getIncidents()
+> = async (event) => {
+    const { page, perPage } = event.queryStringParameters as unknown as {
+        page: number
+        perPage: number
+    }
+
+    const incidents = await incidentRepository.getIncidents({ page, perPage })
 
     return {
         incidents,

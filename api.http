@@ -4,7 +4,7 @@
 # QueryString:
 #   page: number DEFAULT = 1
 #   perPage: number DEFAULT = 10
-GET {{base}}/users?page&perPage
+GET {{base}}/users
 Authorization: {{auth0token}}
 
 ### User Admin
@@ -69,11 +69,21 @@ GET {{base}}/requests/statistic?last
 Authorization: {{auth0token}}
 
 ### Control Center / Incidents
+# QueryString:
+#   page: number DEFAULT = 1
+#   perPage: number DEFAULT = 10
 GET {{base}}/events/incidents
 Authorization: {{auth0token}}
 
 ### Events
+# QueryString:
+#   page: number DEFAULT = 1
+#   perPage: number DEFAULT = 10
 GET {{base}}/events
+Authorization: {{auth0token}}
+
+### Events
+GET {{base}}/events/statistic
 Authorization: {{auth0token}}
 
 ### Changelog

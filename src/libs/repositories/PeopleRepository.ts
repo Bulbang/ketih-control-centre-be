@@ -2,35 +2,35 @@ import { Database } from '@declarations/db/tables'
 import { sql } from 'kysely'
 import { MySQLRepository } from './SQLRepository'
 
-const DEFAULT_PAGE_OFFSET = 10
+const { DEFAULT_PAGE_OFFSET } = process.env
 
 export class PeopleRepository extends MySQLRepository<Database> {
     getPeople = async ({
         page = 1,
-        perPage = DEFAULT_PAGE_OFFSET,
+        perPage = +DEFAULT_PAGE_OFFSET,
     }: {
         page?: number
         perPage?: number
-    }) => {
-        const query = this._db
+    }) =>
+        this._db
             .selectFrom('people')
             .select([
-                'people_id',
-                'first_name',
-                'last_name',
-                'phone_number_mobile',
-                'phone_number_home',
-                'country_code',
-                'status',
-                'business_unit',
-                'position_title',
-                'email_address_home',
-                'email_address_work',
+                'people.people_id',
+                'people.first_name',
+                'people.last_name',
+                'people.phone_number_mobile',
+                'people.phone_number_home',
+                'people.status',
+                'people.business_unit',
+                'people.position_title',
+                'people.email_address_home',
+                'people.email_address_work',
             ])
+            .leftJoin('country', 'people.country_code', 'country.country_code')
+            .select('country.country_name')
             .limit(perPage)
             .offset((page - 1) * perPage)
-        return query.execute()
-    }
+            .execute()
 
     getStatistic = async () =>
         this._db

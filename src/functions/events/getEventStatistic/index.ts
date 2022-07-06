@@ -1,15 +1,15 @@
 import { handlerPath } from '@libs/utils/handler-resolver'
 import { LambdaConfig } from '@declarations/aws/funcs'
-import { mockDbCreds } from '@libs/utils/dbCredentials'
+import { dbCreds } from '@libs/utils/dbCredentials'
 
-const getRequestStats: LambdaConfig = {
+const getEventStatistic: LambdaConfig = {
     handler: handlerPath(__dirname) + '/handler.main',
-    environment: mockDbCreds,
+    environment: dbCreds,
     events: [
         {
             http: {
                 method: 'get',
-                path: 'requests/statistic',
+                path: 'events/statistic',
                 authorizer: {
                     type: 'token',
                     name: 'auth',
@@ -22,4 +22,4 @@ const getRequestStats: LambdaConfig = {
     ],
 }
 
-export default getRequestStats
+export default getEventStatistic

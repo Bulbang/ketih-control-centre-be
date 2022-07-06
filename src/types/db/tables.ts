@@ -59,6 +59,23 @@ interface IncidentTable {
     end_date: number
     notes: string
     last_modified: string
+    response: string
+}
+
+interface EventClassificationTable {
+    event_id: number
+    xp_event_id: number
+    event_key: string
+    short_desc: string
+    long_desc: string
+    category: string
+    type: string
+    action: string
+    routine: string
+    servo: string
+    notes: string
+    priority: number
+    last_modified: string
 }
 
 interface PeopleTable {
@@ -157,9 +174,33 @@ interface ItemDetailTable {
     last_modified: string
 }
 
+interface CountryTable {
+    country_id: Generated<number>
+    country_code: string
+    country_name: string
+    common_names_match: any
+    country_currency: string
+    fips_code: string
+    iso_numeric: string
+    north: number
+    south: number
+    east: number
+    west: number
+    latitude: number
+    longitude: number
+    capital: string
+    continent_name: string
+    continent: string
+    languages: string
+    iso_alpha3: string
+    geoname_id: number
+    last_modified: string
+}
+
 export interface Database {
     work_order: WorkOrderTable
     event: EventTable
+    event_classification: EventClassificationTable
     incident: IncidentTable
     people: PeopleTable
     change_log: ChangeLogTable
@@ -167,4 +208,5 @@ export interface Database {
     change_log_type: ChangeLogTypeTable
     item: ItemTable
     item_detail: ItemDetailTable
+    country: CountryTable
 }

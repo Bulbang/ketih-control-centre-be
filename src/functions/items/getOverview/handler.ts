@@ -7,7 +7,9 @@ const db = createDbConnection()
 const workOrderRepository = new WorkOrderRepository(db)
 
 type LambdaReturn = {
-    overview: Awaited<ReturnType<typeof workOrderRepository.getItemOverview>>
+    overview: Awaited<
+        ReturnType<typeof workOrderRepository.getItemOverview>
+    > & {}
 }
 
 const getOverview: ValidatedEventAPIGatewayProxyEvent<

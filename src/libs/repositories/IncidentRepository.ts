@@ -1,22 +1,38 @@
 import { Database } from '@declarations/db/tables'
 import { MySQLRepository } from './SQLRepository'
 
+const { DEFAULT_PAGE_OFFSET } = process.env
+
 export class IncidentRepository extends MySQLRepository<Database> {
-    getIncidents = async () =>
+    getIncidents = async ({
+        page = 1,
+        perPage = +DEFAULT_PAGE_OFFSET,
+    }: {
+        page?: number
+        perPage?: number
+    }) =>
         this._db
             .selectFrom('incident')
-            .select([
-                'incident.incident_id',
-                'incident.notes as incident_notes',
-                'incident.action as incident_action',
-            ])
+            .select(['incident.incident_id'])
             .leftJoin('event', 'event.event_id', 'incident.event_id')
-            .select(['event.type as eventType', 'event.notes as event_notes'])
+            .select(['event.type as event_type', 'event.event_id'])
             .leftJoin(
                 'work_order',
                 'event.work_order_id',
                 'work_order.work_order_id',
             )
-            .select('work_order.country as country')
+            .leftJoin('country', 'work_order.country', 'country.country_code')
+            .select('country.country_name as country')
+            .leftJoin(
+                'event_classification',
+                'event.event_key',
+                'event_classification.event_key',
+            )
+            .select([
+                'event_classification.short_desc',
+                'event_classification.long_desc',
+            ])
+            .limit(perPage)
+            .offset((page - 1) * perPage)
             .execute()
 }

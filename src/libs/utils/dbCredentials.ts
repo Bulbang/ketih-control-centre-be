@@ -1,8 +1,17 @@
-export const dbCredentials = {
+export const dbCreds = {
     MYSQLUSER: '${env:MYSQLUSER}',
     MYSQLPASSWORD: '${env:MYSQLPASSWORD}',
     MYSQL_URL: '${env:MYSQL_URL}',
     MYSQLPORT: '${env:MYSQLPORT}',
     MYSQLHOST: '${env:MYSQLHOST}',
     MYSQLDATABASE: '${env:MYSQLDATABASE}',
+}
+
+export const mockDbCreds = {
+    MYSQLUSER: '${env:MOCKMYSQLUSER}',
+    MYSQLPASSWORD: '${env:MOCKMYSQLPASSWORD}',
+    MYSQL_URL: '${env:MOCKMYSQL_URL}',
+    MYSQLPORT: '${env:MOCKMYSQLPORT}',
+    MYSQLHOST: '${env:MOCKMYSQLHOST}',
+    MYSQLDATABASE: '${env:MOCKMYSQLDATABASE}',
 }
