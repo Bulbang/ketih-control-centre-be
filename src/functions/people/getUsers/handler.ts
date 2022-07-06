@@ -8,25 +8,22 @@ const peopleRepository = new PeopleRepository(db)
 
 type LambdaReturn = {
     users: Awaited<ReturnType<typeof peopleRepository.getPeople>>
-    totalUsers: number
-    activeMembers: number
 }
 
 const getUsers: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
-> = async (_) => {
-    const users = await peopleRepository.getPeople()
+> = async (event) => {
+    const { page, perPage } = event.queryStringParameters as unknown as {
+        page: number
+        perPage: number
+    }
+    const users = await peopleRepository.getPeople({
+        page,
+        perPage,
+    })
     return {
         users,
-        totalUsers: users.length,
-        activeMembers: users.reduce(
-            (counter, user) =>
-                user.status.toLocaleLowerCase() === 'active'
-                    ? counter + 1
-                    : counter,
-            0,
-        ),
     }
 }
 

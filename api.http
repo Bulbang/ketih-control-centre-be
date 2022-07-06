@@ -1,7 +1,14 @@
 @base=https://fcwsywnkp0.execute-api.us-east-1.amazonaws.com/test
 @auth0token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiaXNzIjoiaHR0cHM6Ly9kZXYtaDZwYWttZ2UudXMuYXV0aDAuY29tLyJ9.._T6BBpjOfTAhXJIg.F1fv5oKWV6hlGgqVNoofcvWcK0La987mnyjRClGvd8qQvYVMoBzF9VFWciiCil9GwYOPs-cW4HP8ijw-L4uD177bzdOoYyC7sMVI_OZpWP__YofOUg1lLowHfguOsv0gNNTY30B9QQldooCTGA2pVme9eBv21krH5Eekmt610HbAqklok9hqQEgmBnPkU7LzXleLdcGlOaBaPOTe-DEYX2FYTxyVIT3cx230Q8dHef7UbbgzlpUQkzzagpc4Po9ymGboxgC_Z8qfppBr1Qoju3f_8Os8RmPyeibYYj2LwjpEhtZnBBuFzHSLuYuhjIFEuXLaCSuMuw.QiUxTmcfvMfbQxZSfN7lfg
 ### User Admin
-GET {{base}}/users
+# QueryString:
+#   page: number DEFAULT = 1
+#   perPage: number DEFAULT = 10
+GET {{base}}/users?page&perPage
+Authorization: {{auth0token}}
+
+### User Admin
+GET {{base}}/users/statistic
 Authorization: {{auth0token}}
 
 ### User Admin

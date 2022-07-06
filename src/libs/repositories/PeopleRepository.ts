@@ -1,9 +1,18 @@
 import { Database } from '@declarations/db/tables'
+import { sql } from 'kysely'
 import { MySQLRepository } from './SQLRepository'
 
+const DEFAULT_PAGE_OFFSET = 10
+
 export class PeopleRepository extends MySQLRepository<Database> {
-    getPeople = async () =>
-        this._db
+    getPeople = async ({
+        page = 1,
+        perPage = DEFAULT_PAGE_OFFSET,
+    }: {
+        page?: number
+        perPage?: number
+    }) => {
+        const query = this._db
             .selectFrom('people')
             .select([
                 'people_id',
@@ -15,6 +24,22 @@ export class PeopleRepository extends MySQLRepository<Database> {
                 'status',
                 'business_unit',
                 'position_title',
+                'email_address_home',
+                'email_address_work',
+            ])
+            .limit(perPage)
+            .offset((page - 1) * perPage)
+        return query.execute()
+    }
+
+    getStatistic = async () =>
+        this._db
+            .selectFrom('people')
+            .select([
+                this._db.fn.count<number>('people.people_id').as('total'),
+                sql<number>`COUNT(IF(LOWER(status) = 'active', 1 , null))`.as(
+                    'active',
+                ),
             ])
             .execute()
 
