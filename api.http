@@ -82,7 +82,21 @@ Content-Type: application/json
 ### Requests
 # QueryString:
 #   last: number - the number of days for which the data is received
-GET {{base}}/requests?last
+#   page: number DEFAULT = 1
+#   perPage: number DEFAULT = 10
+# Response.data: 
+# {
+  #     requests: {
+  #     work_order_id: number
+  #     peripheral_description: string
+  #     request_type: string
+  #     runbook: string
+  #     location: string
+  #     event_date: string
+  #     action: string
+  # }[] 
+# }
+GET {{base}}/requests
 Authorization: {{auth0token}}
 
 ### Control Center
