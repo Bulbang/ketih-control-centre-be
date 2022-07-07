@@ -4,10 +4,33 @@
 # QueryString:
 #   page: number DEFAULT = 1
 #   perPage: number DEFAULT = 10
+# Response.data:
+  # {
+    # "users": {
+        # "people_id": string,
+        # "first_name": string,
+        # "last_name": string,
+        # "phone_number_mobile": string,
+        # "phone_number_home": string,
+        # "status": string,
+        # "business_unit": string,
+        # "position_title": string,
+        # "email_address_home": string,
+        # "email_address_work": string,
+        # "country_name": string
+#   }[]
+# }
 GET {{base}}/users
 Authorization: {{auth0token}}
 
 ### User Admin
+# Response.data:
+  # {
+    # "statistic": {
+      # "total": number,
+      # "active": number
+    # }
+# }
 GET {{base}}/users/statistic
 Authorization: {{auth0token}}
 
@@ -72,6 +95,22 @@ Authorization: {{auth0token}}
 # QueryString:
 #   page: number DEFAULT = 1
 #   perPage: number DEFAULT = 10
+#   countryCode: string
+#   type: string
+# Response.data:
+  # {
+    # incidents: {
+      # "incident_id": number,
+      # "action": string
+      # "latitude": number
+      # "longitude": number,
+      # "event_type": string,
+      # "event_id": number,
+      # "country": string,
+      # "short_desc": string,
+      # "long_desc": string
+    # }[]
+# }
 GET {{base}}/events/incidents
 Authorization: {{auth0token}}
 
@@ -79,10 +118,45 @@ Authorization: {{auth0token}}
 # QueryString:
 #   page: number DEFAULT = 1
 #   perPage: number DEFAULT = 10
+#   countryCode: string
+#   type: string
+# Response.data:
+  # {
+    # events: {
+      # "event_id": number,
+      # "event_type": string,
+      # "action": string
+      # "country": string,
+      # "latitude": number
+      # "longitude": number,
+      # "short_desc": string,
+      # "long_desc": string
+    # }[]
+# }
 GET {{base}}/events
 Authorization: {{auth0token}}
 
 ### Events
+# QueryString:
+#   filterType: "country" | "type"
+# Response.data:
+  # {
+    # "type": string,
+    # "long_desc": string
+  # }[] | 
+  # { 
+    # "country_name": string
+    # "country_code": string
+  # }[]
+GET {{base}}/events/fitler
+Authorization: {{auth0token}}
+
+### Events
+# Response.data:
+  # {
+    # "events": number,
+    # "incidents": number
+  # }
 GET {{base}}/events/statistic
 Authorization: {{auth0token}}
 
