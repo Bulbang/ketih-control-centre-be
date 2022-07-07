@@ -7,7 +7,19 @@ const db = createDbConnection()
 const peopleRepository = new PeopleRepository(db)
 
 type LambdaReturn = {
-    users: Awaited<ReturnType<typeof peopleRepository.getPeople>>
+    users: {
+        people_id: number
+        first_name: string
+        last_name: string
+        phone_number_mobile: string
+        phone_number_home: string
+        status: string
+        business_unit: string
+        position_title: string
+        email_address_home: string
+        email_address_work: string
+        country_name: string
+    }[]
 }
 
 const getUsers: ValidatedEventAPIGatewayProxyEvent<

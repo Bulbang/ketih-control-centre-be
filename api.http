@@ -7,7 +7,7 @@
 # Response.data:
   # {
     # "users": {
-        # "people_id": string,
+        # "people_id": number,
         # "first_name": string,
         # "last_name": string,
         # "phone_number_mobile": string,

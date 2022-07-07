@@ -7,7 +7,16 @@ const db = createDbConnection()
 const eventRepository = new EventRepository(db)
 
 type LambdaReturn = {
-    events: Awaited<ReturnType<typeof eventRepository.getAllEvents>>
+    events: {
+        event_id: number
+        event_type: string
+        action: string
+        country: string
+        latitude: number
+        longitude: number
+        short_desc: string
+        long_desc: string
+    }[]
 }
 
 const getEvents: ValidatedEventAPIGatewayProxyEvent<

@@ -10,8 +10,14 @@ const countryRepository = new CountryRepository(db)
 const eventTypeRepository = new EventTypeRepository(db)
 
 type LambdaReturn =
-    | Awaited<ReturnType<typeof countryRepository.getCountries>>
-    | Awaited<ReturnType<typeof eventTypeRepository.getEventTypes>>
+    | {
+          type: string
+          long_desc: string
+      }[]
+    | {
+          country_name: string
+          country_code: string
+      }[]
 
 const getFilters: ValidatedEventAPIGatewayProxyEvent<
     undefined,

@@ -7,7 +7,17 @@ const db = createDbConnection()
 const incidentRepository = new IncidentRepository(db)
 
 type LambdaReturn = {
-    incidents: Awaited<ReturnType<typeof incidentRepository.getIncidents>>
+    incidents: {
+        incident_id: number
+        action: string
+        latitude: number
+        longitude: number
+        event_type: string
+        event_id: number
+        country: string
+        short_desc: string
+        long_desc: string
+    }[]
 }
 
 const events: ValidatedEventAPIGatewayProxyEvent<
