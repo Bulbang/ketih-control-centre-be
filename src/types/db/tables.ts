@@ -197,6 +197,15 @@ interface CountryTable {
     last_modified: string
 }
 
+interface EventTypeTable {
+    type_id: Generated<number>
+    short_desc: string
+    long_desc: string
+    info_link: string
+    notes: string
+    last_modified: string
+}
+
 export interface Database {
     work_order: WorkOrderTable
     event: EventTable
@@ -209,4 +218,5 @@ export interface Database {
     item: ItemTable
     item_detail: ItemDetailTable
     country: CountryTable
+    type: EventTypeTable
 }

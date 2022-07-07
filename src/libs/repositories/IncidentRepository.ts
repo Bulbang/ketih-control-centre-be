@@ -7,9 +7,13 @@ export class IncidentRepository extends MySQLRepository<Database> {
     getIncidents = async ({
         page = 1,
         perPage = +DEFAULT_PAGE_OFFSET,
+        countryCode,
+        type,
     }: {
         page?: number
         perPage?: number
+        countryCode?: string
+        type?: string
     }) =>
         this._db
             .selectFrom('incident')
@@ -26,6 +30,12 @@ export class IncidentRepository extends MySQLRepository<Database> {
                 'work_order.work_order_id',
             )
             .leftJoin('country', 'work_order.country', 'country.country_code')
+            .if(countryCode?.length > 0, (qb) =>
+                qb.where('work_order.country', '=', countryCode.toUpperCase()),
+            )
+            .if(type?.length > 0, (qb) =>
+                qb.where('event.action', '=', type.toLowerCase()),
+            )
             .select([
                 'country.country_name as country',
                 'country.latitude',

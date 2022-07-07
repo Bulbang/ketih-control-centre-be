@@ -7,9 +7,13 @@ export class EventRepository extends MySQLRepository<Database> {
     getAllEvents = async ({
         page = 1,
         perPage = +DEFAULT_PAGE_OFFSET,
+        countryCode,
+        type,
     }: {
         page?: number
         perPage?: number
+        countryCode?: string
+        type?: string
     }) =>
         this._db
             .selectFrom('event')
@@ -38,6 +42,12 @@ export class EventRepository extends MySQLRepository<Database> {
                 'event_classification.short_desc',
                 'event_classification.long_desc',
             ])
+            .if(countryCode?.length > 0, (qb) =>
+                qb.where('work_order.country', '=', countryCode.toUpperCase()),
+            )
+            .if(type?.length > 0, (qb) =>
+                qb.where('event.action', '=', type.toLowerCase()),
+            )
             .limit(perPage)
             .offset((page - 1) * perPage)
             .execute()

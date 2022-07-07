@@ -14,11 +14,19 @@ const getEvents: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (event) => {
-    const { page, perPage } = event.queryStringParameters as unknown as {
-        page: number
-        perPage: number
-    }
-    const events = await eventRepository.getAllEvents({ perPage, page })
+    const { page, perPage, countryCode, type } =
+        event.queryStringParameters as {
+            page?: number
+            perPage?: number
+            countryCode?: string
+            type?: string
+        }
+    const events = await eventRepository.getAllEvents({
+        perPage,
+        page,
+        countryCode,
+        type,
+    })
 
     return {
         events,
