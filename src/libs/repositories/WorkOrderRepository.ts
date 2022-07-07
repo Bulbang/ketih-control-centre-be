@@ -2,23 +2,50 @@ import { Database } from '@declarations/db/tables'
 import { sql } from 'kysely'
 import { MySQLRepository } from './SQLRepository'
 
+const { DEFAULT_PAGE_OFFSET } = process.env
+
 export class WorkOrderRepository extends MySQLRepository<Database> {
-    getWorkOrders = async (dayInterval?: number) =>
+    getWorkOrders = async ({
+        last = 7,
+        page = 1,
+        perPage = +DEFAULT_PAGE_OFFSET,
+    }: {
+        last: number
+        page: number
+        perPage: number
+    }) =>
         this._db
             .selectFrom('work_order')
             .select([
-                'work_order_id',
-                'periperal_description',
-                'request_type',
-                'country',
+                'work_order.work_order_id',
+                'work_order.peripheral_description',
+                'work_order.request_type',
+                'work_order.runbook',
             ])
-            .where(
-                'request_date',
-                '>=',
-                sql`DATE(NOW() - INTERVAL ${
-                    dayInterval ? dayInterval : 7
-                } DAY)`,
+            .leftJoin(
+                'event',
+                'event.work_order_id',
+                'work_order.work_order_id',
             )
+            .select(['event.event_date as event_date', 'event.action'])
+            .where(
+                sql`event_date = (SELECT MAX(event.event_date) FROM event WHERE event.work_order_id = work_order.work_order_id)`,
+            )
+            .where(
+                'event_date',
+                '>=',
+                sql`DATE(NOW() - INTERVAL ${last ? last : 7} DAY)`,
+            )
+            .limit(perPage)
+            .offset((page - 1) * perPage)
+            .orderBy('event_date', 'desc')
+            // .groupBy([
+            //     'work_order.work_order_id',
+            //     'work_order.peripheral_description',
+            //     'work_order.request_type',
+            //     'work_order.runbook',
+            //     'event.action',
+            // ])
             .execute()
 
     getWorkOrderStats = async (dayInterval: number) => {

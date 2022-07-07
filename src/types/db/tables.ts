@@ -7,7 +7,7 @@ interface WorkOrderTable {
     client_work_order: string
     itsm_id: string
     kit_id: string
-    periperal_description: string
+    peripheral_description: string
     employee_id: string
     runbook: string
     request_name: string
