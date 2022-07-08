@@ -9,10 +9,14 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
         last = 7,
         page = 1,
         perPage = +DEFAULT_PAGE_OFFSET,
+        direction = 'desc',
+        sortBy = 'event_date',
     }: {
         last: number
         page: number
         perPage: number
+        sortBy: any
+        direction: 'desc' | 'asc'
     }) =>
         this._db
             .selectFrom('work_order')
@@ -21,13 +25,14 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
                 'work_order.peripheral_description',
                 'work_order.request_type',
                 'work_order.runbook',
+                'work_order.request_date as event_date',
             ])
             .leftJoin(
                 'event',
                 'event.work_order_id',
                 'work_order.work_order_id',
             )
-            .select(['event.event_date as event_date', 'event.action'])
+            .select(['event.action'])
             .where(
                 sql`event_date = (SELECT MAX(event.event_date) FROM event WHERE event.work_order_id = work_order.work_order_id)`,
             )
@@ -38,7 +43,7 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
             )
             .limit(perPage)
             .offset((page - 1) * perPage)
-            .orderBy('event_date', 'desc')
+            .orderBy(sortBy, direction)
             // .groupBy([
             //     'work_order.work_order_id',
             //     'work_order.peripheral_description',

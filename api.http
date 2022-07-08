@@ -84,6 +84,8 @@ Content-Type: application/json
 #   last: number - the number of days for which the data is received
 #   page: number DEFAULT = 1
 #   perPage: number DEFAULT = 10
+#   sortBy: keyof Response.data DEFAULT = 'event_date'
+#   direction: 'asc' | 'desc' DEFAULT = 'desc'
 # Response.data: 
 # {
   #     requests: {
