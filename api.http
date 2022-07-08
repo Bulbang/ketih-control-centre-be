@@ -181,13 +181,50 @@ GET {{base}}/change-logs
 Authorization: {{auth0token}}
 
 ### Items
-GET {{base}}/items/stock
+# Response.data: {
+#     peripherals: {
+#         type: string
+#         model: string
+#         deployed: number
+#         in_stock: number
+#     }[]
+#     total: number
+# }
+GET {{base}}/items/peripherals
 Authorization: {{auth0token}}
 
 ### Items
-GET {{base}}/items/orders
+# Response.data: {
+    # total: number
+    # recieved_by_atnt: number
+    # in_transit: number
+    # not_shipped_by_employee: number
+# }
+GET {{base}}/items/returns
 Authorization: {{auth0token}}
 
 ### Items
-GET {{base}}/items/overview
+# Response.data: {
+#     assets: {
+#         asset_tag: string
+#         asset_type: string
+#         model: string
+#         status: string
+#         warranty_date: string
+#         requests: string[]
+#     }[]
+#     total: number
+# }
+GET {{base}}/items/assets
+Authorization: {{auth0token}}
+
+### Items
+# Response.data: {
+#     total: number
+#     deployed: number
+#     in_stock: number
+#     returned: number
+#     quarantined: number
+# }
+GET {{base}}/items/assets/by-type
 Authorization: {{auth0token}}
