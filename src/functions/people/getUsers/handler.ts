@@ -26,9 +26,9 @@ const getUsers: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (event) => {
-    const { page, perPage } = event.queryStringParameters as unknown as {
-        page: number
-        perPage: number
+    const { page, perPage } = event.queryStringParameters as {
+        page?: number
+        perPage?: number
     }
     const users = await peopleRepository.getPeople({
         page,
