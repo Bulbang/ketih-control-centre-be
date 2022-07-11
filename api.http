@@ -228,3 +228,17 @@ Authorization: {{auth0token}}
 # }
 GET {{base}}/items/assets/by-type
 Authorization: {{auth0token}}
+
+### Support
+# QueryString: 
+#   status: "active" | "inactive" DEFAULT = "active"
+# 
+# Response.data: {
+#     subject: string
+#     desc: string
+#     status: 'inactive'
+#     date: string
+#     type: "issue" | "request" | "feedback"
+# }[]
+GET {{base}}/support
+Authorization: {{auth0token}}
