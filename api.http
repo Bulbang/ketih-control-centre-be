@@ -177,7 +177,28 @@ GET {{base}}/events/statistic
 Authorization: {{auth0token}}
 
 ### Changelog
+# QueryString:
+#   page: number DEFAULT = 1
+#   perPage: number DEFAULT = 10
+# Response.data: 
+#   changeLogs: 
+#   {
+#     change_log_id: unknown
+#     log_detail: string
+#     last_modified: string
+#   }[]
 GET {{base}}/change-logs
+Authorization: {{auth0token}}
+
+### Changelog
+# Response.data:     
+#   reactions: 
+#   {
+#     amount: number
+#     emoji_code: string
+#     pushed: boolean
+#   }[]
+GET {{base}}/change-logs/:logId/:peopleId
 Authorization: {{auth0token}}
 
 ### Items

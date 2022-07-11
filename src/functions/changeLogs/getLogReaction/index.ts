@@ -1,15 +1,15 @@
 import { handlerPath } from '@libs/utils/handler-resolver'
 import { LambdaConfig } from '@declarations/aws/funcs'
-import { mockDbCreds } from '@libs/utils/dbCredentials'
+import { dbCreds } from '@libs/utils/dbCredentials'
 
-const getChangeLogs: LambdaConfig = {
+const getLogReaction: LambdaConfig = {
     handler: handlerPath(__dirname) + '/handler.main',
-    environment: mockDbCreds,
+    environment: dbCreds,
     events: [
         {
             http: {
                 method: 'get',
-                path: 'change-logs',
+                path: 'change-logs/{logId}/{peopleId}',
                 authorizer: {
                     type: 'token',
                     name: 'auth',
@@ -22,4 +22,4 @@ const getChangeLogs: LambdaConfig = {
     ],
 }
 
-export default getChangeLogs
+export default getLogReaction

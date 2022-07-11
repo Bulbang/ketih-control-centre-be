@@ -7,11 +7,11 @@ import { join } from 'path'
 const db = new Kysely<Database>({
     dialect: new MysqlDialect({
         pool: createPool({
-            database: '',
-            host: '',
-            password: '',
-            user: '',
-            port: 0000,
+            database: 'railway',
+            host: 'containers-us-west-66.railway.app',
+            password: 'kfwawsFcfnmVllFKJ0n4',
+            user: 'root',
+            port: 7853,
         }),
     }),
 })
@@ -20,7 +20,7 @@ const migrator = new Migrator({
     provider: new FileMigrationProvider({
         fs: promises,
         path: { join },
-        migrationFolder: './src/db/migrations',
+        migrationFolder: './src/db/migrations/dump',
     }),
 })
 

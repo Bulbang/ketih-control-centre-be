@@ -206,6 +206,13 @@ interface EventTypeTable {
     last_modified: string
 }
 
+interface ChangeLogReactionsTable {
+    change_log_reaction_id: Generated<number>
+    people_id: number
+    change_log_id: number
+    emoji_code: string
+}
+
 export interface Database {
     work_order: WorkOrderTable
     event: EventTable
@@ -219,4 +226,5 @@ export interface Database {
     item_detail: ItemDetailTable
     country: CountryTable
     type: EventTypeTable
+    change_log_reaction: ChangeLogReactionsTable
 }

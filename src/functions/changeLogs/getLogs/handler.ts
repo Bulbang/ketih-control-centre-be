@@ -7,14 +7,25 @@ const db = createDbConnection()
 const changeLogRepository = new ChangeLogRepository(db)
 
 type LambdaReturn = {
-    changeLogs: Awaited<ReturnType<typeof changeLogRepository.getChangeLogs>>
+    changeLogs: {
+        change_log_id: unknown
+        log_detail: string
+        last_modified: string
+    }[]
 }
 
 const getChangeLogs: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
-> = async (_) => {
-    const changeLogs = await changeLogRepository.getChangeLogs()
+> = async (event) => {
+    const { page, perPage } = event.queryStringParameters as {
+        page?: number
+        perPage?: number
+    }
+    const changeLogs = await changeLogRepository.getChangeLogs({
+        page,
+        perPage,
+    })
 
     return {
         changeLogs,
