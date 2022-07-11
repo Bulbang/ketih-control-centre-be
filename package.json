@@ -10,7 +10,8 @@
         "migration:run:to-latest": "ts-node src/db/migrateToLatest.ts",
         "migration:run:up": "ts-node src/db/migrateUp.ts",
         "migration:run:down": "ts-node src/db/migrateDown.ts",
-        "lambda:new": "sh ./sh/lambda-create.sh"
+        "lambda:new": "sh ./sh/lambda-create.sh",
+        "lambda:deploy": "sls deploy function --stage test --aws-profile default --function"
     },
     "husky": {
         "hooks": {
