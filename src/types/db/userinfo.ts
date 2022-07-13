@@ -9,4 +9,5 @@ export type UserInfo = {
     updated_at: string
     email: string
     email_verified: boolean
+    [key: `${string}/roles`]: string[]
 }

@@ -6,6 +6,7 @@ import {
 import { DynamoRepository } from '@libs/repositories/DynamoRepository'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { getUserInfo } from '@libs/utils/getUserinfo'
+import { UserInfo } from '@declarations/db/userinfo'
 
 const dc = new DocumentClient()
 const { TABLE_NAME, AUTH0_URL } = process.env
@@ -39,19 +40,22 @@ const handler: APIGatewayTokenAuthorizerHandler = async (
 ) => {
     const [authToken] = event.authorizationToken.split(' ').reverse()
 
-    const user = await dynamoRepository.findByToken(authToken)
+    let user = (await dynamoRepository.findByToken(authToken)) as UserInfo
 
     // If authToken don`t extist (or expired) we will record userData from auth0 by new authToken
     if (!user) {
         try {
-            const userData = await getUserInfo(authToken, AUTH0_URL)
-            await dynamoRepository.save(authToken, userData)
+            user = await getUserInfo(authToken, AUTH0_URL)
+            await dynamoRepository.save(authToken, user)
         } catch (error) {
             console.log(error.toString())
             callback('Unauthorized')
         }
     }
-    callback(null, generatePolicy('user', 'Allow', event.methodArn))
+    callback(null, {
+        ...generatePolicy('user', 'Allow', event.methodArn),
+        context: { user: JSON.stringify(user) },
+    })
 
     return null
 }
