@@ -3,14 +3,14 @@ import {
     AuthResponse,
     PolicyDocument,
 } from 'aws-lambda'
-import { DynamoRepository } from '@libs/repositories/dynamoDb/DynamoRepository'
+import { UserRepository } from '@libs/repositories/dynamoDb/DynamoRepository'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { getUserInfo } from '@libs/utils/getUserinfo'
 import { UserInfo } from '@declarations/db/userinfo'
 
 const dc = new DocumentClient()
 const { TABLE_NAME, AUTH0_URL } = process.env
-const dynamoRepository = new DynamoRepository(dc, TABLE_NAME)
+const dynamoRepository = new UserRepository(dc, TABLE_NAME)
 
 const generatePolicy = (
     principalId: string,

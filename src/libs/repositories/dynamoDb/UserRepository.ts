@@ -1,7 +1,7 @@
 import { UserInfo } from '@declarations/db/userinfo'
 import AWS from 'aws-sdk'
 
-export class DynamoRepository {
+export class UserRepository {
     constructor(
         private _ddc: AWS.DynamoDB.DocumentClient,
         private _tableName: string,
