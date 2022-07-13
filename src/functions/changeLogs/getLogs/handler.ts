@@ -1,6 +1,6 @@
 import { middyfy } from '@libs/middlewares/middyfy'
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
-import { ChangeLogRepository } from '@libs/repositories/ChangeLogRepository'
+import { ChangeLogRepository } from '@libs/repositories/mysql/ChangeLogRepository'
 import { createDbConnection } from '@libs/utils/createDbConnection'
 
 const db = createDbConnection()

@@ -1,7 +1,7 @@
 import { middyfy } from '@libs/middlewares/middyfy'
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
 import { createDbConnection } from '@libs/utils/createDbConnection'
-import { PeopleRepository } from '@libs/repositories/PeopleRepository'
+import { PeopleRepository } from '@libs/repositories/mysql/PeopleRepository'
 
 const db = createDbConnection()
 const peopleRepository = new PeopleRepository(db)

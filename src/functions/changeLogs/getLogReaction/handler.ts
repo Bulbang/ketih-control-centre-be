@@ -1,6 +1,6 @@
 import { middyfy } from '@libs/middlewares/middyfy'
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
-import { ChangeLogReactionsRepository } from '@libs/repositories/ChangeLogReactionsRepository'
+import { ChangeLogReactionsRepository } from '@libs/repositories/mysql/ChangeLogReactionsRepository'
 import { createDbConnection } from '@libs/utils/createDbConnection'
 import { badRequest } from '@hapi/boom'
 

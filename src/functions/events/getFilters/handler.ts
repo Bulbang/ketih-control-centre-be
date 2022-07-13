@@ -1,8 +1,8 @@
 import { middyfy } from '@libs/middlewares/middyfy'
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
-import { CountryRepository } from '@libs/repositories/CountryRepository'
+import { CountryRepository } from '@libs/repositories/mysql/CountryRepository'
 import { createDbConnection } from '@libs/utils/createDbConnection'
-import { EventTypeRepository } from '@libs/repositories/EventClassificationRepository'
+import { EventTypeRepository } from '@libs/repositories/mysql/EventClassificationRepository'
 import { badRequest } from '@hapi/boom'
 
 const db = createDbConnection()

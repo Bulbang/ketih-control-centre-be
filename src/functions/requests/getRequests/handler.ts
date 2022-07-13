@@ -1,7 +1,7 @@
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
 import { badRequest } from '@hapi/boom'
 import { middyfy } from '@libs/middlewares/middyfy'
-import { WorkOrderRepository } from '@libs/repositories/WorkOrderRepository'
+import { WorkOrderRepository } from '@libs/repositories/mysql/WorkOrderRepository'
 import { createDbConnection } from '@libs/utils/createDbConnection'
 
 const db = createDbConnection()

@@ -1,6 +1,6 @@
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
 import { middyfy } from '@libs/middlewares/middyfy'
-import { EventRepository } from '@libs/repositories/EventRepository'
+import { EventRepository } from '@libs/repositories/mysql/EventRepository'
 import { createDbConnection } from '@libs/utils/createDbConnection'
 
 const db = createDbConnection()
