@@ -98,6 +98,13 @@
   resolved "https://registry.yarnpkg.com/@middy/do-not-wait-for-empty-event-loop/-/do-not-wait-for-empty-event-loop-3.1.0.tgz#93ee2c512dbee77e9ba4e7d84087d47519e396e2"
   integrity sha512-WsLTlT2nJn3bxfHISeT9xTTgUnXteB6OjRbJ3lM2uOt/GOIIMBDYE8ilrxgMVuUUfSxrrYhv3oyZusNAWH8yxA==
 
+"@middy/http-cors@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@middy/http-cors/-/http-cors-3.1.0.tgz#8bbcc8f0b034eb4db3338efc277fb968aee2f40c"
+  integrity sha512-PWKhNQ9feK4hDB7XI1AM+iCgY7+IETre9zM3fBkZCSPGnSos79rZ325OEYgbHqUWwDIMoDWbDlYfAxzWyQO0tw==
+  dependencies:
+    "@middy/util" "3.1.0"
+
 "@middy/http-event-normalizer@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@middy/http-event-normalizer/-/http-event-normalizer-3.1.0.tgz#355c0b8888fa4e3281b8a12cdb4a6cc8d8e858f6"
@@ -114,6 +121,11 @@
   integrity sha512-6xysTWlK8s8QTVyQE9MfXR6fIY9h26uyiD1rM0mmYzGhLqWmamHgJvXzpBVXyRwOej451zSfjdSgKU66nxZmrw==
   dependencies:
     "@middy/util" "^2.5.7"
+
+"@middy/util@3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@middy/util/-/util-3.1.0.tgz#671a540a8629add033c369a85357701f9ee4e091"
+  integrity sha512-cexFyBQIG0j71pjaknFcJYtjctoxxAvwVAAEjA2ySNIwKlk1BiJo0IRLf0k4grbRoqYjXQ8SLLa8I0M1kS6UEw==
 
 "@middy/util@^2.5.7":
   version "2.5.7"

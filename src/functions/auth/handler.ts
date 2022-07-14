@@ -3,7 +3,7 @@ import {
     AuthResponse,
     PolicyDocument,
 } from 'aws-lambda'
-import { UserRepository } from '@libs/repositories/dynamoDb/DynamoRepository'
+import { UserRepository } from '@libs/repositories/dynamoDb/UserRepository'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { getUserInfo } from '@libs/utils/getUserinfo'
 import { UserInfo } from '@declarations/db/userinfo'
