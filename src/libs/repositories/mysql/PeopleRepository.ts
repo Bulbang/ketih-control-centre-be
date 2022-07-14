@@ -30,6 +30,7 @@ export class PeopleRepository extends MySQLRepository<Database> {
             .select('country.country_name')
             .limit(perPage)
             .offset((page - 1) * perPage)
+            .orderBy('people.people_id')
             .execute()
 
     getStatistic = async () =>
@@ -60,5 +61,26 @@ export class PeopleRepository extends MySQLRepository<Database> {
                     .slice(0, 19)
                     .replace('T', ' '),
             })
+            .execute()
+
+    getUserByEmail = async ({ email }: { email: string }) =>
+        this._db
+            .selectFrom('people')
+            .select([
+                'people.people_id',
+                'people.first_name',
+                'people.last_name',
+                'people.phone_number_mobile',
+                'people.phone_number_home',
+                'people.status',
+                'people.business_unit',
+                'people.position_title',
+                'people.email_address_home',
+                'people.email_address_work',
+            ])
+            .where('people.email_address_home', '=', email)
+            .orWhere('people.email_address_work', '=', email)
+            .leftJoin('country', 'people.country_code', 'country.country_code')
+            .select('country.country_name')
             .execute()
 }

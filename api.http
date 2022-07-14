@@ -265,18 +265,22 @@ GET {{base}}/support
 Authorization: {{auth0token}}
 
 ###
-# Response.data: {
-#     sub: string
-#     given_name: string
-#     family_name: string
-#     nickname: string
-#     name: string
-#     picture: string
-#     locale: string
-#     updated_at: string
-#     email: string
-#     email_verified: boolean
-#     [key: `${string}/roles`]: string[]     *** Should be enabled by Rules in auth0
+# Response.data:
+  # {
+    # "users": {
+        # "people_id": number,
+        # "first_name": string,
+        # "last_name": string,
+        # "phone_number_mobile": string,
+        # "phone_number_home": string,
+        # "status": string,
+        # "business_unit": string,
+        # "position_title": string,
+        # "email_address_home": string,
+        # "email_address_work": string,
+        # "country_name": string,
+        # "roles": string[]
+#   }
 # }
 GET {{base}}/me
 Authorization: {{auth0token}}

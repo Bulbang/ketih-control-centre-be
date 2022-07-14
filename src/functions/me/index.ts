@@ -1,9 +1,10 @@
 import { handlerPath } from '@libs/utils/handler-resolver'
 import { LambdaConfig } from '@declarations/aws/funcs'
+import { dbCreds } from '@libs/utils/dbCredentials'
 
 const me: LambdaConfig = {
     handler: handlerPath(__dirname) + '/handler.main',
-    environment: {},
+    environment: dbCreds,
     events: [
         {
             http: {
