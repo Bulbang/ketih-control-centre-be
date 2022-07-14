@@ -1,7 +1,17 @@
 import { AwsResources } from './src/types/aws/resources'
 const resources: AwsResources = {
-    Parameters: { DataGSI1IndexName: { Type: 'String', Default: 'gsi-1' } },
     Resources: {
+        ActivityTable: {
+            Type: 'AWS::DynamoDB::Table',
+            Properties: {
+                TableName: '${self:custom.prefix}-activity-table',
+                BillingMode: 'PAY_PER_REQUEST',
+                AttributeDefinitions: [
+                    { AttributeName: 'id', AttributeType: 'S' },
+                ],
+                KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }],
+            },
+        },
         UsersTable: {
             Type: 'AWS::DynamoDB::Table',
             Properties: {

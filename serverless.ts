@@ -20,10 +20,12 @@ const serverlessConfiguration: AWS = {
             {
                 Effect: 'Allow',
                 Action: ['dynamodb:PutItem', 'dynamodb:Query'],
-                Resource: [
-                    { 'Fn::GetAtt': ['UsersTable', 'Arn'] },
-                    // { "Fn::Join": ['/', [{ 'Fn::GetAtt': ['UsersTable', 'Arn'] }, "index", {Ref: "DataGSI1IndexName"}]] },
-                ],
+                Resource: [{ 'Fn::GetAtt': ['UsersTable', 'Arn'] }],
+            },
+            {
+                Effect: 'Allow',
+                Action: ['dynamodb:PutItem', 'dynamodb:Query', 'dynamodb:Scan'],
+                Resource: [{ 'Fn::GetAtt': ['ActivityTable', 'Arn'] }],
             },
         ],
         environment: {
@@ -32,6 +34,7 @@ const serverlessConfiguration: AWS = {
             DEFAULT_PAGE_OFFSET: '10',
             AUTH0_CUSTOM_CLAIMS_NAMESPACE:
                 '${env:AUTH0_CUSTOM_CLAIMS_NAMESPACE}',
+            ACTIVITY_TABLE_NAME: { Ref: 'ActivityTable' },
         },
     },
 

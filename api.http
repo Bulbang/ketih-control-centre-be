@@ -285,3 +285,15 @@ Authorization: {{auth0token}}
 # }
 GET {{base}}/me
 Authorization: {{auth0token}}
+
+### Activity Log
+# Response.data: {
+    # id: string
+    # user_first_name: string
+    # user_last_name: string
+    # user_email: string
+    # activity: string
+    # date: string
+# }
+GET {{base}}/activities
+Authorization: {{auth0token}}
