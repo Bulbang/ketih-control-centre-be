@@ -267,7 +267,7 @@ Authorization: {{auth0token}}
 ###
 # Response.data:
   # {
-    # "users": {
+    # "user": {
         # "people_id": number,
         # "first_name": string,
         # "last_name": string,
@@ -279,7 +279,8 @@ Authorization: {{auth0token}}
         # "email_address_home": string,
         # "email_address_work": string,
         # "country_name": string,
-        # "roles": string[]
+        # "roles": string[],
+        # "picture": string
 #   }
 # }
 GET {{base}}/me

@@ -21,6 +21,7 @@ type LambdaReturn = {
         email_address_work: string
         country_name: string
         roles: string[]
+        picture: string
     }
 }
 
@@ -36,6 +37,7 @@ const me: ValidatedEventAPIGatewayProxyEvent<undefined, LambdaReturn> = async (
     const user = {
         ...dbUser,
         roles: auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/roles`],
+        picture: auth0user.picture,
     }
     return {
         user,
