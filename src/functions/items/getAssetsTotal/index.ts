@@ -2,14 +2,14 @@ import { handlerPath } from '@libs/utils/handler-resolver'
 import { LambdaConfig } from '@declarations/aws/funcs'
 import { dbCreds } from '@libs/utils/dbCredentials'
 
-const getAssets: LambdaConfig = {
+const getAssetsTotal: LambdaConfig = {
     handler: handlerPath(__dirname) + '/handler.main',
     environment: dbCreds,
     events: [
         {
             http: {
                 method: 'get',
-                path: 'items/assets',
+                path: 'items/assets/total',
                 authorizer: {
                     type: 'token',
                     name: 'auth',
@@ -22,4 +22,4 @@ const getAssets: LambdaConfig = {
     ],
 }
 
-export default getAssets
+export default getAssetsTotal

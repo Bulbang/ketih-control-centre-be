@@ -1,5 +1,11 @@
 import { middyfy } from '@libs/middlewares/middyfy'
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
+import { createDbConnection } from '@libs/utils/createDbConnection'
+import { ItemDetailRepository } from '@libs/repositories/mysql/ItemDetailRepository'
+import { badRequest } from '@hapi/boom'
+
+const db = createDbConnection()
+const itemDetailRepository = new ItemDetailRepository(db)
 
 type LambdaReturn = {
     assets: {
@@ -10,41 +16,43 @@ type LambdaReturn = {
         warranty_date: string
         requests: string[]
     }[]
-    total: number
 }
 
 const getAssets: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
-> = async () => {
-    return {
-        assets: [
-            {
-                asset_tag: 'dasdasd',
-                asset_type: 'Laptop',
-                model: 'MacBook',
-                status: 'In-stock',
-                warranty_date: '03/23/2023',
-                requests: ['REQ12312', 'REQ12313'],
-            },
-            {
-                asset_tag: 'asdad',
-                asset_type: 'Tablet',
-                model: 'IPad',
-                status: 'Deployed',
-                warranty_date: '03/23/2023',
-                requests: ['REQ12212'],
-            },
-            {
-                asset_tag: 'bbbbb',
-                asset_type: 'Laptop',
-                model: 'HP ZBook',
-                status: 'Returned',
-                warranty_date: '03/23/2023',
-                requests: ['REQ12312', 'REQ12313', 'REQ12313'],
-            },
-        ],
-        total: 228,
+> = async (event) => {
+    const { page, perPage, sortBy, direction } =
+        event.queryStringParameters as {
+            page?: number
+            perPage?: number
+            sortBy?: string
+            direction?: 'asc' | 'desc'
+        }
+
+    if (direction && direction != 'asc' && direction != 'desc') {
+        throw badRequest(`Unknown sort direction parameter: '${direction}'`)
+    }
+    try {
+        const assets = await itemDetailRepository.getAssets({
+            page,
+            perPage,
+            sortBy,
+            direction,
+        })
+
+        return {
+            assets: assets.map((asset) => {
+                return {
+                    ...asset,
+                    requests: [`REQ${Math.round(Math.random() * 8999) + 1000}`],
+                }
+            }),
+        }
+    } catch (error) {
+        throw error.message == `Unknown column '${sortBy}' in 'order clause'`
+            ? badRequest(`Unknown sortBy parameter: '${sortBy}'`)
+            : error
     }
 }
 
