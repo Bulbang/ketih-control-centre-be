@@ -1,10 +1,6 @@
 import { middyfy } from '@libs/middlewares/middyfy'
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
-import { createDbConnection } from '@libs/utils/createDbConnection'
-import { PeopleRepository } from '@libs/repositories/mysql/PeopleRepository'
-
-const db = createDbConnection()
-const peopleRepository = new PeopleRepository(db)
+import Auth0Instance from '@libs/utils/Auth0Instance'
 
 type LambdaReturn = {
     statistic: {
@@ -17,7 +13,7 @@ const getStatistic: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (_) => {
-    const [stats] = await peopleRepository.getStatistic()
+    const stats = await Auth0Instance.getStats()
     return {
         statistic: stats,
     }

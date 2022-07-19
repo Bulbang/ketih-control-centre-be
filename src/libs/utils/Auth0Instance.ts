@@ -150,6 +150,25 @@ class Auth0Instance {
         })
         return data
     }
+
+    getStats = async () => {
+        const { data } = await this._instance.get<Users>('/api/v2/users', {
+            headers: {
+                Authorization: `Bearer ${this._token}`,
+            },
+        })
+
+        return {
+            total: data.length,
+            active: data.reduce(
+                (counter, user) =>
+                    user.user_metadata.status.toLowerCase() == 'active'
+                        ? ++counter
+                        : counter,
+                0,
+            ),
+        }
+    }
 }
 
 export default new Auth0Instance()
