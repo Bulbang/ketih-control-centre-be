@@ -1,17 +1,14 @@
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
 import { middyfy } from '@libs/middlewares/middyfy'
-import { PeopleRepository } from '@libs/repositories/mysql/PeopleRepository'
-import { createDbConnection } from '@libs/utils/createDbConnection'
+import Auth0Instance from '@libs/utils/Auth0Instance'
 import schema from './schema'
-
-const db = createDbConnection()
-const peopleRepository = new PeopleRepository(db)
 
 const addUser: ValidatedEventAPIGatewayProxyEvent<typeof schema, void> = async (
     event,
 ) => {
     const { body } = event
-    await peopleRepository.addUser(body)
+    await Auth0Instance.updateToken()
+    await Auth0Instance.createUser(body)
 }
 
 export const main = middyfy(addUser)

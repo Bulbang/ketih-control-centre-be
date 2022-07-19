@@ -7,10 +7,16 @@ export default {
         last_name: {
             type: 'string',
         },
+        email: {
+            type: 'string',
+        },
         phone_number_mobile: {
             type: 'string',
         },
-        country_code: {
+        role: {
+            type: 'string',
+        },
+        country: {
             type: 'string',
         },
         status: {
@@ -19,7 +25,7 @@ export default {
         business_unit: {
             type: 'string',
         },
-        position_title: {
+        password: {
             type: 'string',
         },
     },

@@ -1,11 +1,8 @@
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
+import { badRequest } from '@hapi/boom'
 import { middyfy } from '@libs/middlewares/middyfy'
-import { PeopleRepository } from '@libs/repositories/mysql/PeopleRepository'
-import { createDbConnection } from '@libs/utils/createDbConnection'
+import Auth0Instance from '@libs/utils/Auth0Instance'
 import schema from './schema'
-
-const db = createDbConnection()
-const peopleRepository = new PeopleRepository(db)
 
 const editUser: ValidatedEventAPIGatewayProxyEvent<
     typeof schema,
@@ -13,7 +10,18 @@ const editUser: ValidatedEventAPIGatewayProxyEvent<
 > = async (event) => {
     const { body } = event
     const { id } = event.pathParameters
-    await peopleRepository.updateUser(+id, body)
+
+    if (body.email && body.password)
+        throw badRequest("Can't update password and email at the same time")
+
+    if (
+        (body.first_name && !body.last_name) ||
+        (!body.first_name && body.last_name)
+    )
+        throw badRequest("Cant't update name without first or second name")
+
+    await Auth0Instance.updateToken()
+    await Auth0Instance.updateUser(id, body)
 }
 
 export const main = middyfy(editUser)

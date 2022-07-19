@@ -7,14 +7,17 @@ export default {
         last_name: {
             type: 'string',
         },
+        email: {
+            type: 'string',
+        },
         phone_number_mobile: {
             type: 'string',
         },
-        country_code: {
+        role: {
             type: 'string',
         },
-        sms_allowed: {
-            type: 'number',
+        country: {
+            type: 'string',
         },
         status: {
             type: 'string',
@@ -22,21 +25,23 @@ export default {
         business_unit: {
             type: 'string',
         },
-        position_title: {
+        password: {
             type: 'string',
         },
-        phone_number_home: {
-            type: 'string',
+        verify_email: {
+            type: 'boolean',
         },
     },
     additionalProperties: false,
     required: [
         'first_name',
         'last_name',
+        'email',
+        'role',
         'phone_number_mobile',
-        'country_code',
+        'country',
         'status',
+        'password',
         'business_unit',
-        'position_title',
     ],
 } as const
