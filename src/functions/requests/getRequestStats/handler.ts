@@ -13,9 +13,9 @@ type LambdaReturn = Awaited<
 const getRequestStats: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
-> = async (event) => {
-    const { last } = event.queryStringParameters
-    const stats = await workOrderRepository.getWorkOrderStats(+last)
+> = async (_) => {
+    // const { last } = event.queryStringParameters
+    const stats = await workOrderRepository.getWorkOrderStats()
 
     return stats
 }

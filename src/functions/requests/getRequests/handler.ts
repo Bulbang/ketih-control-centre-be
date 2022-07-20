@@ -7,15 +7,31 @@ import { createDbConnection } from '@libs/utils/createDbConnection'
 const db = createDbConnection()
 const workOrderRepository = new WorkOrderRepository(db)
 
+const categories = [
+    'on-boarding',
+    'advance_replacement',
+    'support_device',
+    'device_refresh',
+]
+const statuses = [
+    'open',
+    'assigned',
+    'acknowledged',
+    'on-hold',
+    'closed',
+    'complete',
+    'canceled',
+]
+
 type LambdaReturn = {
     requests: {
-        work_order_id: number
-        peripheral_description: string
-        request_type: string
+        work_order_id: any
         runbook: string
+        status: string
+        end_date?: string
+        category: string
         location: string
-        event_date: string
-        action: string
+        event_date: number
     }[]
 }
 
@@ -44,13 +60,17 @@ const requests: ValidatedEventAPIGatewayProxyEvent<
         })
 
         return {
-            requests: requests.map((req: any) => {
-                const desc = JSON.parse(req.peripheral_description)
-                req.peripheral_description = desc.device_type
-                    ? `${desc.device_make} ${desc.device_type}`
-                    : desc.computer
-                req.location = null // --- !!!
-                return req
+            requests: requests.map((req) => {
+                return {
+                    ...req,
+                    status: statuses[
+                        Math.round(Math.random() * (statuses.length - 1))
+                    ],
+                    category:
+                        categories[
+                            Math.round(Math.random() * (categories.length - 1))
+                        ],
+                }
             }),
         }
     } catch (error) {
