@@ -7,11 +7,12 @@
 # Response.data:
   # {
     # "users": {
-        # "people_id": number,
+        # "user_id": number,
         # "first_name": string,
         # "last_name": string,
         # "phone_number_mobile": string,
         # "status": string,
+        # "picture": string
         # "business_unit": string,
         # "email_address_work": string,
         # "country_name": string
@@ -89,22 +90,33 @@ Content-Type: application/json
 # Response.data: 
 # {
   #     requests: {
-  #     work_order_id: number
-  #     peripheral_description: string
-  #     request_type: string
-  #     runbook: string
-  #     location: string
-  #     event_date: string
-  #     action: string
-  # }[] 
+    #     work_order_id: any,
+    #     runbook: string
+    #     status: string
+    #     end_date?: string
+    #     category: string
+    #     location: string
+    #     event_date: number
+    # }[]
 # }
 GET {{base}}/requests
 Authorization: {{auth0token}}
 
+### Requests
+# Response.data: 
+# {
+#     work_order_id: number
+#     requsetor: string
+#     runbook: string
+#     events: number[]
+#     incidents: number[]
+#     notes: string[]
+# }
+GET {{base}}/requests/:id
+Authorization: {{auth0token}}
+
 ### Control Center
-# QueryString:
-#   last: number - the number of days for which the data is received
-GET {{base}}/requests/statistic?last
+GET {{base}}/requests/statistic
 Authorization: {{auth0token}}
 
 ### Control Center / Incidents
