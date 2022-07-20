@@ -9,85 +9,87 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
         last = 7,
         page = 1,
         perPage = +DEFAULT_PAGE_OFFSET,
-        direction = 'desc',
-        sortBy = 'event_date',
+        direction = 'asc',
+        sortBy = 'work_order.work_order_id',
     }: {
-        last: number
-        page: number
-        perPage: number
-        sortBy: any
-        direction: 'desc' | 'asc'
+        last?: number
+        page?: number
+        perPage?: number
+        sortBy?: any
+        direction?: 'desc' | 'asc'
     }) =>
         this._db
             .selectFrom('work_order')
             .select([
                 'work_order.work_order_id',
-                'work_order.peripheral_description',
-                'work_order.request_type',
                 'work_order.runbook',
                 'work_order.request_date as event_date',
             ])
-            .leftJoin(
+            .leftJoin('country', 'country.country_code', 'work_order.country')
+            .select(['country.country_name as location'])
+            .rightJoin(
                 'event',
                 'event.work_order_id',
                 'work_order.work_order_id',
             )
-            .select(['event.action'])
+            // .select(['event.event_id', 'event.requestor'])
+            // .leftJoin('incident', 'incident.event_id', 'event.event_id')
+            // .select([
+            // sql<number>`COUNT(DISTINCT incident.incident_id)`.as('incidents'),
+            // 'incident.acknowledged_by as impacted',
+            // 'incident.end_date',
+            // ])
+            // .where(sql`incident.incident_id is not null`)
             .where(
-                sql`event_date = (SELECT MAX(event.event_date) FROM event WHERE event.work_order_id = work_order.work_order_id)`,
-            )
-            .where(
-                'event_date',
+                'work_order.request_date',
                 '>=',
                 sql`DATE(NOW() - INTERVAL ${last ? last : 7} DAY)`,
             )
             .limit(perPage)
             .offset((page - 1) * perPage)
             .orderBy(sortBy, direction)
-            // .groupBy([
-            //     'work_order.work_order_id',
-            //     'work_order.peripheral_description',
-            //     'work_order.request_type',
-            //     'work_order.runbook',
-            //     'event.action',
-            // ])
+            .groupBy([
+                'work_order.work_order_id',
+                // 'work_order.peripheral_description',
+                // 'work_order.request_type',
+                // 'work_order.runbook',
+                'event_date',
+                'country.country_name',
+            ])
             .execute()
 
-    getWorkOrderStats = async (dayInterval: number) => {
+    getWorkOrderStats = async () => {
         const orders = await this._db
             .selectFrom('work_order')
             .select(['request_type', 'kit_id'])
-            .where(
-                'request_date',
-                '>=',
-                sql`DATE(NOW() - INTERVAL ${
-                    dayInterval ? dayInterval : 7
-                } DAY)`,
-            )
+            // .where(
+            //     'request_date',
+            //     '>=',
+            //     sql`DATE(NOW() - INTERVAL ${
+            //         dayInterval ? dayInterval : 7
+            //     } DAY)`,
+            // )
             .execute()
 
         return {
             ordersCount: orders.length,
-            warrantyRepairs: orders.reduce(
-                (counter, order) =>
-                    order.request_type.toLocaleLowerCase().includes('warranty')
-                        ? counter + 1
-                        : counter,
-                0,
-            ),
-            onboardingKitDelivery: orders.reduce(
-                (counter, order) => (order.kit_id ? counter + 1 : counter),
-                0,
-            ),
-            eolRefreshProgress: Math.round(Math.random() * 10), // --- !!!
-            deviceUpgrade: orders.reduce(
-                (counter, order) =>
-                    order.request_type.toLocaleLowerCase().includes('replace')
-                        ? counter + 1
-                        : counter,
-                0,
-            ),
         }
+    }
+
+    getRequestDetail = async (id: number) => {
+        return this._db
+            .selectFrom('work_order')
+            .select(['work_order.runbook', 'work_order.work_order_id'])
+            .where('work_order.work_order_id', '=', id)
+            .leftJoin(
+                'event',
+                'event.work_order_id',
+                'work_order.work_order_id',
+            )
+            .select(['event.event_id', 'event.requestor', 'event.notes'])
+            .leftJoin('incident', 'incident.event_id', 'event.event_id')
+            .select(['incident.incident_id'])
+            .execute()
     }
 
     getItemOverview = async () =>
