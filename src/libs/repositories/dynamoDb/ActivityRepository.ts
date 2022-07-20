@@ -7,11 +7,15 @@ export class ActivityRepostiory extends DynamoDbRepository {
         firstName,
         lastName,
         email,
+        type,
+        picture,
         activityDetail,
     }: {
         firstName: string
         lastName: string
         email: string
+        type: string
+        picture: string
         activityDetail: string
     }) => {
         const activity: UserActivity = {
@@ -19,7 +23,9 @@ export class ActivityRepostiory extends DynamoDbRepository {
             user_first_name: firstName,
             user_last_name: lastName,
             user_email: email,
-            activity: activityDetail,
+            type,
+            avatar: picture,
+            description: activityDetail,
             date: new Date().toISOString().slice(0, 19).replace('T', ' '),
         }
         return this._ddc

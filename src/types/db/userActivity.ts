@@ -4,6 +4,8 @@ export type UserActivity = {
     user_first_name: string
     user_last_name: string
     user_email: string
-    activity: string
+    type: string
+    avatar: string
+    description: string
     date: string
 }
