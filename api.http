@@ -142,6 +142,23 @@ Authorization: {{auth0token}}
 GET {{base}}/events/incidents
 Authorization: {{auth0token}}
 
+### Control Center / Incidents
+# Response.data:
+  # {
+#     incident_id: number
+#     acknowledged_by: string
+#     closed_by: string
+#     priority: number
+#     updated_by: string
+#     triggering_event: number
+#     last_modified: string
+#     start_date: number
+#     notes: string
+#     work_order_id: number
+# }
+GET {{base}}/events/incidents/:id
+Authorization: {{auth0token}}
+
 ### Events
 # QueryString:
 #   page: number DEFAULT = 1

@@ -53,4 +53,29 @@ export class IncidentRepository extends MySQLRepository<Database> {
             .limit(perPage)
             .offset((page - 1) * perPage)
             .execute()
+
+    getIncident = async (id: number) =>
+        this._db
+            .selectFrom('incident')
+            .select([
+                'incident.incident_id',
+                'incident.acknowledged_by',
+                'incident.closed_by',
+                'incident.priority',
+
+                'incident.updated_by',
+                'incident.event_id as triggering_event',
+                'incident.last_modified',
+                'incident.start_date',
+            ])
+            .where('incident.incident_id', '=', id)
+            .leftJoin('event', 'event.event_id', 'incident.event_id')
+            .select('event.notes')
+            .leftJoin(
+                'work_order',
+                'event.work_order_id',
+                'work_order.work_order_id',
+            )
+            .select('work_order.work_order_id')
+            .execute()
 }
