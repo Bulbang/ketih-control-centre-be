@@ -142,7 +142,7 @@ Authorization: {{auth0token}}
 GET {{base}}/events/incidents
 Authorization: {{auth0token}}
 
-### Control Center / Incidents
+### Incidents
 # Response.data:
   # {
 #     incident_id: number
