@@ -4,8 +4,6 @@ import { UserInfo } from '@declarations/db/userinfo'
 import { createDbConnection } from '@libs/utils/createDbConnection'
 import { PeopleRepository } from '@libs/repositories/mysql/PeopleRepository'
 
-const db = createDbConnection()
-const peopleRepository = new PeopleRepository(db)
 const { AUTH0_CUSTOM_CLAIMS_NAMESPACE } = process.env
 type LambdaReturn = {
     user: {
@@ -31,9 +29,7 @@ const me: ValidatedEventAPIGatewayProxyEvent<undefined, LambdaReturn> = async (
     const auth0user = JSON.parse(
         event.requestContext.authorizer.user,
     ) as UserInfo
-    // const [dbUser] = await peopleRepository.getUserByEmail({
-    //     email: auth0user.email,
-    // }) /// ------ !!!!
+
     const user = {
         people_id: auth0user.sub,
         first_name: auth0user.given_name,
