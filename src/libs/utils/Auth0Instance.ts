@@ -4,7 +4,7 @@ import axios, { AxiosInstance } from 'axios'
 const baseURL = process.env.AUTH0_URL
 const { DEFAULT_PAGE_OFFSET, AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET } =
     process.env
-const roles = ['super admin', 'manager', 'user']
+const roles = ['superadmin', 'manager', 'user']
 
 class Auth0Instance {
     private _instance: AxiosInstance = axios.create({ baseURL })
@@ -16,7 +16,7 @@ class Auth0Instance {
         }>('/oauth/token', {
             client_id: AUTH0_CLIENT_ID,
             client_secret: AUTH0_CLIENT_SECRET,
-            audience: 'https://dev-h6pakmge.us.auth0.com/api/v2/',
+            audience: `${baseURL}/api/v2/`,
             grant_type: 'client_credentials',
         })
         this._token = data.access_token
@@ -37,14 +37,14 @@ class Auth0Instance {
         last_name: string
         email: string
         phone_number_mobile: string
-        role: string
+        role?: string
         country: string
         status: string
         business_unit: string
         password: string
         verify_email?: boolean
     }) => {
-        if (!roles.includes(role.toLowerCase()))
+        if (role && !roles.includes(role.toLowerCase()))
             throw badRequest(`Unknown role ${role}`)
 
         return this._instance.post(
@@ -57,7 +57,7 @@ class Auth0Instance {
                     business_unit,
                     phone_number_mobile,
                 },
-                app_metadata: { roles: [role] },
+                app_metadata: { roles: [role || 'user'] },
                 given_name: first_name,
                 family_name: last_name,
                 name: `${first_name} ${last_name}`,

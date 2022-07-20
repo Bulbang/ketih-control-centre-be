@@ -10,6 +10,12 @@ export type UserInfo = {
     email: string
     email_verified: boolean
     [key: `${string}/roles`]: string[]
+    [key: `${string}/user_metadata`]: {
+        business_unit: string
+        phone_number_mobile: string
+        country: string
+        status: string
+    }
 }
 
 export type Users = {

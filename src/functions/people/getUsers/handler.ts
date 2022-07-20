@@ -8,6 +8,7 @@ type LambdaReturn = {
         first_name: string
         last_name: string
         phone_number_mobile: string
+        picture: string
         status: string
         business_unit: string
         email_address_work: string
@@ -36,6 +37,7 @@ const getUsers: ValidatedEventAPIGatewayProxyEvent<
                 email_address_work: user.email,
                 first_name: user.given_name,
                 last_name: user.family_name,
+                picture: user.picture,
                 phone_number_mobile: user.user_metadata?.phone_number_mobile,
                 status: user.user_metadata?.status,
                 business_unit: user.user_metadata?.business_unit,
