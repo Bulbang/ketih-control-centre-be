@@ -1,4 +1,4 @@
-import { writeActivity } from '@declarations/aws/writeActivity'
+import { writeActivity } from '@libs/utils/writeActivity'
 import middy from '@middy/core'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 

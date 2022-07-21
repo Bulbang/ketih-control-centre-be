@@ -11,6 +11,7 @@ export const writeActivity = (
     requestContext: APIGatewayEventRequestContextWithAuthorizer<{
         [name: string]: string
     }>,
+    activityType: string,
     activityDetail: string,
 ) => {
     const user = JSON.parse(requestContext.authorizer.user) as UserInfo
@@ -18,6 +19,8 @@ export const writeActivity = (
         email: user.email,
         firstName: user.given_name,
         lastName: user.family_name,
+        picture: user.picture,
+        type: activityType,
         activityDetail,
     })
 }
