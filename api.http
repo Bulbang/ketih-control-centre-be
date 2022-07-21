@@ -182,6 +182,19 @@ GET {{base}}/events
 Authorization: {{auth0token}}
 
 ### Events
+# Response.data:
+  # {
+    # event_id: number,
+    # event_date: number,
+    # event_type:string,
+    # work_order_id: number,
+    # short_desc: string
+    # long_desc: string
+#   }
+GET {{base}}/events/:id
+Authorization: {{auth0token}}
+
+### Events
 # QueryString:
 #   filterType: "country" | "type"
 # Response.data:

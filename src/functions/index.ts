@@ -20,7 +20,6 @@ export { default as test } from './test'
 export { default as me } from './me'
 export { default as getActivities } from './activities'
 export { default as getAssetsTotal } from './items/getAssetsTotal'
-
 export { default as getIncident } from './events/getIncident'
-
 export { default as getRequestDetail } from './requests/getRequestDetail'
+export { default as getEvent } from './events/getEvent'

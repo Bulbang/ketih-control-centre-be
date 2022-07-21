@@ -51,6 +51,33 @@ export class EventRepository extends MySQLRepository<Database> {
             .limit(perPage)
             .offset((page - 1) * perPage)
             .execute()
+
+    getEvent = async (id: number) =>
+        this._db
+            .selectFrom('event')
+            .select([
+                'event.event_id',
+                'event.event_date',
+                'event.action as event_type',
+            ])
+            .where('event.event_id', '=', id)
+            .leftJoin(
+                'work_order',
+                'event.work_order_id',
+                'work_order.work_order_id',
+            )
+            .select(['work_order.work_order_id'])
+            .leftJoin(
+                'event_classification',
+                'event.event_key',
+                'event_classification.event_key',
+            )
+            .select([
+                'event_classification.short_desc',
+                'event_classification.long_desc',
+            ])
+            .execute()
+
     getEventStats = async () =>
         this._db
             .selectFrom('event')
