@@ -142,7 +142,7 @@ Authorization: {{auth0token}}
 GET {{base}}/events/incidents
 Authorization: {{auth0token}}
 
-### Incidents
+### Requests
 # Response.data:
   # {
 #     incident_id: number
@@ -153,6 +153,7 @@ Authorization: {{auth0token}}
 #     triggering_event: number
 #     last_modified: string
 #     start_date: number
+#     end_date: number
 #     notes: string
 #     work_order_id: number
 # }
@@ -315,11 +316,11 @@ Authorization: {{auth0token}}
 GET {{base}}/support
 Authorization: {{auth0token}}
 
-###
+### Me
 # Response.data:
   # {
     # "user": {
-        # "people_id": number,
+        # "user_id": number,
         # "first_name": string,
         # "last_name": string,
         # "phone_number_mobile": string,
@@ -336,6 +337,24 @@ Authorization: {{auth0token}}
 # }
 GET {{base}}/me
 Authorization: {{auth0token}}
+
+### Me
+# Body: - all values are optional
+#   "first_name": string,             *** If you change one of names, you should put in request body the second
+#   "last_name": string,              *** If you change one of names, you should put in request body the second
+#   "email": string,                  *** You can't update email and password at the same time
+#   "phone_number_mobile": string,
+#   "country": string,
+#   "status": string,
+#   "business_unit": string,
+#   "password": string                *** You can't update email and password at the same time
+PUT {{base}}/me/update
+Authorization: {{auth0token}}
+Content-Type: application/json
+    {
+      "first_name": "Gregory",
+      "last_name": "House",
+    }
 
 ### Activity Log
 # Response.data: {
