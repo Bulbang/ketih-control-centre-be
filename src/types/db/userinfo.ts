@@ -55,3 +55,5 @@ export type Identity = {
     provider: string
     isSocial: boolean
 }
+
+export type UserRoles = 'superAdmin' | 'manager' | 'user'

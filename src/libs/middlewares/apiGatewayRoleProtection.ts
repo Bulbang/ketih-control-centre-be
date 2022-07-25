@@ -1,4 +1,4 @@
-import { UserInfo } from '@declarations/db/userinfo'
+import { UserInfo, UserRoles } from '@declarations/db/userinfo'
 import { forbidden } from '@hapi/boom'
 import middy from '@middy/core'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
@@ -11,7 +11,7 @@ export const apiGatewayRoleProtection = <
 >({
     roles,
 }: {
-    roles: string[]
+    roles: UserRoles[]
 }): middy.MiddlewareObj<TEvent, TResponse> => {
     const before: middy.MiddlewareFn<TEvent, APIGatewayProxyResult> = async (
         handler,
@@ -20,10 +20,17 @@ export const apiGatewayRoleProtection = <
             handler.event.requestContext.authorizer.user,
         ) as UserInfo
         console.log(handler.event.requestContext)
+        let access = false
 
         for (const role of roles)
-            if (!user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/roles`].includes(role))
-                throw forbidden('Forbidden')
+            if (user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/roles`].includes(role)) {
+                access = !access
+                break
+            }
+
+        if (!access) {
+            throw forbidden('Forbidden')
+        }
     }
 
     return {
