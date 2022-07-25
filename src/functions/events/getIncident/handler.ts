@@ -15,6 +15,7 @@ type LambdaReturn = {
     triggering_event: number
     last_modified: string
     start_date: number
+    end_date: number
     notes: string
     work_order_id: number
 }

@@ -62,7 +62,7 @@ export class IncidentRepository extends MySQLRepository<Database> {
                 'incident.acknowledged_by',
                 'incident.closed_by',
                 'incident.priority',
-
+                'incident.end_date',
                 'incident.updated_by',
                 'incident.event_id as triggering_event',
                 'incident.last_modified',
