@@ -13,9 +13,9 @@ export default {
         phone_number_mobile: {
             type: 'string',
         },
-        role: {
-            type: 'string',
-        },
+        // role: {
+        //     type: 'string',
+        // },
         country: {
             type: 'string',
         },

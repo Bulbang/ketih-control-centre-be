@@ -24,3 +24,5 @@ export { default as getRequestDetail } from './requests/getRequestDetail'
 export { default as getEvent } from './events/getEvent'
 
 export { default as meUpdate } from './meUpdate'
+
+export { default as editRole } from './people/editRole'

@@ -8,9 +8,8 @@ const addUser: ValidatedEventAPIGatewayProxyEvent<typeof schema, void> = async (
     event,
 ) => {
     const { body } = event
-    body.role = body.role ? body.role : 'user'
     await Auth0Instance.updateToken()
-    await Auth0Instance.createUser(body)
+    await Auth0Instance.createUser({ ...body, role: 'user' })
 }
 
 export const main = middyfy(addUser).use(
