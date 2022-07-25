@@ -7,7 +7,7 @@ import { PeopleRepository } from '@libs/repositories/mysql/PeopleRepository'
 const { AUTH0_CUSTOM_CLAIMS_NAMESPACE } = process.env
 type LambdaReturn = {
     user: {
-        people_id: string
+        user_id: string
         first_name: string
         last_name: string
         phone_number_mobile: string
