@@ -106,12 +106,15 @@ class Auth0Instance {
             {
                 email,
                 // phone_number: phone_number_mobile,
-                user_metadata: {
-                    country,
-                    status,
-                    business_unit,
-                    phone_number_mobile,
-                },
+                user_metadata:
+                    country || status || business_unit || phone_number_mobile
+                        ? {
+                              country,
+                              status,
+                              business_unit,
+                              phone_number_mobile,
+                          }
+                        : undefined,
                 app_metadata: role ? { roles: [role] } : undefined,
                 given_name: first_name,
                 family_name: last_name,
