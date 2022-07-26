@@ -4,12 +4,19 @@ import { middyfy } from '@libs/middlewares/middyfy'
 import Auth0Instance from '@libs/utils/Auth0Instance'
 import schema from './schema'
 
-const addUser: ValidatedEventAPIGatewayProxyEvent<typeof schema, void> = async (
-    event,
-) => {
+type LambdaReturn = { user_id: string }
+
+const addUser: ValidatedEventAPIGatewayProxyEvent<
+    typeof schema,
+    LambdaReturn
+> = async (event) => {
     const { body } = event
     await Auth0Instance.updateToken()
-    await Auth0Instance.createUser({ ...body, role: 'user' })
+    const { data } = await Auth0Instance.createUser({ ...body, role: 'user' })
+
+    return {
+        user_id: data.user_id,
+    }
 }
 
 export const main = middyfy(addUser).use(

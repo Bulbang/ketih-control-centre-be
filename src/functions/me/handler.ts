@@ -31,7 +31,7 @@ const me: ValidatedEventAPIGatewayProxyEvent<undefined, LambdaReturn> = async (
     ) as UserInfo
 
     const user = {
-        people_id: auth0user.sub,
+        user_id: auth0user.sub,
         first_name: auth0user.given_name,
         last_name: auth0user.family_name,
         phone_number_mobile:

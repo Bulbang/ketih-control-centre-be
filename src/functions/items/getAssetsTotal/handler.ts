@@ -12,8 +12,11 @@ const getAssetsTotal: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (_) => {
-    const [total] = await itemDetailRepository.getAssetsTotal()
-    return { total: total as unknown as number }
+    const [{ total }] =
+        (await itemDetailRepository.getAssetsTotal()) as unknown as {
+            total: number
+        }[]
+    return { total }
 }
 
 export const main = middyfy(getAssetsTotal)

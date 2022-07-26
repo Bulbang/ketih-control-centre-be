@@ -43,6 +43,10 @@ Authorization: {{auth0token}}
 #   "status": string,
 #   "business_unit": string,
 #   "password": string
+# Response.data: 
+# {
+  #     user_id: string
+# }
 POST {{base}}/users
 Authorization: {{auth0token}}
 Content-Type: application/json
