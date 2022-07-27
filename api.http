@@ -151,6 +151,7 @@ Authorization: {{auth0token}}
       # "country": string,
       # "short_desc": string,
       # "long_desc": string
+      # "response": string
     # }[]
 # }
 GET {{base}}/events/incidents

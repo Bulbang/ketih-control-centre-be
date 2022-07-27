@@ -17,6 +17,7 @@ type LambdaReturn = {
         country: string
         short_desc: string
         long_desc: string
+        response: string
     }[]
 }
 
