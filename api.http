@@ -179,19 +179,19 @@ Authorization: {{auth0token}}
 # QueryString:
 #   page: number DEFAULT = 1
 #   perPage: number DEFAULT = 10
-#   countryCode: string
-#   type: string
+#   sortBy: keyof Response.data
+#   direction: 'asc' | 'desc'
 # Response.data:
   # {
     # events: {
-      # "event_id": number,
-      # "event_type": string,
-      # "action": string
-      # "country": string,
-      # "latitude": number
-      # "longitude": number,
-      # "short_desc": string,
-      # "long_desc": string
+    #     event_id: number
+    #     event_date: string
+    #     priority: number
+    #     event_key: string
+    #     request: { request_id: string }
+    #     short_desc: string
+    #     long_desc: string
+    #     event_type: string
     # }[]
 # }
 GET {{base}}/events

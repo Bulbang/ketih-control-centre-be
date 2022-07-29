@@ -213,6 +213,59 @@ interface ChangeLogReactionsTable {
     emoji_code: string
 }
 
+type V_EventTable = {
+    work_order_id
+    org_id
+    xp_event_id
+    client_work_order_id
+    itsm_id
+    kit_id
+    peripheral_description
+    employee_id
+    runbook
+    request_name
+    request_type
+    request_date
+    request_fulfilled_date
+    serial_number
+    country
+    action_date
+    shipping_carrier
+    shipping_method
+    shipping_status
+    tracking_number
+    delivery_date
+    completion_date
+    return_shipping_status
+    return_tracking_number
+    delivery_Location
+    return_delivery_date
+    signature_required
+    weekend_delivery
+    expidited
+    return_required
+    label_required
+    packaging_required
+    agency_id
+    last_modified
+    event_id
+    requestor
+    action
+    event_key
+    event_date
+    notes
+    is_sent
+    incident_id
+    incident_action
+    incident_response
+    short_desc
+    long_desc
+    category
+    type
+    routine
+    priority
+}
+
 export interface Database {
     work_order: WorkOrderTable
     event: EventTable
@@ -227,4 +280,5 @@ export interface Database {
     country: CountryTable
     type: EventTypeTable
     change_log_reaction: ChangeLogReactionsTable
+    v_event: V_EventTable
 }

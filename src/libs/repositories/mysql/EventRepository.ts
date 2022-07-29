@@ -1,4 +1,5 @@
 import { Database } from '@declarations/db/tables'
+import { sql } from 'kysely'
 import { MySQLRepository } from './SQLRepository'
 
 const { DEFAULT_PAGE_OFFSET } = process.env
@@ -7,49 +8,41 @@ export class EventRepository extends MySQLRepository<Database> {
     getAllEvents = async ({
         page = 1,
         perPage = +DEFAULT_PAGE_OFFSET,
-        countryCode,
-        type,
+        sortBy = 'event_date',
+        direction = 'desc',
     }: {
         page?: number
         perPage?: number
-        countryCode?: string
-        type?: string
+        sortBy: any
+        direction: 'asc' | 'desc'
     }) =>
         this._db
-            .selectFrom('event')
+            .selectFrom('v_event')
             .select([
-                'event.event_id',
-                'event.type as event_type',
-                'event.action',
+                'event_id',
+                'event_date',
+                'priority',
+                'event_key',
+                sql<any>`GROUP_CONCAT(JSON_OBJECT('request_id', v_event.itsm_id) order by v_event.itsm_id SEPARATOR ',')`.as(
+                    'request',
+                ),
+                'short_desc',
+                'long_desc',
+                'action as event_type',
             ])
-            .leftJoin(
-                'work_order',
-                'event.work_order_id',
-                'work_order.work_order_id',
-            )
-            .leftJoin('country', 'work_order.country', 'country.country_code')
-            .select([
-                'country.country_name as country',
-                'country.latitude',
-                'country.longitude',
+            .where('event_id', 'is not', null)
+            .groupBy([
+                'event_id',
+                'event_date',
+                'priority',
+                'event_key',
+                'short_desc',
+                'long_desc',
+                'action',
             ])
-            .leftJoin(
-                'event_classification',
-                'event.event_key',
-                'event_classification.event_key',
-            )
-            .select([
-                'event_classification.short_desc',
-                'event_classification.long_desc',
-            ])
-            .if(countryCode?.length > 0, (qb) =>
-                qb.where('work_order.country', '=', countryCode.toUpperCase()),
-            )
-            .if(type?.length > 0, (qb) =>
-                qb.where('event.action', '=', type.toLowerCase()),
-            )
             .limit(perPage)
             .offset((page - 1) * perPage)
+            .orderBy(sortBy, direction)
             .execute()
 
     getEvent = async (id: number) =>
