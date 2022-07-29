@@ -13,6 +13,7 @@ const getStatistic: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (_) => {
+    await Auth0Instance.updateToken()
     const stats = await Auth0Instance.getStats()
     return {
         statistic: stats,

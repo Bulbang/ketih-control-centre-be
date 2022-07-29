@@ -11,8 +11,8 @@ type LambdaReturn = {
         picture: string
         status: string
         business_unit: string
-        email_address_work: string
-        country_name: string
+        email: string
+        country: string
         roles: string[]
     }[]
 }
@@ -34,14 +34,14 @@ const getUsers: ValidatedEventAPIGatewayProxyEvent<
         users: users.map((user) => {
             return {
                 user_id: user.user_id,
-                email_address_work: user.email,
+                email: user.email,
                 first_name: user.given_name,
                 last_name: user.family_name,
                 picture: user.picture,
                 phone_number_mobile: user.user_metadata?.phone_number_mobile,
                 status: user.user_metadata?.status,
                 business_unit: user.user_metadata?.business_unit,
-                country_name: user.user_metadata?.country,
+                country: user.user_metadata?.country,
                 roles: user.app_metadata.roles,
             }
         }),

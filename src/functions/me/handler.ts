@@ -1,8 +1,6 @@
 import { middyfy } from '@libs/middlewares/middyfy'
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
 import { UserInfo } from '@declarations/db/userinfo'
-import { createDbConnection } from '@libs/utils/createDbConnection'
-import { PeopleRepository } from '@libs/repositories/mysql/PeopleRepository'
 
 const { AUTH0_CUSTOM_CLAIMS_NAMESPACE } = process.env
 type LambdaReturn = {
@@ -16,8 +14,8 @@ type LambdaReturn = {
         business_unit: string
         // position_title: string
         // email_address_home: string
-        email_address_work: string
-        country_name: string
+        email: string
+        country: string
         roles: string[]
         picture: string
     }
@@ -42,10 +40,10 @@ const me: ValidatedEventAPIGatewayProxyEvent<undefined, LambdaReturn> = async (
         business_unit:
             auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/user_metadata`]
                 ?.business_unit,
-        country_name:
+        country:
             auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/user_metadata`]
                 ?.country,
-        email_address_work: auth0user.email,
+        email: auth0user.email,
         roles: auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/roles`]
             ? auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/roles`]
             : [],

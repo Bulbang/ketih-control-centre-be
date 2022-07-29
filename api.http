@@ -14,8 +14,8 @@
         # "status": string,
         # "picture": string
         # "business_unit": string,
-        # "email_address_work": string,
-        # "country_name": string
+        # "email": string,
+        # "country": string
         # "roles": string[]
 #   }[]
 # }
@@ -343,8 +343,7 @@ Authorization: {{auth0token}}
         # "status": string,
         # "business_unit": string,
         # "position_title": string,
-        # "email_address_home": string,
-        # "email_address_work": string,
+        # "email": string,
         # "country_name": string,
         # "roles": string[],
         # "picture": string
