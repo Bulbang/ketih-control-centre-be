@@ -2,11 +2,11 @@ import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gatewa
 import { Database } from '@declarations/db/tables'
 import { badRequest } from '@hapi/boom'
 import { middyfy } from '@libs/middlewares/middyfy'
-import { EventRepository } from '@libs/repositories/mysql/EventRepository'
+import { V_eventRepository } from '@libs/repositories/mysql/V_eventRepository'
 import { createDbConnection } from '@libs/utils/createDbConnection'
 
 const db = createDbConnection()
-const eventRepository = new EventRepository(db)
+const eventRepository = new V_eventRepository(db)
 
 type LambdaReturn = {
     events: {
