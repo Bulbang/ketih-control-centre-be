@@ -1,6 +1,6 @@
 import { middyfy } from '@libs/middlewares/middyfy'
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
-import Auth0Instance from '@libs/utils/Auth0Instance'
+import getAuth0Instance from '@libs/utils/Auth0Instance'
 
 type LambdaReturn = {
     statistic: {
@@ -13,7 +13,7 @@ const getStatistic: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (_) => {
-    await Auth0Instance.updateToken()
+    const Auth0Instance = await getAuth0Instance()
     const stats = await Auth0Instance.getStats()
     return {
         statistic: stats,

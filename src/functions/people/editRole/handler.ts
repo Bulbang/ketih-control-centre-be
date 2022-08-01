@@ -1,6 +1,6 @@
 import { middyfy } from '@libs/middlewares/middyfy'
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
-import Auth0Instance from '@libs/utils/Auth0Instance'
+import getAuth0Instance from '@libs/utils/Auth0Instance'
 import schema from './schema'
 import { badRequest } from '@hapi/boom'
 import { apiGatewayRoleProtection } from '@libs/middlewares/apiGatewayRoleProtection'
@@ -21,7 +21,7 @@ const editRole: ValidatedEventAPIGatewayProxyEvent<
     )
         throw badRequest(`Unknown role ${role}`)
 
-    await Auth0Instance.updateToken()
+    const Auth0Instance = await getAuth0Instance()
     await Auth0Instance.updateUser(id, { role })
 }
 

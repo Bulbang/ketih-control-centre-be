@@ -1,7 +1,7 @@
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
 import { apiGatewayRoleProtection } from '@libs/middlewares/apiGatewayRoleProtection'
 import { middyfy } from '@libs/middlewares/middyfy'
-import Auth0Instance from '@libs/utils/Auth0Instance'
+import getAuth0Instance from '@libs/utils/Auth0Instance'
 import schema from './schema'
 
 type LambdaReturn = { user_id: string }
@@ -11,7 +11,7 @@ const addUser: ValidatedEventAPIGatewayProxyEvent<
     LambdaReturn
 > = async (event) => {
     const { body } = event
-    await Auth0Instance.updateToken()
+    const Auth0Instance = await getAuth0Instance()
     const { data } = await Auth0Instance.createUser({ ...body, role: 'user' })
 
     return {

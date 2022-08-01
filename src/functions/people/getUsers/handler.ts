@@ -1,6 +1,6 @@
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
 import { middyfy } from '@libs/middlewares/middyfy'
-import Auth0Instance from '@libs/utils/Auth0Instance'
+import getAuth0Instance from '@libs/utils/Auth0Instance'
 
 type LambdaReturn = {
     users: {
@@ -25,7 +25,7 @@ const getUsers: ValidatedEventAPIGatewayProxyEvent<
         page?: number
         perPage?: number
     }
-    await Auth0Instance.updateToken()
+    const Auth0Instance = await getAuth0Instance()
     const users = await Auth0Instance.getUsers({
         page,
         perPage,

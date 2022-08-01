@@ -370,6 +370,10 @@ Content-Type: application/json
       "last_name": "House",
     }
 
+### Me ToS
+POST {{base}}/me/tos-sign
+Authorization: {{auth0token}}
+
 ### Activity Log
 # Response.data: {
     # id: string

@@ -15,6 +15,7 @@ export type UserInfo = {
         phone_number_mobile: string
         country: string
         status: string
+        tos_signed: boolean
     }
 }
 

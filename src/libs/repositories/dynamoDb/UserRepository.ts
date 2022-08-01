@@ -15,6 +15,7 @@ export class UserRepository extends DynamoDbRepository {
 
         return Count ? Items[0] : undefined
     }
+
     save = async (accessToken: string, userData: UserInfo) => {
         return this._ddc
             .put({
@@ -24,6 +25,15 @@ export class UserRepository extends DynamoDbRepository {
                     ...userData,
                     createdAt: +new Date(),
                 },
+            })
+            .promise()
+    }
+
+    dropSession = async (accessToken: string) => {
+        return this._ddc
+            .delete({
+                TableName: this._tableName,
+                Key: { accessToken },
             })
             .promise()
     }

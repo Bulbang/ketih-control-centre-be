@@ -56,6 +56,7 @@ class Auth0Instance {
                     status,
                     business_unit,
                     phone_number_mobile,
+                    tos_signed: false,
                 },
                 app_metadata: { roles: [role || 'user'] },
                 given_name: first_name,
@@ -86,6 +87,7 @@ class Auth0Instance {
             status,
             business_unit,
             password,
+            tos_signed,
         }: {
             first_name?: string
             last_name?: string
@@ -96,6 +98,7 @@ class Auth0Instance {
             status?: string
             business_unit?: string
             password?: string
+            tos_signed?: boolean
         },
     ) => {
         if (role && !roles.includes(role.toLowerCase()))
@@ -107,12 +110,17 @@ class Auth0Instance {
                 email,
                 // phone_number: phone_number_mobile,
                 user_metadata:
-                    country || status || business_unit || phone_number_mobile
+                    country ||
+                    status ||
+                    business_unit ||
+                    phone_number_mobile ||
+                    typeof tos_signed === 'boolean'
                         ? {
                               country,
                               status,
                               business_unit,
                               phone_number_mobile,
+                              tos_signed,
                           }
                         : undefined,
                 app_metadata: role ? { roles: [role] } : undefined,
@@ -174,4 +182,10 @@ class Auth0Instance {
     }
 }
 
-export default new Auth0Instance()
+const auth0Instance = new Auth0Instance()
+const getAuth0Instance = async () => {
+    await auth0Instance.updateToken()
+    return auth0Instance
+}
+
+export default getAuth0Instance
