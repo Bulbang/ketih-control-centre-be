@@ -16,13 +16,15 @@ export { default as getPeripherals } from './items/getPeripherals'
 export { default as getDeviceReturns } from './items/getDeviceReturns'
 export { default as getLogReaction } from './changeLogs/getLogReaction'
 export { default as test } from './test'
-export { default as me } from './me'
+export { default as me } from './me/info'
 export { default as getActivities } from './activities'
 export { default as getAssetsTotal } from './items/getAssetsTotal'
 export { default as getIncident } from './events/getIncident'
 export { default as getRequestDetail } from './requests/getRequestDetail'
 export { default as getEvent } from './events/getEvent'
 
-export { default as meUpdate } from './meUpdate'
+export { default as meUpdate } from './me/meUpdate'
 
 export { default as editRole } from './people/editRole'
+
+export { default as tosSign } from './me/tosSign'
