@@ -1,11 +1,11 @@
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
 import { badRequest } from '@hapi/boom'
 import { middyfy } from '@libs/middlewares/middyfy'
-import { WorkOrderRepository } from '@libs/repositories/mysql/WorkOrderRepository'
+import { V_eventRepository } from '@libs/repositories/mysql/V_eventRepository'
 import { createDbConnection } from '@libs/utils/createDbConnection'
 
 const db = createDbConnection()
-const workOrderRepository = new WorkOrderRepository(db)
+const v_eventRepository = new V_eventRepository(db)
 
 const categories = [
     'on-boarding',
@@ -25,13 +25,29 @@ const statuses = [
 
 type LambdaReturn = {
     requests: {
-        work_order_id: any
-        runbook: string
-        status: string
-        end_date?: string
-        category: string
+        request_id: any
+        requestor: string
+        notes: string
+        date_opened?: string
+        date_closed: string
         location: string
-        event_date: number
+        status: string
+        category: string
+        items: {
+            device_type: string
+            device_make: string
+            device_model: string
+            device_color: string
+        }[]
+        events: {
+            event_id: number
+            priority: number
+            event_key: string
+            long_desc: string
+            event_date: string
+            event_type: string
+            short_desc: string
+        }[]
     }[]
 }
 
@@ -51,7 +67,7 @@ const requests: ValidatedEventAPIGatewayProxyEvent<
         throw badRequest(`Unknown sort direction parameter: '${direction}'`)
     }
     try {
-        const requests = await workOrderRepository.getWorkOrders({
+        const requests = await v_eventRepository.getRequests({
             last,
             page,
             perPage,

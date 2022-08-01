@@ -54,7 +54,7 @@ const handler: APIGatewayTokenAuthorizerHandler = async (
     }
     callback(null, {
         ...generatePolicy('user', 'Allow', event.methodArn),
-        context: { user: JSON.stringify(user) },
+        context: { user: JSON.stringify(user), authToken },
     })
 
     return null

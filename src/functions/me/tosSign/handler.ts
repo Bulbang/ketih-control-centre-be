@@ -17,7 +17,7 @@ const tosSign: ValidatedEventAPIGatewayProxyEvent<undefined, void> = async (
 ) => {
     const auth0user = JSON.parse(
         event.requestContext.authorizer.user,
-    ) as UserInfo & { authToken: string }
+    ) as UserInfo
     const { authToken } = event.requestContext.authorizer
     if (
         auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/user_metadata`]?.tos_signed

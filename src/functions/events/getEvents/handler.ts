@@ -43,13 +43,11 @@ const getEvents: ValidatedEventAPIGatewayProxyEvent<
             sortBy,
             direction,
         })
+
+        console.log(events)
+
         return {
-            events: events.map((event) => {
-                event.request = JSON.parse(event.request) as {
-                    request_id: string
-                }
-                return event
-            }),
+            events,
         }
     } catch (error) {
         if (error.message == `Unknown column '${sortBy}' in 'order clause'`) {

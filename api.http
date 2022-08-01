@@ -103,14 +103,30 @@ Content-Type: application/json
 #   direction: 'asc' | 'desc' DEFAULT = 'desc'
 # Response.data: 
 # {
-  #     requests: {
-    #     work_order_id: any,
-    #     runbook: string
-    #     status: string
-    #     end_date?: string
+    # requests: {
+    #     request_id: any
+    #     requestor: string
+    #     notes: string
+    #     date_opened?: string
+    #     date_closed: string
+    #     location: string,
+    #     status: string,
     #     category: string
-    #     location: string
-    #     event_date: number
+    #     items: {
+    #         device_type: string
+    #         device_make: string
+    #         device_model: string
+    #         device_color: string
+    #     }[]
+    #     events: {
+    #         event_id: number
+    #         priority: number
+    #         event_key: string
+    #         long_desc: string
+    #         event_date: string
+    #         event_type: string
+    #         short_desc: string
+    #     }[]
     # }[]
 # }
 GET {{base}}/requests
