@@ -109,8 +109,10 @@ Content-Type: application/json
     #     notes: string
     #     date_opened?: string
     #     date_closed: string
-    #     location: string,
-    #     status: string,
+    #     playbook: string
+    #     impacted_user_id: string
+    #     location: string
+    #     status: string
     #     category: string
     #     items: {
     #         device_type: string

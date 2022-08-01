@@ -30,6 +30,8 @@ type LambdaReturn = {
         notes: string
         date_opened?: string
         date_closed: string
+        playbook: string
+        impacted_user_id: string
         location: string
         status: string
         category: string

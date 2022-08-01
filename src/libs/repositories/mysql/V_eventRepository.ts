@@ -25,6 +25,8 @@ export class V_eventRepository extends MySQLRepository<Database> {
                 'v_event.itsm_id as request_id',
                 'v_event.requestor',
                 'v_event.notes',
+                'v_event.employee_id as impacted_user_id',
+                'v_event.request_name as playbook',
                 'v_event.request_date as date_opened',
                 'v_event.completion_date as date_closed',
                 sql<string>`CONCAT(v_event.city, ', ', country.country_name)`.as(
@@ -67,6 +69,8 @@ export class V_eventRepository extends MySQLRepository<Database> {
                 'v_event.itsm_id',
                 'v_event.requestor',
                 'v_event.notes',
+                'employee_id',
+                'request_name',
                 'v_event.request_date',
                 'v_event.completion_date',
                 sql`location`,
