@@ -11,7 +11,7 @@ export class V_eventRepository extends MySQLRepository<Database> {
         page = 1,
         perPage = 10,
         direction = 'asc',
-        sortBy = 'v_event.itsm_id',
+        sortBy = 'request_id',
     }: {
         last?: number
         page?: number
