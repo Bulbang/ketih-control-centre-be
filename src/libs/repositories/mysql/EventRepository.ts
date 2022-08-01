@@ -8,7 +8,7 @@ export class EventRepository extends MySQLRepository<Database> {
     getAllEvents = async ({
         page = 1,
         perPage = +DEFAULT_PAGE_OFFSET,
-        sortBy = 'event_date',
+        sortBy = 'request_date',
         direction = 'desc',
     }: {
         page?: number
@@ -20,7 +20,7 @@ export class EventRepository extends MySQLRepository<Database> {
             .selectFrom('v_event')
             .select([
                 'event_id',
-                'event_date',
+                'request_date as event_date',
                 'priority',
                 'event_key',
                 sql<any>`GROUP_CONCAT(JSON_OBJECT('request_id', v_event.itsm_id) order by v_event.itsm_id SEPARATOR ',')`.as(
@@ -33,7 +33,7 @@ export class EventRepository extends MySQLRepository<Database> {
             .where('event_id', 'is not', null)
             .groupBy([
                 'event_id',
-                'event_date',
+                'request_date',
                 'priority',
                 'event_key',
                 'short_desc',
