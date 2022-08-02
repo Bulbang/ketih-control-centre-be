@@ -8,13 +8,15 @@ import { createDbConnection } from '@libs/utils/createDbConnection'
 const db = createDbConnection()
 const eventRepository = new V_eventRepository(db)
 
+const statuses = ['open', 'in-progress', 'closed']
+
 type LambdaReturn = {
     events: {
         event_id: number
         event_date: string
         priority: number
         event_key: string
-        request: { request_id: string }
+        request: { request_id: string; status: string }
         short_desc: string
         long_desc: string
         event_type: string
@@ -47,7 +49,11 @@ const getEvents: ValidatedEventAPIGatewayProxyEvent<
         console.log(events)
 
         return {
-            events,
+            events: events.map((event) => {
+                event.request.status =
+                    statuses[Math.round(Math.random() * (statuses.length - 1))]
+                return event
+            }),
         }
     } catch (error) {
         if (error.message == `Unknown column '${sortBy}' in 'order clause'`) {

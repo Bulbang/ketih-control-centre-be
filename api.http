@@ -206,7 +206,7 @@ Authorization: {{auth0token}}
     #     event_date: string
     #     priority: number
     #     event_key: string
-    #     request: { request_id: string }
+    #     request: { request_id: string, status: string }
     #     short_desc: string
     #     long_desc: string
     #     event_type: string
