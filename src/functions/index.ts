@@ -28,3 +28,5 @@ export { default as meUpdate } from './me/meUpdate'
 export { default as editRole } from './people/editRole'
 
 export { default as tosSign } from './me/tosSign'
+
+export { default as getLocations } from './getLocations'

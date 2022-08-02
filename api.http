@@ -1,5 +1,5 @@
 @base=https://fcwsywnkp0.execute-api.us-east-1.amazonaws.com/test
-@auth0token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiaXNzIjoiaHR0cHM6Ly9kZXYtaDZwYWttZ2UudXMuYXV0aDAuY29tLyJ9.._T6BBpjOfTAhXJIg.F1fv5oKWV6hlGgqVNoofcvWcK0La987mnyjRClGvd8qQvYVMoBzF9VFWciiCil9GwYOPs-cW4HP8ijw-L4uD177bzdOoYyC7sMVI_OZpWP__YofOUg1lLowHfguOsv0gNNTY30B9QQldooCTGA2pVme9eBv21krH5Eekmt610HbAqklok9hqQEgmBnPkU7LzXleLdcGlOaBaPOTe-DEYX2FYTxyVIT3cx230Q8dHef7UbbgzlpUQkzzagpc4Po9ymGboxgC_Z8qfppBr1Qoju3f_8Os8RmPyeibYYj2LwjpEhtZnBBuFzHSLuYuhjIFEuXLaCSuMuw.QiUxTmcfvMfbQxZSfN7lfg
+@auth0token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiaXNzIjoiaHR0cHM6Ly94b3BzLWNvbnRyb2wtY2VudGVyLWRldi51cy5hdXRoMC5jb20vIn0..QjChtmjuSAIg-Lnc.HFh6paeR5avkcn3EduanUAB-naROEYOz6kUFxYlfR0lgDnVeIHrZEv25jesoXHlBFtN45jmQda-PBWGBuHc39SgmLBRJmygQHapBFDdJfA_fEW3rurzmnOkyhG3QPbx6IZFFpQn6BkU9vL1OGFPHwNC4WkUOHl8Cu3klQfepmCYHH3_ak6vDhFZrDYVbG-xENyz5439YNlsF6q-gsaMhl0VIc9CD7FbJgOp0GpxFR_oKzz5HzZ4cJaHRF4wGBOjbuV6gZJU_KhvkBmoGVKGWZq3-kTW4sFxkvkVTr-CscBLzQGuDXcOnJxYW0YHAMR96pm52_xGrd94gBPQGMud1yyVP56Py_9Ly.1Pwqc146U2EUxQXLQH-q6w
 ### User Admin
 # QueryString:
 #   page: number DEFAULT = 1
@@ -402,4 +402,14 @@ Authorization: {{auth0token}}
     # date: string
 # }
 GET {{base}}/activities
+Authorization: {{auth0token}}
+
+### Get locations
+# Response.data: {
+# locations: {
+#         country_name: string
+#         country_code: string
+#     }[]
+# }
+GET {{base}}/locations
 Authorization: {{auth0token}}

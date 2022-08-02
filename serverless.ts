@@ -19,13 +19,29 @@ const serverlessConfiguration: AWS = {
         iamRoleStatements: [
             {
                 Effect: 'Allow',
-                Action: ['dynamodb:PutItem', 'dynamodb:Query'],
+                Action: [
+                    'dynamodb:PutItem',
+                    'dynamodb:Query',
+                    'dynamodb:DeleteItem',
+                ],
                 Resource: [{ 'Fn::GetAtt': ['UsersTable', 'Arn'] }],
             },
             {
                 Effect: 'Allow',
                 Action: ['dynamodb:PutItem', 'dynamodb:Query', 'dynamodb:Scan'],
                 Resource: [{ 'Fn::GetAtt': ['ActivityTable', 'Arn'] }],
+            },
+            {
+                Effect: 'Allow',
+                Action: ['s3:*'],
+                Resource: [
+                    {
+                        'Fn::Join': [
+                            '/',
+                            [{ 'Fn::GetAtt': 'ClientBrandingBucket.Arn' }, '*'],
+                        ],
+                    },
+                ],
             },
         ],
         environment: {
@@ -44,6 +60,7 @@ const serverlessConfiguration: AWS = {
     package: { individually: true },
     custom: {
         prefix: '${self:service}-${self:provider.stage}',
+        brandingBucketName: '${self:custom.prefix}-branding-bucket',
         esbuild: {
             bundle: true,
             minify: false,

@@ -23,6 +23,27 @@ const resources: AwsResources = {
                 KeySchema: [{ AttributeName: 'accessToken', KeyType: 'HASH' }],
             },
         },
+        ClientBrandingBucket: {
+            Type: 'AWS::S3::Bucket',
+            Properties: {
+                BucketName: '${self:custom.brandingBucketName}',
+                AccessControl: 'PublicReadWrite',
+                PublicAccessBlockConfiguration: {
+                    BlockPublicAcls: false,
+                    BlockPublicPolicy: false,
+                    IgnorePublicAcls: false,
+                    RestrictPublicBuckets: false,
+                },
+                CorsConfiguration: {
+                    CorsRules: [
+                        {
+                            AllowedMethods: ['GET', 'POST'],
+                            AllowedOrigins: ['*'],
+                        },
+                    ],
+                },
+            },
+        },
     },
 }
 
