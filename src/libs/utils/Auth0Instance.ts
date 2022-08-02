@@ -6,6 +6,9 @@ const { DEFAULT_PAGE_OFFSET, AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET } =
     process.env
 const roles = ['superadmin', 'manager', 'user']
 
+// Required AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET, AUTH0_URL(application domain) in .env
+// DEFAULT_PAGE_OFFSET could be any number more than 0
+
 class Auth0Instance {
     private _instance: AxiosInstance = axios.create({ baseURL })
     private _token: string

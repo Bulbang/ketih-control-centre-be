@@ -5,6 +5,8 @@ import { createPool } from 'mysql2'
 const { MYSQLUSER, MYSQLPASSWORD, MYSQLPORT, MYSQLHOST, MYSQLDATABASE } =
     process.env
 
+// Required MYSQLUSER, MYSQLPASSWORD, MYSQLPORT, MYSQLHOST, MYSQLDATABASE in .env
+
 export const createDbConnection = () => {
     const db = new Kysely<Database>({
         dialect: new MysqlDialect({
