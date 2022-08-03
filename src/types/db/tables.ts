@@ -29,6 +29,7 @@ interface WorkOrderTable {
     signature_required: number
     weekend_delivery: number
     expidited: number
+    notes: string
     last_modified: string
 }
 

@@ -24,7 +24,6 @@ export class V_eventRepository extends MySQLRepository<Database> {
             .select([
                 'v_event.itsm_id as request_id',
                 'v_event.requestor',
-                'v_event.notes',
                 'v_event.employee_id as impacted_user_id',
                 'v_event.request_name as playbook',
                 'v_event.request_date as date_opened',
@@ -57,6 +56,12 @@ export class V_eventRepository extends MySQLRepository<Database> {
                 ),
             ])
             .leftJoin('country', 'v_event.country', 'country.country_code')
+            .leftJoin(
+                'work_order',
+                'work_order.work_order_id',
+                'v_event.work_order_id',
+            )
+            .select('work_order.notes')
             .where(
                 'v_event.request_date',
                 '>=',
@@ -68,9 +73,9 @@ export class V_eventRepository extends MySQLRepository<Database> {
             .groupBy([
                 'v_event.itsm_id',
                 'v_event.requestor',
-                'v_event.notes',
-                'employee_id',
-                'request_name',
+                'work_order.notes',
+                'v_event.employee_id',
+                'v_event.request_name',
                 'v_event.request_date',
                 'v_event.completion_date',
                 sql`location`,
