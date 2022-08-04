@@ -115,12 +115,7 @@ Content-Type: application/json
     #     location: string
     #     status: string
     #     category: string
-    #     items: {
-    #         device_type: string
-    #         device_make: string
-    #         device_model: string
-    #         device_color: string
-    #     }[]
+    #     serial_numbers: string[]
     #     events: {
     #         event_id: number
     #         priority: number
@@ -428,4 +423,15 @@ Authorization: {{auth0token}}
 #     }[]
 # }
 GET {{base}}/locations
+Authorization: {{auth0token}}
+
+### Items modal
+# Response.data: {
+# {
+#     device_make: string
+#     device_model: string
+#     device_status: string
+#     device_serial_number: string
+# }
+GET {{base}}/items/{serial_number}
 Authorization: {{auth0token}}

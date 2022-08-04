@@ -33,15 +33,8 @@ export class V_eventRepository extends MySQLRepository<Database> {
                 sql<string>`CONCAT(v_event.city, ', ', country.country_name)`.as(
                     'location',
                 ),
-                sql<
-                    {
-                        device_type: string
-                        device_make: string
-                        device_model: string
-                        device_color: string
-                    }[]
-                >`JSON_ARRAYAGG(CAST(v_event.peripheral_description as JSON))`.as(
-                    'items',
+                sql<string[]>`JSON_ARRAYAGG(v_event.serial_number)`.as(
+                    'serial_numbers',
                 ),
                 sql<
                     {

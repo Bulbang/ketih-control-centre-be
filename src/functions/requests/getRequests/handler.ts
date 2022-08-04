@@ -35,12 +35,7 @@ type LambdaReturn = {
         location: string
         status: string
         category: string
-        items: {
-            device_type: string
-            device_make: string
-            device_model: string
-            device_color: string
-        }[]
+        serial_numbers: string[]
         events: {
             event_id: number
             priority: number

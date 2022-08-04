@@ -42,7 +42,7 @@ const getUsers: ValidatedEventAPIGatewayProxyEvent<
                 status: user.user_metadata?.status,
                 business_unit: user.user_metadata?.business_unit,
                 country: user.user_metadata?.country,
-                roles: user.app_metadata.roles,
+                roles: user.app_metadata?.roles,
             }
         }),
     }

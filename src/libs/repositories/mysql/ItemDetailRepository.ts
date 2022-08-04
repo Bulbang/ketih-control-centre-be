@@ -49,4 +49,15 @@ export class ItemDetailRepository extends MySQLRepository<Database> {
             .groupBy(['manufacturer', 'model'])
             .orderBy('total', 'desc')
             .execute()
+    getItem = async (serial_number: string) =>
+        this._db
+            .selectFrom('item_detail')
+            .select([
+                'manufacturer as device_make',
+                'model as device_model',
+                'serial_number as device_serial_number',
+                'status as device_status',
+            ])
+            .where('serial_number', '=', serial_number)
+            .execute()
 }

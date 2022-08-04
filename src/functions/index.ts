@@ -32,3 +32,5 @@ export { default as tosSign } from './me/tosSign'
 export { default as getLocations } from './getLocations'
 
 export { default as getAssetsByMake } from './items/getAssetsByMake'
+
+export { default as getItem } from './items/getItem'
