@@ -76,7 +76,7 @@ const requests: ValidatedEventAPIGatewayProxyEvent<
             perPage,
             sortBy,
             direction,
-            filter: filter.toLowerCase(),
+            filter: filter?.toLowerCase(),
         })
 
         return {
