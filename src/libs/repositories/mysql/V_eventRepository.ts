@@ -89,32 +89,52 @@ export class V_eventRepository extends MySQLRepository<Database> {
     }: {
         page?: number
         perPage?: number
-        sortBy: any
-        direction: 'asc' | 'desc'
+        sortBy?: any
+        direction?: 'asc' | 'desc'
     }) =>
         this._db
             .selectFrom('v_event')
             .select([
-                'event_id',
-                'request_date as event_date',
-                'priority',
-                'event_key',
+                'v_event.event_id',
+                'v_event.request_date as event_date',
+                'v_event.priority',
+                'v_event.event_key',
                 sql<{
                     request_id: string
                 }>`JSON_OBJECT('request_id', v_event.itsm_id)`.as('request'),
-                'short_desc',
-                'long_desc',
-                'action as event_type',
+                'v_event.short_desc',
+                'v_event.long_desc',
+                'v_event.action as event_type',
+                sql<{
+                    notes: any
+                    start_date: string
+                    incident_id: number
+                    last_modified: string
+                }>`if(incident.incident_id is not null,
+                    JSON_OBJECT('incident_id',
+                    incident.incident_id,
+                    'start_date',
+                    incident.start_date,
+                    'last_modified',
+                    incident.last_modified,
+                    'notes',
+                    v_event.notes),
+                    null)`.as('incident'),
             ])
-            .where('event_id', 'is not', null)
+            .where('v_event.event_id', 'is not', null)
+            .leftJoin('incident', 'incident.incident_id', 'v_event.incident_id')
             .groupBy([
-                'event_id',
-                'request_date',
-                'priority',
-                'event_key',
-                'short_desc',
-                'long_desc',
-                'action',
+                'incident.incident_id',
+                'incident.start_date',
+                'incident.last_modified',
+                'v_event.notes',
+                'v_event.event_id',
+                'v_event.request_date',
+                'v_event.priority',
+                'v_event.event_key',
+                'v_event.short_desc',
+                'v_event.long_desc',
+                'v_event.action',
                 'itsm_id',
             ])
             .limit(perPage)

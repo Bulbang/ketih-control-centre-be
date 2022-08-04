@@ -20,6 +20,13 @@ type LambdaReturn = {
         short_desc: string
         long_desc: string
         event_type: string
+        status: string
+        incident: {
+            notes: any
+            start_date: string
+            incident_id: number
+            last_modified: string
+        }
     }[]
 }
 
