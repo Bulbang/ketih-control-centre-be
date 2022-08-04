@@ -101,6 +101,7 @@ Content-Type: application/json
 #   perPage: number DEFAULT = 10
 #   sortBy: keyof Response.data.requests DEFAULT = 'request_id'
 #   direction: 'asc' | 'desc' DEFAULT = 'asc'
+#   filter: 'needs_verification' | 'urgent' | 'in_transit' | 'in_deploy' DEFAULT = 'all_requests'
 # Response.data: 
 # {
     # requests: {
@@ -207,7 +208,6 @@ Authorization: {{auth0token}}
     #     priority: number
     #     event_key: string
     #     request: { request_id: string; status: string }
-    #     short_desc: string
     #     long_desc: string
     #     event_type: string
     #     status: string

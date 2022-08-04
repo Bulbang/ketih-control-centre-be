@@ -12,12 +12,14 @@ export class V_eventRepository extends MySQLRepository<Database> {
         perPage = 10,
         direction = 'asc',
         sortBy = 'request_id',
+        filter = 'all_requests',
     }: {
         last?: number
         page?: number
         perPage?: number
         sortBy?: any
         direction?: 'desc' | 'asc'
+        filter?: string
     }) =>
         this._db
             .selectFrom('v_event')
@@ -67,6 +69,32 @@ export class V_eventRepository extends MySQLRepository<Database> {
                 '>=',
                 sql`DATE(NOW() - INTERVAL ${last ? last : 7} DAY)`,
             )
+            .if(filter == 'urgent', (qb) =>
+                qb
+                    .where('v_event.priority', '<=', '2')
+                    .orWhere(
+                        'v_event.event_key',
+                        '=',
+                        'request_closed_complete',
+                    ),
+            )
+            .if(filter == 'in_deploy', (qb) =>
+                qb.where(
+                    'v_event.xp_event_id',
+                    'in',
+                    [100, 102, 103, 104, 105, 106, 107, 108],
+                ),
+            )
+            .if(filter == 'in_transit', (qb) =>
+                qb.where(
+                    'v_event.xp_event_id',
+                    'in',
+                    [201, 202, 203, 204, 205, 207],
+                ),
+            )
+            .if(filter == 'needs_verification', (qb) =>
+                qb.where('v_event.xp_event_id', 'in', [21, 22, 23, 31, 32, 41]),
+            )
             .limit(perPage)
             .offset((page - 1) * perPage)
             .orderBy(sortBy, direction)
@@ -102,7 +130,7 @@ export class V_eventRepository extends MySQLRepository<Database> {
                 sql<{
                     request_id: string
                 }>`JSON_OBJECT('request_id', v_event.itsm_id)`.as('request'),
-                'v_event.short_desc',
+                'v_event.short_desc as status',
                 'v_event.long_desc',
                 'v_event.action as event_type',
                 sql<{

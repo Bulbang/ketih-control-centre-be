@@ -17,10 +17,9 @@ type LambdaReturn = {
         priority: number
         event_key: string
         request: { request_id: string; status: string }
-        short_desc: string
+        status: string
         long_desc: string
         event_type: string
-        status: string
         incident: {
             notes: any
             start_date: string
