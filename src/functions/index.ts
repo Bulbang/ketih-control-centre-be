@@ -30,3 +30,5 @@ export { default as editRole } from './people/editRole'
 export { default as tosSign } from './me/tosSign'
 
 export { default as getLocations } from './getLocations'
+
+export { default as getAssetsByMake } from './items/getAssetsByMake'

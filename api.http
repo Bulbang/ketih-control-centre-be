@@ -342,6 +342,15 @@ Authorization: {{auth0token}}
 GET {{base}}/items/assets/by-type
 Authorization: {{auth0token}}
 
+### Items
+# Response.data: {
+#     total: number
+#     topAssets: { manufacturer: string; model: string; total: number }[],
+#     other: number
+# }
+GET {{base}}/items/assets/make
+Authorization: {{auth0token}}
+
 ### Support
 # QueryString: 
 #   status: "active" | "inactive" DEFAULT = "active"

@@ -37,4 +37,16 @@ export class ItemDetailRepository extends MySQLRepository<Database> {
             .selectFrom('item_detail')
             .select(this._db.fn.count('item_detail.item_detail_id').as('total'))
             .execute()
+
+    getAssetsByMake = async () =>
+        this._db
+            .selectFrom('item_detail')
+            .select([
+                'manufacturer',
+                'model',
+                this._db.fn.count('model').as('total'),
+            ])
+            .groupBy(['manufacturer', 'model'])
+            .orderBy('total', 'desc')
+            .execute()
 }
