@@ -1,6 +1,5 @@
 import { Database } from '@declarations/db/tables'
 import { sql } from 'kysely'
-// import { sql } from 'kysely'
 import { MySQLRepository } from './SQLRepository'
 
 const { DEFAULT_PAGE_OFFSET } = process.env
@@ -24,16 +23,16 @@ export class V_eventRepository extends MySQLRepository<Database> {
         this._db
             .selectFrom('v_event')
             .select([
-                'v_event.itsm_id as request_id',
+                'v_event.work_order_id as request_id',
                 'v_event.requestor',
                 'v_event.employee_id as impacted_user_id',
-                'v_event.request_name as playbook',
+                'v_event.request_name as category',
                 'v_event.request_date as date_opened',
                 'v_event.completion_date as date_closed',
-                sql<string>`CONCAT(v_event.city, ', ', country.country_name)`.as(
+                sql<string>`CONCAT(v_event.city, ', ', v_event.state_or_province)`.as(
                     'location',
                 ),
-                this._db.fn.count('v_event.incident_id').as('incidents'),
+                this._db.fn.count('v_event.incident_id').as('incidents_count'),
                 sql<string[]>`JSON_ARRAYAGG(v_event.serial_number)`.as(
                     'serial_numbers',
                 ),
@@ -47,17 +46,17 @@ export class V_eventRepository extends MySQLRepository<Database> {
                         event_type: string
                         short_desc: string
                         incident: {
-                            incident_id: number
                             start_date: string
+                            incident_id: number
                             last_modified: string
-                            notes: string
+                            description: string
                         }
                     }[]
                 >`JSON_ARRAYAGG(JSON_INSERT(
                     JSON_OBJECT('event_id',
                     v_event.event_id ,
                     'event_date',
-                    v_event.request_date ,
+                    v_event.event_date ,
                     'priority',
                     v_event.priority,
                     'event_key',
@@ -69,21 +68,29 @@ export class V_eventRepository extends MySQLRepository<Database> {
                     'event_type',
                     v_event.action
                      ),
-                    '$.incident',
-                    if(v_event.incident_id is not null,
-                    JSON_OBJECT('incident_id',
-                    v_event.incident_id,
-                    'start_date',
-                    incident.start_date,
-                    'last_modified',
-                    incident.last_modified,
-                    'notes',
-                    v_event.notes),
-                    null)
+                    '$.incidents',
+                    JSON_ARRAYAGG(
+                        JSON_OBJECT('incident_id',
+                        incident.incident_id,
+                        'description', 
+                        incident.response,
+                        'start_date',
+                        incident.start_date,
+                        'last_modified',
+                        incident.last_modified
+                        ))
                     ))`.as('events'),
             ])
+            .leftJoin(
+                'event_classification',
+                'event_classification.xp_event_id',
+                'v_event.xp_event_id',
+            )
+            .select([
+                'event_classification.short_desc as status',
+                'event_classification.priority',
+            ])
             .leftJoin('incident', 'v_event.incident_id', 'incident.incident_id')
-            .leftJoin('country', 'v_event.country', 'country.country_code')
             .leftJoin(
                 'work_order',
                 'work_order.work_order_id',
@@ -97,12 +104,8 @@ export class V_eventRepository extends MySQLRepository<Database> {
             )
             .if(filter == 'urgent', (qb) =>
                 qb
-                    .where('v_event.priority', '<=', '2')
-                    .orWhere(
-                        'v_event.event_key',
-                        '=',
-                        'request_closed_complete',
-                    ),
+                    .where('event_classification.priority', '<=', 2)
+                    .where('v_event.completion_date', 'is', null),
             )
             .if(filter == 'in_deploy', (qb) =>
                 qb.where(
@@ -125,7 +128,9 @@ export class V_eventRepository extends MySQLRepository<Database> {
             .offset((page - 1) * perPage)
             .orderBy(sortBy, direction)
             .groupBy([
-                'v_event.itsm_id',
+                'event_classification.priority',
+                'event_classification.short_desc',
+                'v_event.work_order_id',
                 'v_event.requestor',
                 'work_order.notes',
                 'v_event.employee_id',
@@ -152,6 +157,7 @@ export class V_eventRepository extends MySQLRepository<Database> {
                 'v_event.event_id',
                 'v_event.request_date as event_date',
                 'v_event.priority',
+                this._db.fn.count('v_event.incident_id').as('incident_count'),
                 'v_event.event_key',
                 sql<{
                     request_id: string
@@ -159,21 +165,24 @@ export class V_eventRepository extends MySQLRepository<Database> {
                 'v_event.short_desc as status',
                 'v_event.long_desc',
                 'v_event.action as event_type',
-                sql<{
-                    notes: any
-                    start_date: string
-                    incident_id: number
-                    last_modified: string
-                }>`if(incident.incident_id is not null,
+                sql<
+                    {
+                        start_date: string
+                        incident_id: number
+                        last_modified: string
+                        description: string
+                        response: string
+                    }[]
+                >`JSON_ARRAYAGG(
                     JSON_OBJECT('incident_id',
                     incident.incident_id,
+                    'description', 
+                    incident.response,
                     'start_date',
                     incident.start_date,
                     'last_modified',
-                    incident.last_modified,
-                    'notes',
-                    v_event.notes),
-                    null)`.as('incident'),
+                    incident.last_modified
+                    ))`.as('incidents'),
             ])
             .where('v_event.event_id', 'is not', null)
             .leftJoin('incident', 'incident.incident_id', 'v_event.incident_id')

@@ -115,7 +115,8 @@ Content-Type: application/json
     #     status: string
     #     category: string
     #     serial_numbers: string[]
-    #     inicidents: number
+    #     incidents_count: unknown
+    #     priority: number
     #     events: {
     #         event_id: number
     #         priority: number
@@ -125,11 +126,10 @@ Content-Type: application/json
     #         event_type: string
     #         short_desc: string
     #         incident: {
-                # incident_id: number
-                # start_date: string
-                # last_modified: string
-                # notes: string
-            # }
+    #             incident_id: number
+    #             start_date: string
+    #             last_modified: string
+    #         }
     #     }[]
     # }[]
 # }
@@ -208,16 +208,17 @@ Authorization: {{auth0token}}
     #     event_date: string
     #     priority: number
     #     event_key: string
-    #     request: { request_id: string; status: string }
+    #     request: { request_id: string }
+    #     status: string
     #     long_desc: string
     #     event_type: string
-    #     status: string
-    #     incident: {
-    #         notes: any
+    #     incident_count: any
+    #     incidents: {
     #         start_date: string
     #         incident_id: number
     #         last_modified: string
-    #     } | null
+    #         response: string
+    #     }[]
     # }[]
 # }
 GET {{base}}/events
@@ -440,4 +441,39 @@ Authorization: {{auth0token}}
 #     device_serial_number: string
 # }
 GET {{base}}/items/{serial_number}
+Authorization: {{auth0token}}
+
+### Requests diagrams
+# Response.data: {
+#   total: number
+#   categories: {
+#     name: string
+#     total: number
+#   }
+# }
+GET {{base}}/requests/by-category
+Authorization: {{auth0token}}
+
+### Requests diagrams
+# Response.data: {
+    # total: number
+    # other: number
+    # top_statuses: {
+    #     name: string
+    #     total: number
+    # }[]
+# }
+GET {{base}}/requests/by-status
+Authorization: {{auth0token}}
+
+### Requests diagrams
+# Response.data: {
+    # total: number
+    # other: number
+    # top_services: {
+    #     name: string
+    #     total: number
+    # }[]
+# }
+GET {{base}}/requests/by-service
 Authorization: {{auth0token}}

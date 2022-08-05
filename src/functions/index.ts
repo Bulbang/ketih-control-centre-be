@@ -34,3 +34,9 @@ export { default as getLocations } from './getLocations'
 export { default as getAssetsByMake } from './items/getAssetsByMake'
 
 export { default as getItem } from './items/getItem'
+
+export { default as getRequestsByCategory } from './requests/getRequestsByCategory'
+
+export { default as getRequestsByService } from './requests/getRequestsByService'
+
+export { default as getRequestsByStatus } from './requests/getRequestsByStatus'

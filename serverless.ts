@@ -26,23 +26,23 @@ const serverlessConfiguration: AWS = {
                 ],
                 Resource: [{ 'Fn::GetAtt': ['UsersTable', 'Arn'] }],
             },
-            {
-                Effect: 'Allow',
-                Action: ['dynamodb:PutItem', 'dynamodb:Query', 'dynamodb:Scan'],
-                Resource: [{ 'Fn::GetAtt': ['ActivityTable', 'Arn'] }],
-            },
-            {
-                Effect: 'Allow',
-                Action: ['s3:*'],
-                Resource: [
-                    {
-                        'Fn::Join': [
-                            '/',
-                            [{ 'Fn::GetAtt': 'ClientBrandingBucket.Arn' }, '*'],
-                        ],
-                    },
-                ],
-            },
+            // {
+            //     Effect: 'Allow',
+            //     Action: ['dynamodb:PutItem', 'dynamodb:Query', 'dynamodb:Scan'],
+            //     Resource: [{ 'Fn::GetAtt': ['ActivityTable', 'Arn'] }],
+            // },
+            // {
+            //     Effect: 'Allow',
+            //     Action: ['s3:*'],
+            //     Resource: [
+            //         {
+            //             'Fn::Join': [
+            //                 '/',
+            //                 [{ 'Fn::GetAtt': 'ClientBrandingBucket.Arn' }, '*'],
+            //             ],
+            //         },
+            //     ],
+            // },
         ],
         environment: {
             AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
@@ -50,7 +50,7 @@ const serverlessConfiguration: AWS = {
             DEFAULT_PAGE_OFFSET: '10',
             AUTH0_CUSTOM_CLAIMS_NAMESPACE:
                 '${env:AUTH0_CUSTOM_CLAIMS_NAMESPACE}',
-            ACTIVITY_TABLE_NAME: { Ref: 'ActivityTable' },
+            // ACTIVITY_TABLE_NAME: { Ref: 'ActivityTable' },
         },
     },
 

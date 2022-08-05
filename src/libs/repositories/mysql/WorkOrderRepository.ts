@@ -123,4 +123,44 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
             )
             .groupBy(sql`month_index`)
             .execute()
+
+    getReqsByCategory = async () =>
+        this._db
+            .selectFrom('work_order')
+            .select([
+                'request_name as name',
+                this._db.fn.count('request_name').as('total'),
+            ])
+            .groupBy(['request_name'])
+            .orderBy(sql`total`, 'desc')
+            .execute()
+
+    getReqsByService = async () =>
+        this._db
+            .selectFrom('work_order')
+            .select([
+                'shipping_method as name',
+                this._db.fn.count('shipping_method').as('total'),
+            ])
+            .groupBy(['shipping_method'])
+            .orderBy(sql`total`, 'desc')
+            .execute()
+
+    getReqsByStatus = async () =>
+        this._db
+            .selectFrom('work_order')
+            .leftJoin(
+                'event_classification',
+                'work_order.xp_event_id',
+                'event_classification.xp_event_id',
+            )
+            .select([
+                'event_classification.short_desc as name',
+                this._db.fn
+                    .count('event_classification.short_desc')
+                    .as('total'),
+            ])
+            .groupBy(['event_classification.short_desc'])
+            .orderBy(sql`total`, 'desc')
+            .execute()
 }

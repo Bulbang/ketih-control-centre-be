@@ -234,6 +234,7 @@ type V_EventTable = {
     shipping_carrier
     shipping_method
     shipping_status
+    state_or_province
     tracking_number
     delivery_date
     completion_date
