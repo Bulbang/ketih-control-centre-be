@@ -143,7 +143,7 @@ export class V_eventRepository extends MySQLRepository<Database> {
     getAllEvents = async ({
         page = 1,
         perPage = +DEFAULT_PAGE_OFFSET,
-        sortBy = 'request_date',
+        sortBy = 'v_event.event_date',
         direction = 'desc',
     }: {
         page?: number
@@ -155,13 +155,17 @@ export class V_eventRepository extends MySQLRepository<Database> {
             .selectFrom('v_event')
             .select([
                 'v_event.event_id',
-                'v_event.request_date as event_date',
+                'v_event.event_date',
                 'v_event.priority',
                 this._db.fn.count('v_event.incident_id').as('incident_count'),
                 'v_event.event_key',
                 sql<{
                     request_id: string
-                }>`JSON_OBJECT('request_id', v_event.itsm_id)`.as('request'),
+                    notes: string
+                    serial_numbers: string[]
+                }>`JSON_INSERT(JSON_OBJECT('request_id', v_event.work_order_id, 'notes', work_order.notes), '$.serial_numbers', JSON_ARRAYAGG(work_order.serial_number))`.as(
+                    'request',
+                ),
                 'v_event.short_desc as status',
                 'v_event.long_desc',
                 'v_event.action as event_type',
@@ -186,19 +190,24 @@ export class V_eventRepository extends MySQLRepository<Database> {
             ])
             .where('v_event.event_id', 'is not', null)
             .leftJoin('incident', 'incident.incident_id', 'v_event.incident_id')
+            .leftJoin(
+                'work_order',
+                'work_order.work_order_id',
+                'v_event.work_order_id',
+            )
             .groupBy([
                 'incident.incident_id',
                 'incident.start_date',
                 'incident.last_modified',
                 'v_event.notes',
                 'v_event.event_id',
-                'v_event.request_date',
+                'v_event.event_date',
                 'v_event.priority',
                 'v_event.event_key',
                 'v_event.short_desc',
                 'v_event.long_desc',
                 'v_event.action',
-                'itsm_id',
+                'v_event.work_order_id',
             ])
             .limit(perPage)
             .offset((page - 1) * perPage)
