@@ -35,8 +35,8 @@ const getEvents: ValidatedEventAPIGatewayProxyEvent<
 > = async (event) => {
     const { page, perPage, sortBy, direction } =
         event.queryStringParameters as {
-            page?: number
-            perPage?: number
+            page?: string
+            perPage?: string
             sortBy?: keyof Database['v_event']
             direction?: 'asc' | 'desc'
         }
@@ -46,8 +46,8 @@ const getEvents: ValidatedEventAPIGatewayProxyEvent<
 
     try {
         const events = await eventRepository.getAllEvents({
-            perPage,
-            page,
+            perPage: perPage ? +perPage : undefined,
+            page: page ? +page : undefined,
             sortBy,
             direction,
         })

@@ -36,6 +36,7 @@ type LambdaReturn = {
         status: string
         category: string
         serial_numbers: string[]
+        incidents: unknown
         events: {
             event_id: number
             priority: number
@@ -44,6 +45,12 @@ type LambdaReturn = {
             event_date: string
             event_type: string
             short_desc: string
+            incident: {
+                incident_id: number
+                start_date: string
+                last_modified: string
+                notes: string
+            }
         }[]
     }[]
 }
@@ -54,9 +61,9 @@ const requests: ValidatedEventAPIGatewayProxyEvent<
 > = async (event) => {
     const { last, page, perPage, sortBy, direction, filter } =
         event.queryStringParameters as {
-            last?: number
-            page?: number
-            perPage?: number
+            last?: string
+            page?: string
+            perPage?: string
             sortBy?: string
             direction?: 'asc' | 'desc'
             filter?: string
@@ -66,9 +73,9 @@ const requests: ValidatedEventAPIGatewayProxyEvent<
     }
     try {
         const requests = await v_eventRepository.getRequests({
-            last,
-            page,
-            perPage,
+            last: last ? +last : undefined,
+            page: page ? +page : undefined,
+            perPage: perPage ? +perPage : undefined,
             sortBy,
             direction,
             filter: filter?.toLowerCase(),

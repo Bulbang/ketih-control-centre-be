@@ -33,6 +33,7 @@ export class V_eventRepository extends MySQLRepository<Database> {
                 sql<string>`CONCAT(v_event.city, ', ', country.country_name)`.as(
                     'location',
                 ),
+                this._db.fn.count('v_event.incident_id').as('incidents'),
                 sql<string[]>`JSON_ARRAYAGG(v_event.serial_number)`.as(
                     'serial_numbers',
                 ),
@@ -45,11 +46,43 @@ export class V_eventRepository extends MySQLRepository<Database> {
                         event_date: string
                         event_type: string
                         short_desc: string
+                        incident: {
+                            incident_id: number
+                            start_date: string
+                            last_modified: string
+                            notes: string
+                        }
                     }[]
-                >`JSON_ARRAYAGG(JSON_OBJECT('event_id', v_event.event_id ,'event_date', v_event.request_date ,'priority', v_event.priority,'event_key', v_event.event_key,'short_desc', v_event.short_desc,'long_desc', v_event.long_desc,'event_type', v_event.action))`.as(
-                    'events',
-                ),
+                >`JSON_ARRAYAGG(JSON_INSERT(
+                    JSON_OBJECT('event_id',
+                    v_event.event_id ,
+                    'event_date',
+                    v_event.request_date ,
+                    'priority',
+                    v_event.priority,
+                    'event_key',
+                    v_event.event_key,
+                    'short_desc',
+                    v_event.short_desc,
+                    'long_desc',
+                    v_event.long_desc,
+                    'event_type',
+                    v_event.action
+                     ),
+                    '$.incident',
+                    if(v_event.incident_id is not null,
+                    JSON_OBJECT('incident_id',
+                    v_event.incident_id,
+                    'start_date',
+                    incident.start_date,
+                    'last_modified',
+                    incident.last_modified,
+                    'notes',
+                    v_event.notes),
+                    null)
+                    ))`.as('events'),
             ])
+            .leftJoin('incident', 'v_event.incident_id', 'incident.incident_id')
             .leftJoin('country', 'v_event.country', 'country.country_code')
             .leftJoin(
                 'work_order',

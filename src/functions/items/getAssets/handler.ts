@@ -24,8 +24,8 @@ const getAssets: ValidatedEventAPIGatewayProxyEvent<
 > = async (event) => {
     const { page, perPage, sortBy, direction } =
         event.queryStringParameters as {
-            page?: number
-            perPage?: number
+            page?: string
+            perPage?: string
             sortBy?: string
             direction?: 'asc' | 'desc'
         }
@@ -35,8 +35,8 @@ const getAssets: ValidatedEventAPIGatewayProxyEvent<
     }
     try {
         const assets = await itemDetailRepository.getAssets({
-            page,
-            perPage,
+            perPage: perPage ? +perPage : undefined,
+            page: page ? +page : undefined,
             sortBy,
             direction,
         })

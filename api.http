@@ -116,6 +116,7 @@ Content-Type: application/json
     #     status: string
     #     category: string
     #     serial_numbers: string[]
+    #     inicidents: number
     #     events: {
     #         event_id: number
     #         priority: number
@@ -124,6 +125,12 @@ Content-Type: application/json
     #         event_date: string
     #         event_type: string
     #         short_desc: string
+    #         incident: {
+                # incident_id: number
+                # start_date: string
+                # last_modified: string
+                # notes: string
+            # }
     #     }[]
     # }[]
 # }
