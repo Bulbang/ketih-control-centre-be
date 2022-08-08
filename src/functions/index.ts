@@ -40,3 +40,5 @@ export { default as getRequestsByCategory } from './requests/getRequestsByCatego
 export { default as getRequestsByService } from './requests/getRequestsByService'
 
 export { default as getRequestsByStatus } from './requests/getRequestsByStatus'
+
+export { default as getAssociatedEvents } from './events/getAssociatedEvents'

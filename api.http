@@ -225,6 +225,28 @@ GET {{base}}/events
 Authorization: {{auth0token}}
 
 ### Events
+# Response.data:{
+#   events: {
+#         event_id: number
+#         event_date: number
+#         priority: number
+#         event_key: string
+#         status: string
+#         long_desc: string
+#         event_type: string
+#         incident_count: any
+#         incidents: {
+#             start_date: string
+#             incident_id: number
+#             last_modified: string
+#             response: string
+#         }[]
+#     }[]
+# }
+GET {{base}}/events/associated/:event_id
+Authorization: {{auth0token}}
+
+### Events
 # Response.data:
   # {
     # event_id: number,

@@ -28,7 +28,7 @@ const getRequestsByStatus: ValidatedEventAPIGatewayProxyEvent<
         const totalByMake = asset.total as number
         return totalByMake + counter
     }, 0)
-    const top_statuses = statuses.splice(0, 10)
+    const top_statuses = statuses.splice(0, 5)
     const other =
         total -
         top_statuses.reduce((counter, asset) => {

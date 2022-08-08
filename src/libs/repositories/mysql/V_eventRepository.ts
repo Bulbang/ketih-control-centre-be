@@ -45,12 +45,12 @@ export class V_eventRepository extends MySQLRepository<Database> {
                         event_date: string
                         event_type: string
                         short_desc: string
-                        incident: {
+                        incidents: {
                             start_date: string
                             incident_id: number
                             last_modified: string
                             description: string
-                        }
+                        }[]
                     }[]
                 >`JSON_ARRAYAGG(JSON_INSERT(
                     JSON_OBJECT('event_id',
@@ -69,7 +69,7 @@ export class V_eventRepository extends MySQLRepository<Database> {
                     v_event.action
                      ),
                     '$.incidents',
-                    JSON_ARRAYAGG(
+                    JSON_ARRAY(
                         JSON_OBJECT('incident_id',
                         incident.incident_id,
                         'description', 
@@ -187,6 +187,50 @@ export class V_eventRepository extends MySQLRepository<Database> {
                     'last_modified',
                     incident.last_modified
                     ))`.as('incidents'),
+                sql<
+                    {
+                        event_id: number
+                        priority: number
+                        event_key: string
+                        long_desc: string
+                        event_date: string
+                        event_type: string
+                        short_desc: string
+                        incident: {
+                            start_date: string
+                            incident_id: number
+                            last_modified: string
+                            description: string
+                        }
+                    }[]
+                >`JSON_ARRAYAGG(JSON_INSERT(
+                    JSON_OBJECT('event_id',
+                    v_event.event_id ,
+                    'event_date',
+                    v_event.event_date ,
+                    'priority',
+                    v_event.priority,
+                    'event_key',
+                    v_event.event_key,
+                    'short_desc',
+                    v_event.short_desc,
+                    'long_desc',
+                    v_event.long_desc,
+                    'event_type',
+                    v_event.action
+                     ),
+                    '$.incidents',
+                    JSON_ARRAY(
+                        JSON_OBJECT('incident_id',
+                        incident.incident_id,
+                        'description', 
+                        incident.response,
+                        'start_date',
+                        incident.start_date,
+                        'last_modified',
+                        incident.last_modified
+                        ))
+                    ))`.as('events'),
             ])
             .where('v_event.event_id', 'is not', null)
             .leftJoin('incident', 'incident.incident_id', 'v_event.incident_id')
@@ -199,7 +243,7 @@ export class V_eventRepository extends MySQLRepository<Database> {
                 'incident.incident_id',
                 'incident.start_date',
                 'incident.last_modified',
-                'v_event.notes',
+                // 'wokr_order.notes',
                 'v_event.event_id',
                 'v_event.event_date',
                 'v_event.priority',

@@ -29,11 +29,11 @@ type LambdaReturn = {
             event_date: string
             event_type: string
             short_desc: string
-            incident: {
+            incidents: {
                 incident_id: number
                 start_date: string
                 last_modified: string
-            }
+            }[]
         }[]
     }[]
 }
@@ -62,6 +62,10 @@ const requests: ValidatedEventAPIGatewayProxyEvent<
             sortBy,
             direction,
             filter: filter?.toLowerCase(),
+        })
+
+        requests.map((req) => {
+            req.serial_numbers = [...new Set(req.serial_numbers)]
         })
 
         return {
