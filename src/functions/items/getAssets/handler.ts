@@ -1,11 +1,11 @@
 import { middyfy } from '@libs/middlewares/middyfy'
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
 import { createDbConnection } from '@libs/utils/createDbConnection'
-import { ItemDetailRepository } from '@libs/repositories/mysql/ItemDetailRepository'
 import { badRequest } from '@hapi/boom'
+import { WorkOrderRepository } from '@libs/repositories/mysql/WorkOrderRepository'
 
 const db = createDbConnection()
-const itemDetailRepository = new ItemDetailRepository(db)
+const workOrderRepository = new WorkOrderRepository(db)
 
 type LambdaReturn = {
     assets: {
@@ -14,7 +14,7 @@ type LambdaReturn = {
         model: string
         status: string
         warranty_date: string
-        requests: string[]
+        requests: { request_id: string }[]
     }[]
 }
 
@@ -34,7 +34,7 @@ const getAssets: ValidatedEventAPIGatewayProxyEvent<
         throw badRequest(`Unknown sort direction parameter: '${direction}'`)
     }
     try {
-        const assets = await itemDetailRepository.getAssets({
+        const assets = await workOrderRepository.getAssets({
             perPage: perPage ? +perPage : undefined,
             page: page ? +page : undefined,
             sortBy,
@@ -42,12 +42,7 @@ const getAssets: ValidatedEventAPIGatewayProxyEvent<
         })
 
         return {
-            assets: assets.map((asset) => {
-                return {
-                    ...asset,
-                    requests: [`REQ${Math.round(Math.random() * 8999) + 1000}`],
-                }
-            }),
+            assets,
         }
     } catch (error) {
         throw error.message == `Unknown column '${sortBy}' in 'order clause'`

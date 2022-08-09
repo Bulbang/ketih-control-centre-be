@@ -12,6 +12,17 @@ const serverlessConfiguration: AWS = {
         stage: '${opt:stage, "dev"}',
         name: 'aws',
         runtime: 'nodejs14.x',
+        vpc: {
+            securityGroupIds: ['sg-0c1bd58f78b8ec568'],
+            subnetIds: [
+                'subnet-0f26697d6853297b4',
+                'subnet-03065842684a088c2',
+                'subnet-031ebf4f2ac4a2c4e',
+                'subnet-0d810a8ae6864ad44',
+                'subnet-0604aac7a56f336e6',
+                'subnet-0c546d787837ada11',
+            ],
+        },
         apiGateway: {
             minimumCompressionSize: 1024,
             shouldStartNameWithService: true,

@@ -7,11 +7,3 @@ export const dbCreds = {
     MYSQLHOST: '${env:MYSQLHOST}',
     MYSQLDATABASE: '${env:MYSQLDATABASE}',
 }
-
-export const mockDbCreds = {
-    MYSQLUSER: '${env:MOCKMYSQLUSER}',
-    MYSQLPASSWORD: '${env:MOCKMYSQLPASSWORD}',
-    MYSQLPORT: '${env:MOCKMYSQLPORT}',
-    MYSQLHOST: '${env:MOCKMYSQLHOST}',
-    MYSQLDATABASE: '${env:MOCKMYSQLDATABASE}',
-}

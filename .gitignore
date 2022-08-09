@@ -7,5 +7,6 @@ jspm_packages
 
 yarn-error.log
 .env
+.env.prod
 # esbuild directories
 .esbuild
