@@ -465,7 +465,7 @@ Authorization: {{auth0token}}
 GET {{base}}/items/{serial_number}
 Authorization: {{auth0token}}
 
-### Requests diagrams
+### Requests data graphs
 # Response.data: {
 #   total: number
 #   categories: {
@@ -476,7 +476,7 @@ Authorization: {{auth0token}}
 GET {{base}}/requests/by-category
 Authorization: {{auth0token}}
 
-### Requests diagrams
+### Requests data graphs
 # Response.data: {
     # total: number
     # other: number
@@ -488,7 +488,7 @@ Authorization: {{auth0token}}
 GET {{base}}/requests/by-status
 Authorization: {{auth0token}}
 
-### Requests diagrams
+### Requests data graphs
 # Response.data: {
     # total: number
     # other: number
@@ -498,4 +498,16 @@ Authorization: {{auth0token}}
     # }[]
 # }
 GET {{base}}/requests/by-service
+Authorization: {{auth0token}}
+
+### Requests data graphs
+# Response.data {
+    # total: number
+    # other: number
+    # top_item_types: {
+        # name: string
+        # total: number
+    # }[]
+# }
+GET {{base}}/requests/advanced-replacements/by-item-type
 Authorization: {{auth0token}}

@@ -42,7 +42,12 @@ const getAssets: ValidatedEventAPIGatewayProxyEvent<
         })
 
         return {
-            assets,
+            assets: assets.map((asset) => {
+                asset.requests = [
+                    { request_id: Math.round(Math.random() * 1000) },
+                ]
+                return asset
+            }),
         }
     } catch (error) {
         throw error.message == `Unknown column '${sortBy}' in 'order clause'`

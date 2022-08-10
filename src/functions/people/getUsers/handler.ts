@@ -20,8 +20,8 @@ type LambdaReturn = {
 const getUsers: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
-> = async (event) => {
-    const { page, perPage } = event.queryStringParameters as {
+> = async ({ queryStringParameters }) => {
+    const { page, perPage } = queryStringParameters as {
         page?: number
         perPage?: number
     }

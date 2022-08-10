@@ -5,6 +5,23 @@ import { MySQLRepository } from './SQLRepository'
 const { DEFAULT_PAGE_OFFSET } = process.env
 
 export class WorkOrderRepository extends MySQLRepository<Database> {
+    getAdvancedReplacementsByItemType = async () =>
+        this._db
+            .selectFrom('work_order')
+            .leftJoin(
+                'item_detail',
+                'item_detail.serial_number',
+                'work_order.serial_number',
+            )
+            .select([
+                'item_detail.device_type as name',
+                this._db.fn.count('device_type').as('total'),
+            ])
+            .where(sql`LOWER(work_order.runbook)`, 'like', '%replace%')
+            .groupBy('item_detail.device_type')
+            .orderBy(sql`total`, 'desc')
+            .execute()
+
     getAssets = async ({
         page = 1,
         perPage = +DEFAULT_PAGE_OFFSET,
@@ -17,12 +34,12 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
         direction?: 'desc' | 'asc'
     }) =>
         this._db
-            .selectFrom('work_order')
-            .leftJoin(
-                'item_detail',
-                'work_order.serial_number',
-                'item_detail.serial_number',
-            )
+            .selectFrom('item_detail')
+            // .leftJoin(
+            //     'item_detail',
+            //     'work_order.serial_number',
+            //     'item_detail.serial_number',
+            // )
             .select([
                 'item_detail.item_detail_id as asset_tag',
                 'item_detail.device_type as asset_type',
@@ -31,11 +48,11 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
                 ),
                 'item_detail.status',
                 'item_detail.warranty_end_date as warranty_date',
-                sql<
-                    { request_id: string }[]
-                >`JSON_ARRAYAGG(JSON_OBJECT('request_id', work_order.work_order_id))`.as(
-                    'requests',
-                ),
+                // sql<
+                //     { request_id: string }[]
+                // >`JSON_ARRAYAGG(JSON_OBJECT('request_id', work_order.work_order_id))`.as(
+                //     'requests',
+                // ),
             ])
             .groupBy([
                 'item_detail.item_detail_id',

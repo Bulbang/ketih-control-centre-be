@@ -17,7 +17,7 @@ type LambdaReturn = {
 const getRequestsByCategory: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
-> = async (event) => {
+> = async (_) => {
     const categories = (await workOrderRepository.getReqsByCategory()) as {
         name: string
         total: number

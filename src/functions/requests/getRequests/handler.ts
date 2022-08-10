@@ -69,7 +69,12 @@ const requests: ValidatedEventAPIGatewayProxyEvent<
         })
 
         return {
-            requests,
+            requests: requests.map((req) => {
+                req.serial_numbers = req.serial_numbers.map((num) =>
+                    num ? num : '',
+                )
+                return req
+            }),
         }
     } catch (error) {
         throw error.message == `Unknown column '${sortBy}' in 'order clause'`
