@@ -10,7 +10,7 @@ const v_eventRepository = new V_eventRepository(db)
 type LambdaReturn = {
     requests: {
         request_id: any
-        requestor: string
+        // requestor: string
         notes: string
         date_opened?: string
         date_closed: string

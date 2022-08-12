@@ -49,7 +49,7 @@ const getAssets: ValidatedEventAPIGatewayProxyEvent<
             )
         return {
             assets: assets.map((asset) => {
-                const associatedRequest = associatedRequests
+                const [associatedRequest] = associatedRequests
                     .filter((req) => req.serial_number == asset.serial_number)
                     .map((req) => req.requests)
                 asset.serial_number = undefined

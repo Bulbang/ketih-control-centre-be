@@ -344,7 +344,7 @@ Authorization: {{auth0token}}
 #         model: string
 #         status: string
 #         warranty_date: string
-#         requests: string[]
+#         requests: {reuqest_id: string}[]
 #     }[]
 # }
 GET {{base}}/items/assets

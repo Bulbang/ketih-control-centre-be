@@ -8,7 +8,7 @@ const workOrderRepository = new WorkOrderRepository(db)
 
 type LambdaReturn = {
     work_order_id: number
-    requsetor: string
+    // requsetor: string
     runbook: string
     events: number[]
     incidents: number[]
@@ -24,7 +24,7 @@ const getRequestDetail: ValidatedEventAPIGatewayProxyEvent<
 
     return {
         work_order_id: orders[0].work_order_id,
-        requsetor: orders[0].requestor,
+        // requsetor: orders[0].requestor,
         runbook: orders[0].runbook,
         events: orders.map((order) => order.event_id),
         incidents: orders

@@ -27,9 +27,11 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
             .selectFrom('work_order')
             .select([
                 'work_order.serial_number',
-                sql<{
-                    request_id: number
-                }>`JSON_ARRAYAGG(JSON_OBJECT('request_id', work_order.work_order_id))`.as(
+                sql<
+                    {
+                        request_id: number
+                    }[]
+                >`JSON_ARRAYAGG(JSON_OBJECT('request_id', work_order.work_order_id))`.as(
                     'requests',
                 ),
             ])
@@ -118,7 +120,7 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
                 'event.work_order_id',
                 'work_order.work_order_id',
             )
-            .select(['event.event_id', 'event.requestor', 'event.notes'])
+            .select(['event.event_id', /* 'event.requestor', */ 'event.notes'])
             .leftJoin('incident', 'incident.event_id', 'event.event_id')
             .select(['incident.incident_id'])
             .execute()
@@ -171,10 +173,19 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
         this._db
             .selectFrom('work_order')
             .select([
-                'shipping_method as name',
-                this._db.fn.count('shipping_method').as('total'),
+                sql<number>`COUNT(*)`.as('total'),
+                // 'shipping_method as name',
+                sql<number>`COUNT(IF(expidited = true, 1, NULL))`.as(
+                    'expedited',
+                ),
+                sql<number>`COUNT(IF(weekend_delivery = true, 1, NULL))`.as(
+                    'saturday_delivery',
+                ),
+                sql<number>`COUNT(IF(expidited != true AND weekend_delivery != true, 1, NULL))`.as(
+                    'ground',
+                ),
             ])
-            .groupBy(['shipping_method'])
+            // .groupBy(['shipping_method'])
             .orderBy(sql`total`, 'desc')
             .execute()
 
