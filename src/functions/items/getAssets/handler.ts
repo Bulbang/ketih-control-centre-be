@@ -3,8 +3,10 @@ import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gatewa
 import { createDbConnection } from '@libs/utils/createDbConnection'
 import { badRequest } from '@hapi/boom'
 import { WorkOrderRepository } from '@libs/repositories/mysql/WorkOrderRepository'
+import { ItemDetailRepository } from '@libs/repositories/mysql/ItemDetailRepository'
 
 const db = createDbConnection()
+const itemDetailRepository = new ItemDetailRepository(db)
 const workOrderRepository = new WorkOrderRepository(db)
 
 type LambdaReturn = {
@@ -14,7 +16,7 @@ type LambdaReturn = {
         model: string
         status: string
         warranty_date: string
-        requests: { request_id: string }[]
+        requests: { request_id: number }[]
     }[]
 }
 
@@ -34,19 +36,35 @@ const getAssets: ValidatedEventAPIGatewayProxyEvent<
         throw badRequest(`Unknown sort direction parameter: '${direction}'`)
     }
     try {
-        const assets = await workOrderRepository.getAssets({
+        const assets = await itemDetailRepository.getAssets({
             perPage: perPage ? +perPage : undefined,
             page: page ? +page : undefined,
             sortBy,
             direction,
         })
 
+        const associatedRequests =
+            await workOrderRepository.getAssociatedRequestsToAsset(
+                assets.map((asset) => asset.serial_number),
+            )
         return {
             assets: assets.map((asset) => {
-                asset.requests = [
-                    { request_id: Math.round(Math.random() * 1000) },
-                ]
-                return asset
+                const associatedRequest = associatedRequests
+                    .filter((req) => req.serial_number == asset.serial_number)
+                    .map((req) => req.requests)
+                asset.serial_number = undefined
+                const newAsset: {
+                    asset_tag: string
+                    asset_type: string
+                    model: string
+                    status: string
+                    warranty_date: string
+                    requests: { request_id: number }[]
+                } = {
+                    ...asset,
+                    requests: associatedRequest ? associatedRequest : [],
+                }
+                return newAsset
             }),
         }
     } catch (error) {

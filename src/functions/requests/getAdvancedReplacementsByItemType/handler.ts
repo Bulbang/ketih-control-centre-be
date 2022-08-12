@@ -40,7 +40,7 @@ const getAdvancedReplacementsByItemType: ValidatedEventAPIGatewayProxyEvent<
     return {
         total,
         other,
-        top_item_types,
+        top_item_types: top_item_types.filter((type) => type.name),
     }
 }
 

@@ -11,7 +11,9 @@ const addUser: ValidatedEventAPIGatewayProxyEvent<
     LambdaReturn
 > = async (event) => {
     const { body } = event
+
     const Auth0Instance = await getAuth0Instance()
+
     const { data } = await Auth0Instance.createUser({ ...body, role: 'user' })
 
     return {

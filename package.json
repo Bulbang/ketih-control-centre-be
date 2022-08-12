@@ -12,7 +12,8 @@
         "migration:run:down": "ts-node src/db/migrateDown.ts",
         "lambda:new": "sh ./sh/lambda-create.sh",
         "lambda:deploy:qa": "sls deploy function --stage qa --aws-profile xperienc --function",
-        "lambda:deploy:dev": "sls deploy function --stage dev --aws-profile xperienc --function"
+        "lambda:deploy:dev": "sls deploy function --stage dev --aws-profile xperienc --function",
+        "lambda:deploy:prod": "sls deploy function --stage prod --aws-profile xperienc --function"
     },
     "husky": {
         "hooks": {

@@ -13,7 +13,9 @@ const serverlessConfiguration: AWS = {
         name: 'aws',
         runtime: 'nodejs14.x',
         vpc: {
-            securityGroupIds: ['sg-0c1bd58f78b8ec568'],
+            securityGroupIds: [
+                /* 'sg-0c1bd58f78b8ec568' */ 'sg-0662ff778214610f7',
+            ],
             subnetIds: [
                 'subnet-0f26697d6853297b4',
                 'subnet-03065842684a088c2',

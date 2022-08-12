@@ -8,6 +8,11 @@ const roles = ['superadmin', 'manager', 'user']
 
 // Required AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET, AUTH0_URL(application domain) in .env
 // DEFAULT_PAGE_OFFSET could be any number more than 0
+const undefinedIfAllValuesUndefined = (obj: Object) => {
+    return Object.values(obj).every((item) => item == undefined)
+        ? undefined
+        : obj
+}
 
 class Auth0Instance {
     private _instance: AxiosInstance = axios.create({ baseURL })
@@ -50,6 +55,9 @@ class Auth0Instance {
         if (role && !roles.includes(role.toLowerCase()))
             throw badRequest(`Unknown role ${role}`)
 
+        const name =
+            first_name && last_name ? `${first_name} ${last_name}` : undefined
+
         return this._instance.post(
             '/api/v2/users',
             {
@@ -64,7 +72,7 @@ class Auth0Instance {
                 app_metadata: { roles: [role || 'user'] },
                 given_name: first_name,
                 family_name: last_name,
-                name: `${first_name} ${last_name}`,
+                name,
                 // picture:
                 // 'https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png',
                 connection: 'Username-Password-Authentication',
@@ -107,32 +115,27 @@ class Auth0Instance {
         if (role && !roles.includes(role.toLowerCase()))
             throw badRequest(`Unknown role ${role}`)
 
+        const userMetadata = undefinedIfAllValuesUndefined({
+            country,
+            status,
+            business_unit,
+            phone_number_mobile,
+            tos_signed,
+        })
+
+        const name =
+            first_name && last_name ? `${first_name} ${last_name}` : undefined
+
         return this._instance.patch(
             `/api/v2/users/${id}`,
             {
                 email,
                 // phone_number: phone_number_mobile,
-                user_metadata:
-                    country ||
-                    status ||
-                    business_unit ||
-                    phone_number_mobile ||
-                    typeof tos_signed === 'boolean'
-                        ? {
-                              country,
-                              status,
-                              business_unit,
-                              phone_number_mobile,
-                              tos_signed,
-                          }
-                        : undefined,
+                user_metadata: userMetadata,
                 app_metadata: role ? { roles: [role] } : undefined,
                 given_name: first_name,
                 family_name: last_name,
-                name:
-                    first_name && last_name
-                        ? `${first_name} ${last_name}`
-                        : undefined,
+                name,
                 // picture:
                 // 'https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png',
                 connection: 'Username-Password-Authentication',

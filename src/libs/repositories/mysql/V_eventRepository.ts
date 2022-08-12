@@ -24,7 +24,7 @@ export class V_eventRepository extends MySQLRepository<Database> {
             .selectFrom('v_event')
             .select([
                 'v_event.work_order_id as request_id',
-                'v_event.requestor',
+                // 'v_event.requestor',
                 'v_event.employee_id as impacted_user_id',
                 'v_event.request_name as category',
                 'v_event.request_date as date_opened',
@@ -131,7 +131,7 @@ export class V_eventRepository extends MySQLRepository<Database> {
                 'event_classification.priority',
                 'event_classification.short_desc',
                 'v_event.work_order_id',
-                'v_event.requestor',
+                // 'v_event.requestor',
                 'work_order.notes',
                 'v_event.employee_id',
                 'v_event.request_name',
