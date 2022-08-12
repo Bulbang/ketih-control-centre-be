@@ -502,12 +502,10 @@ Authorization: {{auth0token}}
 
 ### Requests data graphs
 # Response.data {
-    # total: number
-    # other: number
-    # top_item_types: {
-        # name: string
-        # total: number
-    # }[]
+#     total: number
+#     expedited: number
+#     saturday_delivery: number
+#     ground: number
 # }
 GET {{base}}/requests/advanced-replacements/by-item-type
 Authorization: {{auth0token}}
