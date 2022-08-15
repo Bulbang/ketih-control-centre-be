@@ -7,32 +7,34 @@ const db = createDbConnection()
 const workOrderRepository = new WorkOrderRepository(db)
 
 type LambdaReturn = {
-    total: number
-    other: number
-    top_item_types: {
+    top_reason_codes: {
         name: string
         total: number
     }[]
+    other: number
+    total: number
 }
 
-const getAdvancedReplacementsByItemType: ValidatedEventAPIGatewayProxyEvent<
+const getAdvancedReplacementsByReasonCode: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (_) => {
-    const item_types =
-        (await workOrderRepository.getAdvancedReplacementsByItemType()) as {
+    const reqsByReasonCode =
+        (await workOrderRepository.getAdvancedReplacementsByReasonCode()) as {
             name: string
             total: number
         }[]
 
-    const total = item_types.reduce((counter, asset) => {
+    const total = reqsByReasonCode.reduce((counter, asset) => {
         const totalByMake = asset.total as number
         return totalByMake + counter
     }, 0)
-    const top_item_types = item_types.filter((type) => type.name).splice(0, 5)
+    const top_reason_codes = reqsByReasonCode
+        .filter((code) => code.name != null)
+        .splice(0, 6)
     const other =
         total -
-        top_item_types.reduce((counter, asset) => {
+        top_reason_codes.reduce((counter, asset) => {
             const totalByMake = asset.total as number
             return totalByMake + counter
         }, 0)
@@ -40,8 +42,8 @@ const getAdvancedReplacementsByItemType: ValidatedEventAPIGatewayProxyEvent<
     return {
         total,
         other,
-        top_item_types,
+        top_reason_codes: top_reason_codes,
     }
 }
 
-export const main = middyfy(getAdvancedReplacementsByItemType)
+export const main = middyfy(getAdvancedReplacementsByReasonCode)

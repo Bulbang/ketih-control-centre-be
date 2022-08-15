@@ -1,6 +1,7 @@
 import { Generated } from 'kysely'
 
 interface WorkOrderTable {
+    action_date: Date
     work_order_id: Generated<number>
     org_id: number
     xp_event_id: number
@@ -13,6 +14,7 @@ interface WorkOrderTable {
     request_name: string
     request_type: string
     request_date: number
+    reason_code: string
     request_fulfilled_date: number
     serial_number: string
     country: string
@@ -28,7 +30,7 @@ interface WorkOrderTable {
     return_delivery_date: number
     signature_required: number
     weekend_delivery: number
-    expidited: number
+    expedited: number
     notes: string
     last_modified: string
 }

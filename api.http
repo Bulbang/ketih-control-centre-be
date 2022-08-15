@@ -489,13 +489,11 @@ GET {{base}}/requests/by-status
 Authorization: {{auth0token}}
 
 ### Requests data graphs
-# Response.data: {
-    # total: number
-    # other: number
-    # top_services: {
-    #     name: string
-    #     total: number
-    # }[]
+# Response.data {
+#     total: number
+#     expedited: number
+#     saturday_delivery: number
+#     ground: number
 # }
 GET {{base}}/requests/by-service
 Authorization: {{auth0token}}
@@ -503,9 +501,30 @@ Authorization: {{auth0token}}
 ### Requests data graphs
 # Response.data {
 #     total: number
-#     expedited: number
-#     saturday_delivery: number
-#     ground: number
+#     other: number
+#     top_item_types: {
+#         name: string
+#         total: number
+#     }[]
+# }
+GET {{base}}/requests/advanced-replacements/by-item-type
+Authorization: {{auth0token}}
+
+### Requests data graphs
+# Response.data {
+#     [date: string]: { status: string; total: number }[]
+# }
+GET {{base}}/requests/by-action-date-and-status
+Authorization: {{auth0token}}
+
+### Requests data graphs
+# Response.data {
+#     top_reason_codes: {
+#         name: string
+#         total: number
+#     }[]
+#     other: number
+#     total: number
 # }
 GET {{base}}/requests/advanced-replacements/by-item-type
 Authorization: {{auth0token}}

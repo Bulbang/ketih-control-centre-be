@@ -12,6 +12,7 @@ const meUpdate: ValidatedEventAPIGatewayProxyEvent<
     LambdaReturn
 > = async (event) => {
     const { body } = event
+    if (!Object.keys(body).length) throw badRequest('No data to update')
 
     if (body.email && body.password)
         throw badRequest("Can't update password and email at the same time")
@@ -22,9 +23,12 @@ const meUpdate: ValidatedEventAPIGatewayProxyEvent<
     )
         throw badRequest("Cant't update name without first or second name")
 
-    const user = event.requestContext.authorizer as UserInfo
+    const user = JSON.parse(event.requestContext.authorizer.user) as {
+        user: UserInfo
+    }
+    const id = user['sub']
     const Auth0Instance = await getAuth0Instance()
-    await Auth0Instance.updateUser(user.sub, body)
+    await Auth0Instance.updateUser(id, body)
 }
 
 export const main = middyfy(meUpdate)

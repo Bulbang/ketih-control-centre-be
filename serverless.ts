@@ -14,14 +14,13 @@ const serverlessConfiguration: AWS = {
         runtime: 'nodejs14.x',
         vpc: {
             securityGroupIds: [
-                /* 'sg-0c1bd58f78b8ec568' */ 'sg-0662ff778214610f7',
+                /* 'sg-0c1bd58f78b8ec568' */ 'sg-0662ff778214610f7' /* 'sg-0549a77804ddaec5e' */,
             ],
             subnetIds: [
                 'subnet-0f26697d6853297b4',
                 'subnet-03065842684a088c2',
                 'subnet-031ebf4f2ac4a2c4e',
                 'subnet-0d810a8ae6864ad44',
-                'subnet-0604aac7a56f336e6',
                 'subnet-0c546d787837ada11',
             ],
         },
@@ -29,6 +28,7 @@ const serverlessConfiguration: AWS = {
             minimumCompressionSize: 1024,
             shouldStartNameWithService: true,
         },
+        timeout: 30,
         iamRoleStatements: [
             {
                 Effect: 'Allow',

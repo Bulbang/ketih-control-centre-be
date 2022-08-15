@@ -5,10 +5,32 @@ import { MySQLRepository } from './SQLRepository'
 const { DEFAULT_PAGE_OFFSET } = process.env
 
 export class WorkOrderRepository extends MySQLRepository<Database> {
+    getReqsByActionDateAndDeliveryStatus = () =>
+        this._db
+            .selectFrom('work_order')
+            .select([
+                'work_order.action_date',
+                sql<
+                    string[]
+                >`JSON_ARRAYAGG(event_classification.short_desc)`.as(
+                    'statuses',
+                ),
+            ])
+            .leftJoin(
+                'event_classification',
+                'work_order.xp_event_id',
+                'event_classification.xp_event_id',
+            )
+            .groupBy([
+                'work_order.action_date',
+                'event_classification.short_desc',
+            ])
+            .execute()
+
     getAdvancedReplacementsByItemType = async () =>
         this._db
             .selectFrom('work_order')
-            .leftJoin(
+            .innerJoin(
                 'item_detail',
                 'item_detail.serial_number',
                 'work_order.serial_number',
@@ -19,6 +41,17 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
             ])
             .where(sql`LOWER(work_order.runbook)`, 'like', '%replace%')
             .groupBy('item_detail.device_type')
+            .orderBy(sql`total`, 'desc')
+            .execute()
+
+    getAdvancedReplacementsByReasonCode = async () =>
+        this._db
+            .selectFrom('work_order')
+            .select([
+                'work_order.reason_code as name',
+                this._db.fn.count('reason_code').as('total'),
+            ])
+            .groupBy('work_order.reason_code')
             .orderBy(sql`total`, 'desc')
             .execute()
 
@@ -175,13 +208,13 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
             .select([
                 sql<number>`COUNT(*)`.as('total'),
                 // 'shipping_method as name',
-                sql<number>`COUNT(IF(expidited = true, 1, NULL))`.as(
+                sql<number>`COUNT(IF(expedited = true, 1, NULL))`.as(
                     'expedited',
                 ),
                 sql<number>`COUNT(IF(weekend_delivery = true, 1, NULL))`.as(
                     'saturday_delivery',
                 ),
-                sql<number>`COUNT(IF(expidited != true AND weekend_delivery != true, 1, NULL))`.as(
+                sql<number>`COUNT(IF(expedited != true AND weekend_delivery != true, 1, NULL))`.as(
                     'ground',
                 ),
             ])

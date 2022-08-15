@@ -179,7 +179,7 @@ class Auth0Instance {
             total: data.length,
             active: data.reduce(
                 (counter, user) =>
-                    user.user_metadata?.status.toLowerCase() == 'active'
+                    user.user_metadata?.status?.toLowerCase() == 'active'
                         ? ++counter
                         : counter,
                 0,

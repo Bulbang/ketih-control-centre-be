@@ -12,6 +12,8 @@ const editUser: ValidatedEventAPIGatewayProxyEvent<
     const { body } = event
     const { id } = event.pathParameters
 
+    if (!Object.keys(body).length) throw badRequest('No data to update')
+
     if (body.email && body.password)
         throw badRequest("Can't update password and email at the same time")
 

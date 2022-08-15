@@ -44,3 +44,7 @@ export { default as getRequestsByStatus } from './requests/getRequestsByStatus'
 export { default as getAssociatedEvents } from './events/getAssociatedEvents'
 
 export { default as getAdvancedReplacementsByItemType } from './requests/getAdvancedReplacementsByItemType'
+
+export { default as getRequestsByActionDateAndStatus } from './requests/getRequestsByActionDateAndStatus'
+
+export { default as getAdvancedReplacementsByReasonCode } from './requests/getAdvancedReplacementsByReasonCode'

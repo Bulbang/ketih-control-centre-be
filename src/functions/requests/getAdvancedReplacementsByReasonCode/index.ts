@@ -1,24 +1,15 @@
-import schema from './schema'
 import { handlerPath } from '@libs/utils/handler-resolver'
 import { LambdaConfig } from '@declarations/aws/funcs'
+import { dbCreds } from '@libs/utils/dbCredentials'
 
-const meUpdate: LambdaConfig = {
+const getAdvancedReplacementsByReasonCode: LambdaConfig = {
     handler: handlerPath(__dirname) + '/handler.main',
-    environment: {
-        AUTH0_URL: '${env:AUTH0_URL}',
-        AUTH0_CLIENT_SECRET: '${env:AUTH0_CLIENT_SECRET}',
-        AUTH0_CLIENT_ID: '${env:AUTH0_CLIENT_ID}',
-    },
+    environment: dbCreds,
     events: [
         {
             http: {
-                method: 'put',
-                path: 'me/update',
-                request: {
-                    schemas: {
-                        'application/json': schema,
-                    },
-                },
+                method: 'get',
+                path: 'requests/advanced-replacements/by-reason-code',
                 authorizer: {
                     type: 'token',
                     name: 'auth',
@@ -31,4 +22,4 @@ const meUpdate: LambdaConfig = {
     ],
 }
 
-export default meUpdate
+export default getAdvancedReplacementsByReasonCode

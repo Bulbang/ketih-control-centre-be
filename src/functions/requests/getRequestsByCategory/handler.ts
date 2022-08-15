@@ -8,6 +8,7 @@ const workOrderRepository = new WorkOrderRepository(db)
 
 type LambdaReturn = {
     total: number
+    // other: number
     categories: {
         name: string
         total: number
@@ -18,12 +19,25 @@ const getRequestsByCategory: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (_) => {
-    const categories = (await workOrderRepository.getReqsByCategory()) as {
+    const allCategories = (await workOrderRepository.getReqsByCategory()) as {
         name: string
         total: number
     }[]
 
+    const total = allCategories.reduce((counter, asset) => {
+        const totalByMake = asset.total as number
+        return totalByMake + counter
+    }, 0)
+    const categories = allCategories.splice(0, 5)
+    // const other =
+    //     total -
+    //     categories.reduce((counter, asset) => {
+    //         const totalByMake = asset.total as number
+    //         return totalByMake + counter
+    //     }, 0)
+
     return {
+        // other,
         total: categories.reduce(
             (counter, category) => counter + category.total,
             0,
