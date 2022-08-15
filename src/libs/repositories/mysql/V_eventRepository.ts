@@ -1,4 +1,5 @@
 import { Database } from '@declarations/db/tables'
+import { queryMiddleware } from '@libs/utils/dbUtils'
 import { sql } from 'kysely'
 import { MySQLRepository } from './SQLRepository'
 
@@ -20,39 +21,42 @@ export class V_eventRepository extends MySQLRepository<Database> {
         direction?: 'desc' | 'asc'
         filter?: string
     }) =>
-        this._db
-            .selectFrom('v_event')
-            .select([
-                'v_event.work_order_id as request_id',
-                // 'v_event.requestor',
-                'v_event.employee_id as impacted_user_id',
-                'v_event.request_name as category',
-                'v_event.request_date as date_opened',
-                'v_event.completion_date as date_closed',
-                sql<string>`CONCAT(v_event.city, ', ', v_event.state_or_province)`.as(
-                    'location',
-                ),
-                this._db.fn.count('v_event.incident_id').as('incidents_count'),
-                sql<string[]>`JSON_ARRAYAGG(v_event.serial_number)`.as(
-                    'serial_numbers',
-                ),
-                sql<
-                    {
-                        event_id: number
-                        priority: number
-                        event_key: string
-                        long_desc: string
-                        event_date: string
-                        event_type: string
-                        short_desc: string
-                        incidents: {
-                            start_date: string
-                            incident_id: number
-                            last_modified: string
-                            description: string
+        queryMiddleware(
+            this._db
+                .selectFrom('v_event')
+                .select([
+                    'v_event.work_order_id as request_id',
+                    // 'v_event.requestor',
+                    'v_event.employee_id as impacted_user_id',
+                    'v_event.request_name as category',
+                    'v_event.request_date as date_opened',
+                    'v_event.completion_date as date_closed',
+                    sql<string>`CONCAT(v_event.city, ', ', v_event.state_or_province)`.as(
+                        'location',
+                    ),
+                    this._db.fn
+                        .count('v_event.incident_id')
+                        .as('incidents_count'),
+                    sql<string[]>`JSON_ARRAYAGG(v_event.serial_number)`.as(
+                        'serial_numbers',
+                    ),
+                    sql<
+                        {
+                            event_id: number
+                            priority: number
+                            event_key: string
+                            long_desc: string
+                            event_date: string
+                            event_type: string
+                            short_desc: string
+                            incidents: {
+                                start_date: string
+                                incident_id: number
+                                last_modified: string
+                                description: string
+                            }[]
                         }[]
-                    }[]
-                >`JSON_ARRAYAGG(JSON_INSERT(
+                    >`JSON_ARRAYAGG(JSON_INSERT(
                     JSON_OBJECT('event_id',
                     v_event.event_id ,
                     'event_date',
@@ -80,104 +84,157 @@ export class V_eventRepository extends MySQLRepository<Database> {
                         incident.last_modified
                         ))
                     ))`.as('events'),
-            ])
-            .leftJoin(
-                'event_classification',
-                'event_classification.xp_event_id',
-                'v_event.xp_event_id',
-            )
-            .select([
-                'event_classification.short_desc as status',
-                'event_classification.priority',
-            ])
-            .leftJoin('incident', 'v_event.incident_id', 'incident.incident_id')
-            .leftJoin(
-                'work_order',
-                'work_order.work_order_id',
-                'v_event.work_order_id',
-            )
-            .select('work_order.notes')
-            .where(
-                'v_event.request_date',
-                '>=',
-                sql`DATE(NOW() - INTERVAL ${last ? last : 7} DAY)`,
-            )
-            .if(filter == 'urgent', (qb) =>
-                qb
-                    .where('event_classification.priority', '<=', 2)
-                    .where('v_event.completion_date', 'is', null),
-            )
-            .if(filter == 'in_deploy', (qb) =>
-                qb.where(
+                ])
+                .leftJoin(
+                    'event_classification',
+                    'event_classification.xp_event_id',
                     'v_event.xp_event_id',
-                    'in',
-                    [100, 102, 103, 104, 105, 106, 107, 108],
-                ),
-            )
-            .if(filter == 'in_transit', (qb) =>
-                qb.where(
-                    'v_event.xp_event_id',
-                    'in',
-                    [201, 202, 203, 204, 205, 207],
-                ),
-            )
-            .if(filter == 'needs_verification', (qb) =>
-                qb.where('v_event.xp_event_id', 'in', [21, 22, 23, 31, 32, 41]),
-            )
-            .limit(perPage)
-            .offset((page - 1) * perPage)
-            .orderBy(sortBy, direction)
-            .groupBy([
-                'event_classification.priority',
-                'event_classification.short_desc',
-                'v_event.work_order_id',
-                // 'v_event.requestor',
-                'work_order.notes',
-                'v_event.employee_id',
-                'v_event.request_name',
-                'v_event.request_date',
-                'v_event.completion_date',
-                sql`location`,
-            ])
-            .execute()
+                )
+                .select([
+                    'event_classification.short_desc as status',
+                    'event_classification.priority',
+                ])
+                .leftJoin(
+                    'incident',
+                    'v_event.incident_id',
+                    'incident.incident_id',
+                )
+                .leftJoin(
+                    'work_order',
+                    'work_order.work_order_id',
+                    'v_event.work_order_id',
+                )
+                .select('work_order.notes')
+                .if(filter == 'urgent', (qb) =>
+                    qb
+                        .where('event_classification.priority', '<=', 2)
+                        .where('v_event.completion_date', 'is', null),
+                )
+                .if(filter == 'in_deploy', (qb) =>
+                    qb.where(
+                        'v_event.xp_event_id',
+                        'in',
+                        [100, 102, 103, 104, 105, 106, 107, 108],
+                    ),
+                )
+                .if(filter == 'in_transit', (qb) =>
+                    qb.where(
+                        'v_event.xp_event_id',
+                        'in',
+                        [201, 202, 203, 204, 205, 207],
+                    ),
+                )
+                .if(filter == 'needs_verification', (qb) =>
+                    qb.where(
+                        'v_event.xp_event_id',
+                        'in',
+                        [21, 22, 23, 31, 32, 41],
+                    ),
+                )
+                .limit(perPage)
+                .offset((page - 1) * perPage)
+                .orderBy(sortBy, direction)
+                .groupBy([
+                    'event_classification.priority',
+                    'event_classification.short_desc',
+                    'v_event.work_order_id',
+                    // 'v_event.requestor',
+                    'work_order.notes',
+                    'v_event.employee_id',
+                    'v_event.request_name',
+                    'v_event.request_date',
+                    'v_event.completion_date',
+                    sql`location`,
+                ]),
+            { timeLimitter: { last, column: 'work_order.last_modified' } },
+        ).execute()
+
     getAllEvents = async ({
+        last = 7,
         page = 1,
         perPage = +DEFAULT_PAGE_OFFSET,
         sortBy = 'v_event.event_date',
         direction = 'desc',
     }: {
+        last?: number
         page?: number
         perPage?: number
         sortBy?: any
         direction?: 'asc' | 'desc'
     }) =>
-        this._db
-            .selectFrom('v_event')
-            .select([
-                'v_event.event_id',
-                'v_event.event_date',
-                'v_event.priority',
-                this._db.fn.count('v_event.incident_id').as('incident_count'),
-                'v_event.event_key',
-                sql<{
-                    request_id: string
-                    notes: string
-                    serial_numbers: string[]
-                }>`JSON_INSERT(JSON_OBJECT('request_id', v_event.work_order_id, 'notes', work_order.notes), '$.serial_numbers', JSON_ARRAYAGG(work_order.serial_number))`.as(
-                    'request',
-                ),
-                'v_event.short_desc as status',
-                'v_event.long_desc',
-                'v_event.action as event_type',
-                sql<
-                    {
-                        start_date: string
-                        incident_id: number
-                        last_modified: string
-                        description: string
-                        response: string
-                    }[]
-                >`JSON_ARRAYAGG(
+        queryMiddleware(
+            this._db
+                .selectFrom('v_event')
+                .select([
+                    'v_event.event_id',
+                    'v_event.event_date',
+                    'v_event.priority',
+                    this._db.fn
+                        .count('v_event.incident_id')
+                        .as('incident_count'),
+                    'v_event.event_key',
+                    sql<{
+                        request_id: string
+                        notes: string
+                        serial_numbers: string[]
+                    }>`JSON_INSERT(JSON_OBJECT('request_id', v_event.work_order_id, 'notes', work_order.notes), '$.serial_numbers', JSON_ARRAYAGG(work_order.serial_number))`.as(
+                        'request',
+                    ),
+                    'v_event.short_desc as status',
+                    'v_event.long_desc',
+                    'v_event.action as event_type',
+                    sql<
+                        {
+                            start_date: string
+                            incident_id: number
+                            last_modified: string
+                            description: string
+                            response: string
+                        }[]
+                    >`JSON_ARRAYAGG(
+                JSON_OBJECT('incident_id',
+                incident.incident_id,
+                'description', 
+                incident.response,
+                'start_date',
+                incident.start_date,
+                'last_modified',
+                incident.last_modified
+                ))`.as('incidents'),
+                    sql<
+                        {
+                            event_id: number
+                            priority: number
+                            event_key: string
+                            long_desc: string
+                            event_date: string
+                            event_type: string
+                            short_desc: string
+                            incident: {
+                                start_date: string
+                                incident_id: number
+                                last_modified: string
+                                description: string
+                            }
+                        }[]
+                    >`JSON_ARRAYAGG(JSON_INSERT(
+                JSON_OBJECT('event_id',
+                v_event.event_id ,
+                'event_date',
+                v_event.event_date ,
+                'priority',
+                v_event.priority,
+                'event_key',
+                v_event.event_key,
+                'short_desc',
+                v_event.short_desc,
+                'long_desc',
+                v_event.long_desc,
+                'event_type',
+                v_event.action
+                 ),
+                '$.incidents',
+                JSON_ARRAY(
                     JSON_OBJECT('incident_id',
                     incident.incident_id,
                     'description', 
@@ -186,75 +243,37 @@ export class V_eventRepository extends MySQLRepository<Database> {
                     incident.start_date,
                     'last_modified',
                     incident.last_modified
-                    ))`.as('incidents'),
-                sql<
-                    {
-                        event_id: number
-                        priority: number
-                        event_key: string
-                        long_desc: string
-                        event_date: string
-                        event_type: string
-                        short_desc: string
-                        incident: {
-                            start_date: string
-                            incident_id: number
-                            last_modified: string
-                            description: string
-                        }
-                    }[]
-                >`JSON_ARRAYAGG(JSON_INSERT(
-                    JSON_OBJECT('event_id',
-                    v_event.event_id ,
-                    'event_date',
-                    v_event.event_date ,
-                    'priority',
-                    v_event.priority,
-                    'event_key',
-                    v_event.event_key,
-                    'short_desc',
-                    v_event.short_desc,
-                    'long_desc',
-                    v_event.long_desc,
-                    'event_type',
-                    v_event.action
-                     ),
-                    '$.incidents',
-                    JSON_ARRAY(
-                        JSON_OBJECT('incident_id',
-                        incident.incident_id,
-                        'description', 
-                        incident.response,
-                        'start_date',
-                        incident.start_date,
-                        'last_modified',
-                        incident.last_modified
-                        ))
-                    ))`.as('events'),
-            ])
-            .where('v_event.event_id', 'is not', null)
-            .leftJoin('incident', 'incident.incident_id', 'v_event.incident_id')
-            .leftJoin(
-                'work_order',
-                'work_order.work_order_id',
-                'v_event.work_order_id',
-            )
-            .groupBy([
-                'incident.incident_id',
-                'incident.start_date',
-                'incident.last_modified',
-                // 'wokr_order.notes',
-                'v_event.event_id',
-                'v_event.event_date',
-                'v_event.priority',
-                'v_event.event_key',
-                'v_event.short_desc',
-                'v_event.long_desc',
-                'v_event.action',
-                'v_event.work_order_id',
-            ])
-            .limit(perPage)
-            .offset((page - 1) * perPage)
-            .orderBy(sortBy, direction)
-            .execute()
+                    ))
+                ))`.as('events'),
+                ])
+                .where('v_event.event_id', 'is not', null)
+                .leftJoin(
+                    'incident',
+                    'incident.incident_id',
+                    'v_event.incident_id',
+                )
+                .leftJoin(
+                    'work_order',
+                    'work_order.work_order_id',
+                    'v_event.work_order_id',
+                )
+                .groupBy([
+                    'incident.incident_id',
+                    'incident.start_date',
+                    'incident.last_modified',
+                    // 'wokr_order.notes',
+                    'v_event.event_id',
+                    'v_event.event_date',
+                    'v_event.priority',
+                    'v_event.event_key',
+                    'v_event.short_desc',
+                    'v_event.long_desc',
+                    'v_event.action',
+                    'v_event.work_order_id',
+                ])
+                .limit(perPage)
+                .offset((page - 1) * perPage)
+                .orderBy(sortBy, direction),
+            { timeLimitter: { last, column: 'v_event.last_modified' } },
+        ).execute()
 }

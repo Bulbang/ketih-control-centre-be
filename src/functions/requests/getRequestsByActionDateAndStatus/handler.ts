@@ -14,8 +14,13 @@ const getRequestsByActionDateAndStatus: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (event) => {
-    const data =
-        await workOrderRepository.getReqsByActionDateAndDeliveryStatus()
+    const { last } = event.queryStringParameters as {
+        last?: string
+    }
+
+    const data = await workOrderRepository.getReqsByActionDateAndDeliveryStatus(
+        { last: last ? +last : undefined },
+    )
 
     const dates = [...new Set(data.map((item) => item.action_date))]
     const res: {

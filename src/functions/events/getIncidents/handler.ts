@@ -25,17 +25,19 @@ const events: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (event) => {
-    const { page, perPage, countryCode, type } =
+    const { page, perPage, countryCode, type, last } =
         event.queryStringParameters as {
-            page?: number
-            perPage?: number
+            last?: string
+            page?: string
+            perPage?: string
             countryCode?: string
             type?: string
         }
 
     const incidents = await incidentRepository.getIncidents({
-        page,
-        perPage,
+        last: last ? +last : undefined,
+        page: page ? +page : undefined,
+        perPage: perPage ? +perPage : undefined,
         countryCode,
         type,
     })

@@ -17,7 +17,12 @@ const getRequestsByService: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (event) => {
-    const [reqsByService] = await workOrderRepository.getReqsByService()
+    const { last } = event.queryStringParameters as {
+        last?: string
+    }
+    const [reqsByService] = await workOrderRepository.getReqsByService({
+        last: last ? +last : undefined,
+    })
 
     return {
         ...reqsByService,

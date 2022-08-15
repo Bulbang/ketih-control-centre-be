@@ -95,8 +95,8 @@ Content-Type: application/json
 }
 
 ### Requests
-# QueryString:
-#   last: number - the number of days for which the data is received
+# QueryString: 
+#   last: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
 #   page: number DEFAULT = 1
 #   perPage: number DEFAULT = 10
 #   sortBy: keyof Response.data.requests DEFAULT = 'request_id'
@@ -150,11 +150,14 @@ GET {{base}}/requests/:id
 Authorization: {{auth0token}}
 
 ### Control Center
+# QueryString: 
+#   last: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
 GET {{base}}/requests/statistic
 Authorization: {{auth0token}}
 
 ### Control Center / Incidents
 # QueryString:
+#   last: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
 #   page: number DEFAULT = 1
 #   perPage: number DEFAULT = 10
 #   countryCode: string
@@ -196,8 +199,8 @@ GET {{base}}/events/incidents/:id
 Authorization: {{auth0token}}
 
 ### Events
-# QueryString:
-#   page: number DEFAULT = 1
+# QueryString: 
+#   last: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
 #   perPage: number DEFAULT = 10
 #   sortBy: keyof Response.data
 #   direction: 'asc' | 'desc'
@@ -333,6 +336,7 @@ Authorization: {{auth0token}}
 
 ### Items
 # QueryString: 
+#   last: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
 #   page: number DEFAULT = 1
 #   perPage: number DEFAULT = 10
 #   sortBy: keyof Response.data.assets[0] DEFAULT = 'item_detail_id'
@@ -351,6 +355,8 @@ GET {{base}}/items/assets
 Authorization: {{auth0token}}
 
 ### Items
+# QueryString:
+#   last: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
 # Response.data: { total: number }
 GET {{base}}/items/assets/total
 Authorization: {{auth0token}}
@@ -367,6 +373,8 @@ GET {{base}}/items/assets/by-type
 Authorization: {{auth0token}}
 
 ### Items
+# QueryString: 
+#   last: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
 # Response.data: {
 #     total: number
 #     topAssets: { manufacturer: string; model: string; total: number }[],
@@ -466,6 +474,8 @@ GET {{base}}/items/{serial_number}
 Authorization: {{auth0token}}
 
 ### Requests data graphs
+# QueryString: 
+#   last: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
 # Response.data: {
 #   total: number
 #   categories: {
@@ -477,6 +487,8 @@ GET {{base}}/requests/by-category
 Authorization: {{auth0token}}
 
 ### Requests data graphs
+# QueryString: 
+#   last: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
 # Response.data: {
     # total: number
     # other: number
@@ -489,6 +501,8 @@ GET {{base}}/requests/by-status
 Authorization: {{auth0token}}
 
 ### Requests data graphs
+# QueryString: 
+#   last: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
 # Response.data {
 #     total: number
 #     expedited: number
@@ -499,6 +513,8 @@ GET {{base}}/requests/by-service
 Authorization: {{auth0token}}
 
 ### Requests data graphs
+# QueryString: 
+#   last: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
 # Response.data {
 #     total: number
 #     other: number
@@ -511,6 +527,8 @@ GET {{base}}/requests/advanced-replacements/by-item-type
 Authorization: {{auth0token}}
 
 ### Requests data graphs
+# QueryString: 
+#   last: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
 # Response.data {
 #     [date: string]: { status: string; total: number }[]
 # }
@@ -518,6 +536,8 @@ GET {{base}}/requests/by-action-date-and-status
 Authorization: {{auth0token}}
 
 ### Requests data graphs
+# QueryString: 
+#   last: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
 # Response.data {
 #     top_reason_codes: {
 #         name: string

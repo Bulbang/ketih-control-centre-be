@@ -18,9 +18,14 @@ type LambdaReturn = {
 const getAdvancedReplacementsByItemType: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
-> = async (_) => {
+> = async (event) => {
+    const { last } = event.queryStringParameters as {
+        last?: string
+    }
     const item_types =
-        (await workOrderRepository.getAdvancedReplacementsByItemType()) as {
+        (await workOrderRepository.getAdvancedReplacementsByItemType({
+            last: last ? +last : undefined,
+        })) as {
             name: string
             total: number
         }[]
