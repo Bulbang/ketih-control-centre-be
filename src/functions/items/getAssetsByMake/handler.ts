@@ -16,12 +16,12 @@ const getAssetsByMake: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (event) => {
-    const { last } = event.queryStringParameters as {
-        last?: string
+    const { interval } = event.queryStringParameters as {
+        interval?: string
     }
 
     const assetsStats = await itemDetailRepository.getAssetsByMake({
-        last: last ? +last : undefined,
+        last: interval ? +interval : undefined,
     })
     const total = assetsStats.reduce((counter, asset) => {
         const totalByMake = asset.total as number

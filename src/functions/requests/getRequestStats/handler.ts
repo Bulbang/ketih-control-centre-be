@@ -14,11 +14,11 @@ const getRequestStats: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (event) => {
-    const { last } = event.queryStringParameters as {
-        last?: string
+    const { interval } = event.queryStringParameters as {
+        interval?: string
     }
     const stats = await workOrderRepository.getWorkOrderStats({
-        last: last ? +last : undefined,
+        last: interval ? +interval : undefined,
     })
 
     return stats

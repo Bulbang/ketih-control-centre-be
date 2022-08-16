@@ -19,11 +19,11 @@ const getRequestsByCategory: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (event) => {
-    const { last } = event.queryStringParameters as {
-        last?: string
+    const { interval } = event.queryStringParameters as {
+        interval?: string
     }
     const allCategories = (await workOrderRepository.getReqsByCategory({
-        last: last ? +last : undefined,
+        last: interval ? +interval : undefined,
     })) as {
         name: string
         total: number

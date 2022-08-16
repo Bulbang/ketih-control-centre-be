@@ -12,11 +12,11 @@ const getAssetsTotal: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (event) => {
-    const { last } = event.queryStringParameters as {
-        last?: string
+    const { interval } = event.queryStringParameters as {
+        interval?: string
     }
     const [{ total }] = (await itemDetailRepository.getAssetsTotal({
-        last: last ? +last : undefined,
+        last: interval ? +interval : undefined,
     })) as unknown as {
         total: number
     }[]

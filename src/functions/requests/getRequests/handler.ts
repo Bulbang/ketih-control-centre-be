@@ -42,31 +42,40 @@ const requests: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (event) => {
-    const { last, page, perPage, sortBy, direction, phase, priority, status } =
-        event.queryStringParameters as {
-            last?: string
-            page?: string
-            perPage?: string
-            sortBy?: string
-            direction?: 'asc' | 'desc'
-            phase?: string
-            priority?: string
-            status?: string
-        }
+    const {
+        interval,
+        page,
+        perPage,
+        sortBy,
+        direction,
+        phase,
+        priority,
+        status,
+    } = event.queryStringParameters as {
+        interval?: string
+        page?: string
+        perPage?: string
+        sortBy?: string
+        direction?: 'asc' | 'desc'
+        phase?: string
+        priority?: string
+        status?: string
+    }
     if (direction && direction != 'asc' && direction != 'desc') {
         throw badRequest(`Unknown sort direction parameter: '${direction}'`)
     }
     try {
-        const requests = await v_eventRepository.getRequests({
-            last: last ? +last : undefined,
-            page: page ? +page : undefined,
-            perPage: perPage ? +perPage : undefined,
-            sortBy,
-            direction,
-            phase: phase?.toLowerCase(),
-            priority: priority ? +priority : undefined,
-            status: status?.toLowerCase(),
-        })
+        const requests: LambdaReturn['requests'] =
+            await v_eventRepository.getRequests({
+                last: interval ? +interval : undefined,
+                page: page ? +page : undefined,
+                perPage: perPage ? +perPage : undefined,
+                sortBy,
+                direction,
+                phase: phase?.toLowerCase(),
+                priority: priority ? +priority : undefined,
+                status: status?.toLowerCase(),
+            })
 
         requests.map((req) => {
             req.serial_numbers = [...new Set(req.serial_numbers)]

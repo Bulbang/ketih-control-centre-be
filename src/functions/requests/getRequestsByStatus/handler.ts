@@ -19,12 +19,12 @@ const getRequestsByStatus: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (event) => {
-    const { last } = event.queryStringParameters as {
-        last?: string
+    const { interval } = event.queryStringParameters as {
+        interval?: string
     }
 
     const statuses = (await workOrderRepository.getReqsByStatus({
-        last: last ? +last : undefined,
+        last: interval ? +interval : undefined,
     })) as {
         name: string
         total: number
