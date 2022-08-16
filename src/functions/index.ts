@@ -48,3 +48,5 @@ export { default as getAdvancedReplacementsByItemType } from './requests/getAdva
 export { default as getRequestsByActionDateAndStatus } from './requests/getRequestsByActionDateAndStatus'
 
 export { default as getAdvancedReplacementsByReasonCode } from './requests/getAdvancedReplacementsByReasonCode'
+
+export { default as getAssociatedRequest } from './requests/getAssociatedRequest'
