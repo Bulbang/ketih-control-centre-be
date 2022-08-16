@@ -22,7 +22,7 @@ export class V_eventRepository extends MySQLRepository<Database> {
         sortBy?: any
         direction?: 'desc' | 'asc'
         phase?: string
-        priority?: string
+        priority?: number
         status?: string
     }) =>
         queryMiddleware(
@@ -109,14 +109,17 @@ export class V_eventRepository extends MySQLRepository<Database> {
                     'v_event.work_order_id',
                 )
                 .select('work_order.notes')
-                .if(status.length > 0, (qb) =>
+                .if(!!priority, (qb) =>
+                    qb.where('event_classification.priority', '=', priority),
+                )
+                .if(status?.length > 0, (qb) =>
                     qb.where(
                         sql`LOWER(event_classification.short_desc)`,
                         '=',
                         status,
                     ),
                 )
-                .if(priority == 'urgent', (qb) =>
+                .if(phase == 'urgent', (qb) =>
                     qb
                         .where('event_classification.priority', '<=', 2)
                         .where('v_event.completion_date', 'is', null),

@@ -64,7 +64,7 @@ const requests: ValidatedEventAPIGatewayProxyEvent<
             sortBy,
             direction,
             phase: phase?.toLowerCase(),
-            priority: priority?.toLowerCase(),
+            priority: priority ? +priority : undefined,
             status: status?.toLowerCase(),
         })
 
