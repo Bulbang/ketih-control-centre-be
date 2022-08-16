@@ -12,14 +12,18 @@ export class V_eventRepository extends MySQLRepository<Database> {
         perPage = 10,
         direction = 'asc',
         sortBy = 'request_id',
-        filter = 'all_requests',
+        phase,
+        priority,
+        status,
     }: {
         last?: number
         page?: number
         perPage?: number
         sortBy?: any
         direction?: 'desc' | 'asc'
-        filter?: string
+        phase?: string
+        priority?: string
+        status?: string
     }) =>
         queryMiddleware(
             this._db
@@ -105,26 +109,33 @@ export class V_eventRepository extends MySQLRepository<Database> {
                     'v_event.work_order_id',
                 )
                 .select('work_order.notes')
-                .if(filter == 'urgent', (qb) =>
+                .if(status.length > 0, (qb) =>
+                    qb.where(
+                        sql`LOWER(event_classification.short_desc)`,
+                        '=',
+                        status,
+                    ),
+                )
+                .if(priority == 'urgent', (qb) =>
                     qb
                         .where('event_classification.priority', '<=', 2)
                         .where('v_event.completion_date', 'is', null),
                 )
-                .if(filter == 'in_deploy', (qb) =>
+                .if(phase == 'in_deploy', (qb) =>
                     qb.where(
                         'v_event.xp_event_id',
                         'in',
                         [100, 102, 103, 104, 105, 106, 107, 108],
                     ),
                 )
-                .if(filter == 'in_transit', (qb) =>
+                .if(phase == 'in_transit', (qb) =>
                     qb.where(
                         'v_event.xp_event_id',
                         'in',
                         [201, 202, 203, 204, 205, 207],
                     ),
                 )
-                .if(filter == 'needs_verification', (qb) =>
+                .if(phase == 'needs_verification', (qb) =>
                     qb.where(
                         'v_event.xp_event_id',
                         'in',

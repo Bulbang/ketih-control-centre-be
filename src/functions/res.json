@@ -1,0 +1,26 @@
+{
+    "1899-11-29": [
+        { "status": "Address validated", "total": 1 },
+        { "status": "Work order created", "total": 1 }
+    ],
+    "2011-11-10": [{ "status": "Address validated", "total": 1 }],
+    "2022-04-30": [
+        { "status": "Address error", "total": 163 },
+        { "status": "Address validated", "total": 836 },
+        { "status": "Dispatch in progress", "total": 227 },
+        { "status": "Dispatch initiated", "total": 5150 },
+        { "status": "In Transit", "total": 1 },
+        { "status": "Inventory available", "total": 28 },
+        { "status": "Inventory unavailable", "total": 14 },
+        { "status": "Work order created", "total": 143 }
+    ],
+    "2022-07-31": [
+        { "status": "Address error", "total": 9 },
+        { "status": "Address validated", "total": 11 },
+        { "status": "Dispatch initiated", "total": 8 },
+        { "status": "In Transit", "total": 1 },
+        { "status": "Inventory available", "total": 3 },
+        { "status": "Inventory unavailable", "total": 2 },
+        { "status": "Work order created", "total": 58 }
+    ]
+}

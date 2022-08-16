@@ -101,7 +101,9 @@ Content-Type: application/json
 #   perPage: number DEFAULT = 10
 #   sortBy: keyof Response.data.requests DEFAULT = 'request_id'
 #   direction: 'asc' | 'desc' DEFAULT = 'asc'
-#   filter: 'needs_verification' | 'urgent' | 'in_transit' | 'in_deploy' DEFAULT = 'all_requests'
+#   phase?: string
+#   priority?: string
+#   status?: string
 # Response.data: 
 # {
     # requests: {
@@ -263,18 +265,12 @@ GET {{base}}/events/:id
 Authorization: {{auth0token}}
 
 ### Events
-# QueryString:
-#   filterType: "country" | "type"
 # Response.data:
   # {
-    # "type": string,
-    # "long_desc": string
-  # }[] | 
-  # { 
-    # "country_name": string
-    # "country_code": string
+    # "status": string
   # }[]
-GET {{base}}/events/fitler
+
+GET {{base}}/requests/statuses
 Authorization: {{auth0token}}
 
 ### Events

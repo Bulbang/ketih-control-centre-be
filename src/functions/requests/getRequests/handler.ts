@@ -42,14 +42,16 @@ const requests: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (event) => {
-    const { last, page, perPage, sortBy, direction, filter } =
+    const { last, page, perPage, sortBy, direction, phase, priority, status } =
         event.queryStringParameters as {
             last?: string
             page?: string
             perPage?: string
             sortBy?: string
             direction?: 'asc' | 'desc'
-            filter?: string
+            phase?: string
+            priority?: string
+            status?: string
         }
     if (direction && direction != 'asc' && direction != 'desc') {
         throw badRequest(`Unknown sort direction parameter: '${direction}'`)
@@ -61,7 +63,9 @@ const requests: ValidatedEventAPIGatewayProxyEvent<
             perPage: perPage ? +perPage : undefined,
             sortBy,
             direction,
-            filter: filter?.toLowerCase(),
+            phase: phase?.toLowerCase(),
+            priority: priority?.toLowerCase(),
+            status: status?.toLowerCase(),
         })
 
         requests.map((req) => {
