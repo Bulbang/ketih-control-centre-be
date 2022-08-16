@@ -1,5 +1,6 @@
 import { Database } from '@declarations/db/tables'
 import { queryMiddleware } from '@libs/utils/dbUtils'
+import { sql } from 'kysely'
 import { MySQLRepository } from './SQLRepository'
 
 const { DEFAULT_PAGE_OFFSET } = process.env
@@ -24,9 +25,19 @@ export class IncidentRepository extends MySQLRepository<Database> {
                 .select(['incident.incident_id', 'incident.response'])
                 .leftJoin('event', 'event.event_id', 'incident.event_id')
                 .select([
-                    'event.type as event_type',
-                    'event.event_id',
-                    'event.action',
+                    sql<{
+                        event_type: string
+                        event_id: number
+                        action: string
+                        event_date: string
+                        short_desc: string
+                        long_desc: string
+                    }>`JSON_OBJECT('event_type', event.type,
+                    'event_id',event.event_id,
+                    'action', event.action,
+                    'event_date',event.event_date,
+                    'short_desc', event_classification.short_desc,
+                    'long_desc', event_classification.long_desc)`.as('event'),
                 ])
                 .leftJoin(
                     'work_order',
@@ -58,10 +69,7 @@ export class IncidentRepository extends MySQLRepository<Database> {
                     'event.event_key',
                     'event_classification.event_key',
                 )
-                .select([
-                    'event_classification.short_desc',
-                    'event_classification.long_desc',
-                ])
+                .select([])
                 .limit(perPage)
                 .offset((page - 1) * perPage),
             { timeLimitter: { last, column: 'incident.last_modified' } },

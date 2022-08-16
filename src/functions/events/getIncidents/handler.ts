@@ -9,14 +9,17 @@ const incidentRepository = new IncidentRepository(db)
 type LambdaReturn = {
     incidents: {
         incident_id: number
-        action: string
+        event: {
+            event_type: string
+            event_id: number
+            action: string
+            event_date: string
+            short_desc: string
+            long_desc: string
+        }
         latitude: number
         longitude: number
-        event_type: string
-        event_id: number
         country: string
-        short_desc: string
-        long_desc: string
         response: string
     }[]
 }

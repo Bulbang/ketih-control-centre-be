@@ -4,6 +4,40 @@ import { sql } from 'kysely'
 import { MySQLRepository } from './SQLRepository'
 
 export class EventRepository extends MySQLRepository<Database> {
+    getAssociatedRequest = async (eventId: number) =>
+        this._db
+            .selectFrom('event')
+            .leftJoin(
+                'work_order',
+                'event.work_order_id',
+                'work_order.work_order_id',
+            )
+            .select([
+                'work_order.work_order_id as request_id',
+                'work_order.notes',
+                'work_order.employee_id as impacted_user_id',
+                'work_order.request_name as category',
+                'work_order.request_date as date_opened',
+                'work_order.completion_date as date_closed',
+                sql<string>`CONCAT(work_order.city, ', ', work_order.state_or_province)`.as(
+                    'location',
+                ),
+                sql<string[]>`JSON_ARRAYAGG(work_order.serial_number)`.as(
+                    'serial_numbers',
+                ),
+            ])
+            .where('event.event_id', '=', eventId)
+            .groupBy([
+                'work_order.work_order_id',
+                'work_order.notes',
+                'work_order.employee_id',
+                'work_order.request_name',
+                'work_order.request_date',
+                'work_order.completion_date',
+                'work_order.city',
+                'work_order.state_or_province',
+            ])
+            .execute()
     getEvent = async (id: number) =>
         this._db
             .selectFrom('event')

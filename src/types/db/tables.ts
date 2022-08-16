@@ -19,6 +19,8 @@ interface WorkOrderTable {
     serial_number: string
     country: string
     expected_arrival_date: string
+    state_or_province: string
+    city: string
     shipping_carrier: string
     shipping_method: string
     shipping_status: string

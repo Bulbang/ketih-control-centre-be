@@ -151,6 +151,22 @@ Authorization: {{auth0token}}
 GET {{base}}/requests/:id
 Authorization: {{auth0token}}
 
+### Requests
+# Response.data: {
+# request: {
+#         request_id: number,
+#         notes: any,
+#         impacted_user_id: string,
+#         category: string,
+#         date_opened: string,
+#         date_closed: string,
+#         location: string,
+#         serial_numbers: string[]
+#       }
+#   }
+GET {{base}}/requests/events/:event_id
+Authorization: {{auth0token}}
+
 ### Control Center
 # QueryString: 
 #   interval: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
@@ -167,16 +183,19 @@ Authorization: {{auth0token}}
 # Response.data:
   # {
     # incidents: {
-      # "incident_id": number,
-      # "action": string
-      # "latitude": number
-      # "longitude": number,
-      # "event_type": string,
-      # "event_id": number,
-      # "country": string,
-      # "short_desc": string,
-      # "long_desc": string
-      # "response": string
+    #     incident_id: number
+    #     event: {
+    #         event_type: string
+    #         event_id: number
+    #         action: string
+    #         event_date: string
+    #         short_desc: string
+    #         long_desc: string
+    #     }
+    #     latitude: number
+    #     longitude: number
+    #     country: string
+    #     response: string
     # }[]
 # }
 GET {{base}}/events/incidents

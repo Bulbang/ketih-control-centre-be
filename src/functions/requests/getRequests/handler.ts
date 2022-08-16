@@ -74,7 +74,7 @@ const requests: ValidatedEventAPIGatewayProxyEvent<
                 direction,
                 phase: phase?.toLowerCase(),
                 priority: priority ? +priority : undefined,
-                status: status?.toLowerCase(),
+                status: status?.split('_').join(' ').toLowerCase(),
             })
 
         requests.map((req) => {
