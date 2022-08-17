@@ -144,24 +144,26 @@ export class V_eventRepository extends MySQLRepository<Database> {
                         'in',
                         [21, 22, 23, 31, 32, 41],
                     ),
-                )
-                .limit(perPage)
-                .offset((page - 1) * perPage)
-                .orderBy(sortBy, direction)
-                .groupBy([
-                    'event_classification.priority',
-                    'event_classification.short_desc',
-                    'v_event.work_order_id',
-                    // 'v_event.requestor',
-                    'work_order.notes',
-                    'v_event.employee_id',
-                    'v_event.request_name',
-                    'v_event.request_date',
-                    'v_event.completion_date',
-                    sql`location`,
-                ]),
+                ),
+
             { timeLimitter: { last, column: 'work_order.last_modified' } },
-        ).execute()
+        )
+            .limit(perPage)
+            .offset((page - 1) * perPage)
+            .orderBy(sortBy, direction)
+            .groupBy([
+                'event_classification.priority',
+                'event_classification.short_desc',
+                'v_event.work_order_id',
+                // 'v_event.requestor',
+                'work_order.notes',
+                'v_event.employee_id',
+                'v_event.request_name',
+                'v_event.request_date',
+                'v_event.completion_date',
+                sql`location`,
+            ])
+            .execute()
 
     getAllEvents = async ({
         last = 7,
@@ -169,12 +171,16 @@ export class V_eventRepository extends MySQLRepository<Database> {
         perPage = +DEFAULT_PAGE_OFFSET,
         sortBy = 'v_event.event_date',
         direction = 'desc',
+        priority,
+        status,
     }: {
         last?: number
         page?: number
         perPage?: number
         sortBy?: any
         direction?: 'asc' | 'desc'
+        priority?: number
+        status?: string
     }) =>
         queryMiddleware(
             this._db
@@ -270,6 +276,12 @@ export class V_eventRepository extends MySQLRepository<Database> {
                     'work_order',
                     'work_order.work_order_id',
                     'v_event.work_order_id',
+                )
+                .if(!!priority, (qb) =>
+                    qb.where('v_event.priority', '=', priority),
+                )
+                .if(status?.length > 0, (qb) =>
+                    qb.where(sql`LOWER(v_event.short_desc)`, '=', status),
                 )
                 .groupBy([
                     'incident.incident_id',

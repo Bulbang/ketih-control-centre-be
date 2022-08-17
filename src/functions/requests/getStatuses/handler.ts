@@ -14,8 +14,17 @@ const getStatuses: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (_) => {
-    const types = await eventTypeRepository.getEventTypes()
-    return types
+    const statuses = await eventTypeRepository.getEventTypes()
+
+    const mappedStatuses: string[] = [
+        ...new Set(statuses.map((statusObj) => statusObj.status)),
+    ]
+
+    const response: LambdaReturn = mappedStatuses.map((status) => {
+        return { status }
+    })
+
+    return response
 }
 
 export const main = middyfy(getStatuses)

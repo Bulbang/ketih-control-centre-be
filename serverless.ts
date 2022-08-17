@@ -60,7 +60,7 @@ const serverlessConfiguration: AWS = {
         environment: {
             AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
             NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
-            DEFAULT_PAGE_OFFSET: '10',
+            DEFAULT_PAGE_OFFSET: '20',
             AUTH0_CUSTOM_CLAIMS_NAMESPACE:
                 '${env:AUTH0_CUSTOM_CLAIMS_NAMESPACE}',
             // ACTIVITY_TABLE_NAME: { Ref: 'ActivityTable' },

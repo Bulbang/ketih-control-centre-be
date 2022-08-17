@@ -225,6 +225,8 @@ Authorization: {{auth0token}}
 #   perPage: number DEFAULT = 10
 #   sortBy: keyof Response.data
 #   direction: 'asc' | 'desc'
+#   status: string
+#   priority: number
 # Response.data:
   # {
     # events: {
