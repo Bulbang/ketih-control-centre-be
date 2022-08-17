@@ -5,7 +5,7 @@ import resources from './resources'
 
 const serverlessConfiguration: AWS = {
     useDotenv: true,
-    service: 'keith-control-centre-be',
+    service: 'CC',
     frameworkVersion: '3',
     plugins: ['serverless-esbuild'],
     provider: {
