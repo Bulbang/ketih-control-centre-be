@@ -6,19 +6,26 @@ import { createDbConnection } from '@libs/utils/createDbConnection'
 const db = createDbConnection()
 const workOrderRepository = new WorkOrderRepository(db)
 
-type LambdaReturn = Awaited<
-    ReturnType<typeof workOrderRepository.getWorkOrderStats>
->
+type LambdaReturn = {
+    orders_сount: number
+}
 
 const getRequestStats: ValidatedEventAPIGatewayProxyEvent<
     undefined,
     LambdaReturn
 > = async (event) => {
-    const { interval } = event.queryStringParameters as {
-        interval?: string
-    }
+    const { interval, phase, priority, status } =
+        event.queryStringParameters as {
+            interval?: string
+            priority?: string
+            status?: string
+            phase?: string
+        }
     const stats = await workOrderRepository.getWorkOrderStats({
         last: interval ? +interval : undefined,
+        phase: phase?.toLowerCase(),
+        priority: priority ? +priority : undefined,
+        status: status?.split('_').join(' ').toLowerCase(),
     })
 
     return stats

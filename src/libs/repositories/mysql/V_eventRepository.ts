@@ -109,7 +109,7 @@ export class V_eventRepository extends MySQLRepository<Database> {
                     'v_event.work_order_id',
                 )
                 .select('work_order.notes')
-                .if(!!priority, (qb) =>
+                .if(priority && priority > 0, (qb) =>
                     qb.where('event_classification.priority', '=', priority),
                 )
                 .if(status?.length > 0, (qb) =>
@@ -277,7 +277,7 @@ export class V_eventRepository extends MySQLRepository<Database> {
                     'work_order.work_order_id',
                     'v_event.work_order_id',
                 )
-                .if(!!priority, (qb) =>
+                .if(priority && priority > 0, (qb) =>
                     qb.where('v_event.priority', '=', priority),
                 )
                 .if(status?.length > 0, (qb) =>

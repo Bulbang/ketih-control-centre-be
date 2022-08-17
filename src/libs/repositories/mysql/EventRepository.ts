@@ -64,15 +64,67 @@ export class EventRepository extends MySQLRepository<Database> {
             ])
             .execute()
 
-    getEventStats = async ({ last = 7 }: { last?: number }) =>
+    getEventStats = async ({
+        last = 7,
+        priority,
+        status,
+        phase,
+    }: {
+        last?: number
+        priority?: number
+        status?: string
+        phase?: string
+    }) =>
         queryMiddleware(
             this._db
                 .selectFrom('event')
-                .select(this._db.fn.count('event.event_id').as('events'))
-                .leftJoin('incident', 'event.event_id', 'incident.event_id')
-                .select(
-                    this._db.fn.count('incident.incident_id').as('incidents'),
-                ),
+                .leftJoin(
+                    'work_order',
+                    'event.work_order_id',
+                    'work_order.work_order_id',
+                )
+                .leftJoin(
+                    'event_classification',
+                    'work_order.xp_event_id',
+                    'event_classification.xp_event_id',
+                )
+                .if(priority && priority > 0, (qb) =>
+                    qb.where('event_classification.priority', '=', priority),
+                )
+                .if(status?.length > 0, (qb) =>
+                    qb.where(
+                        sql`LOWER(event_classification.short_desc)`,
+                        '=',
+                        status,
+                    ),
+                )
+                .if(phase == 'urgent', (qb) =>
+                    qb
+                        .where('event_classification.priority', '<=', 2)
+                        .where('work_order.completion_date', 'is', null),
+                )
+                .if(phase == 'in_deploy', (qb) =>
+                    qb.where(
+                        'event_classification.xp_event_id',
+                        'in',
+                        [100, 102, 103, 104, 105, 106, 107, 108],
+                    ),
+                )
+                .if(phase == 'in_transit', (qb) =>
+                    qb.where(
+                        'event_classification.xp_event_id',
+                        'in',
+                        [201, 202, 203, 204, 205, 207],
+                    ),
+                )
+                .if(phase == 'needs_verification', (qb) =>
+                    qb.where(
+                        'event_classification.xp_event_id',
+                        'in',
+                        [21, 22, 23, 31, 32, 41],
+                    ),
+                )
+                .select(this._db.fn.count('event.event_id').as('events')),
             { timeLimitter: { last, column: 'event.last_modified' } },
         ).execute()
 

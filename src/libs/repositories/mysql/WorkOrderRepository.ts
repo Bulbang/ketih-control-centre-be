@@ -142,16 +142,67 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
             { timeLimitter: { last, column: 'work_order.last_modified' } },
         ).execute()
 
-    getWorkOrderStats = async ({ last = 7 }: { last?: number }) => {
+    getWorkOrderStats = async ({
+        last = 7,
+        priority,
+        status,
+        phase,
+    }: {
+        last?: number
+        priority?: number
+        status?: string
+        phase?: string
+    }) => {
         const orders = await queryMiddleware(
             this._db
                 .selectFrom('work_order')
-                .select(['request_type', 'kit_id']),
+                .select(['work_order.work_order_id'])
+                .leftJoin(
+                    'event_classification',
+                    'work_order.xp_event_id',
+                    'event_classification.xp_event_id',
+                )
+                .if(priority && priority > 0, (qb) =>
+                    qb.where('event_classification.priority', '=', priority),
+                )
+                .if(status?.length > 0, (qb) =>
+                    qb.where(
+                        sql`LOWER(event_classification.short_desc)`,
+                        '=',
+                        status,
+                    ),
+                )
+                .if(phase == 'urgent', (qb) =>
+                    qb
+                        .where('event_classification.priority', '<=', 2)
+                        .where('work_order.completion_date', 'is', null),
+                )
+                .if(phase == 'in_deploy', (qb) =>
+                    qb.where(
+                        'event_classification.xp_event_id',
+                        'in',
+                        [100, 102, 103, 104, 105, 106, 107, 108],
+                    ),
+                )
+                .if(phase == 'in_transit', (qb) =>
+                    qb.where(
+                        'event_classification.xp_event_id',
+                        'in',
+                        [201, 202, 203, 204, 205, 207],
+                    ),
+                )
+                .if(phase == 'needs_verification', (qb) =>
+                    qb.where(
+                        'event_classification.xp_event_id',
+                        'in',
+                        [21, 22, 23, 31, 32, 41],
+                    ),
+                ),
             { timeLimitter: { last, column: 'work_order.last_modified' } },
         ).execute()
 
         return {
-            ordersCount: orders.length,
+            orders_count: orders.length,
         }
     }
 

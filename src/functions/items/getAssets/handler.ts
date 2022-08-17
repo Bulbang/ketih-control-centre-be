@@ -45,9 +45,11 @@ const getAssets: ValidatedEventAPIGatewayProxyEvent<
             direction,
         })
 
+        const serialNumbers = assets.map((asset) => asset.serial_number)
+
         const associatedRequests =
             await workOrderRepository.getAssociatedRequestsToAsset(
-                assets.map((asset) => asset.serial_number),
+                serialNumbers.length ? serialNumbers : [null],
             )
         return {
             assets: assets.map((asset) => {

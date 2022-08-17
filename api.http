@@ -168,8 +168,16 @@ GET {{base}}/requests/events/:event_id
 Authorization: {{auth0token}}
 
 ### Control Center
+# Response.data: {
+  # {
+    # orders_count: number;
+  # }
+# }
 # QueryString: 
 #   interval: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
+#   priority: string
+#   status: string
+#   phase: string
 GET {{base}}/requests/statistic
 Authorization: {{auth0token}}
 
@@ -295,10 +303,14 @@ GET {{base}}/requests/statuses
 Authorization: {{auth0token}}
 
 ### Events
+# QueryString: 
+#   interval: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
+#   priority: string
+#   status: string
+#   phase: string
 # Response.data:
   # {
     # "events": number,
-    # "incidents": number
   # }
 GET {{base}}/events/statistic
 Authorization: {{auth0token}}
