@@ -1,4 +1,4 @@
-import { Users } from '@declarations/db/userinfo'
+import { OrgsList, Users } from '@declarations/db/userinfo'
 import { badRequest } from '@hapi/boom'
 import axios, { AxiosInstance } from 'axios'
 const baseURL = process.env.AUTH0_URL
@@ -52,7 +52,7 @@ class Auth0Instance {
         first_name: string
         last_name: string
         email: string
-        phone_numbers?: { type: string; phone: string }[]
+        phone_numbers?: { type?: string; phone?: string }[]
         role?: string
         country: string
         status: string
@@ -67,6 +67,16 @@ class Auth0Instance {
         if (role && !roles.includes(role.toLowerCase()))
             throw badRequest(`Unknown role ${role}`)
 
+        const userMetadata = {
+            country,
+            status,
+            business_unit,
+            phone_numbers,
+            tos_signed: false,
+        }
+
+        console.log('user metadata: ', JSON.stringify(userMetadata, null, 2))
+
         const name =
             first_name && last_name ? `${first_name} ${last_name}` : undefined
 
@@ -74,13 +84,7 @@ class Auth0Instance {
             '/api/v2/users',
             {
                 email,
-                user_metadata: {
-                    country,
-                    status,
-                    business_unit,
-                    phone_numbers,
-                    tos_signed: false,
-                },
+                user_metadata: userMetadata,
                 app_metadata: { roles: [role || 'user'] },
                 given_name: first_name,
                 family_name: last_name,
@@ -124,11 +128,11 @@ class Auth0Instance {
             tos_signed?: boolean
         },
     ) => {
-        if (!validateEmail(email)) {
+        if (email && !validateEmail(email)) {
             throw badRequest('Invalid email')
         }
 
-        if (role && !roles.includes(role.toLowerCase()))
+        if (role && !roles.includes(role?.toLowerCase()))
             throw badRequest(`Unknown role ${role}`)
 
         const userMetadata = undefinedIfAllValuesUndefined({
@@ -201,6 +205,18 @@ class Auth0Instance {
                 0,
             ),
         }
+    }
+
+    listUserOrgs = async (userId: string) => {
+        const { data } = await this._instance.get<OrgsList[]>(
+            `/api/v2/users/${userId}/organizations`,
+            {
+                headers: {
+                    Authorization: `Bearer ${this._token}`,
+                },
+            },
+        )
+        return data.map((org) => +org.metadata.org_id)
     }
 }
 

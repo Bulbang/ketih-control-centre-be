@@ -3,7 +3,7 @@ import { sql } from 'kysely'
 import { MySQLRepository } from './SQLRepository'
 
 export class ItemRepository extends MySQLRepository<Database> {
-    getItemsWithDetails = async () =>
+    getItemsWithDetails = async (orgs: number[]) =>
         this._db
             .selectFrom('item')
             .leftJoin('item_detail', 'item.item_id', 'item_detail.item_id')
@@ -13,7 +13,7 @@ export class ItemRepository extends MySQLRepository<Database> {
             ])
             .execute()
 
-    countOrdersByDeviceType = async () =>
+    countOrdersByDeviceType = async (orgs: number[]) =>
         this._db
             .selectFrom('item')
             .leftJoin('item_detail', 'item.item_id', 'item_detail.item_id')

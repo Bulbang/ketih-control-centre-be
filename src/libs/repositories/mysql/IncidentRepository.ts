@@ -7,7 +7,7 @@ const { DEFAULT_PAGE_OFFSET } = process.env
 
 export class IncidentRepository extends MySQLRepository<Database> {
     getIncidents = async ({
-        last = 7,
+        last = -1,
         page = 1,
         perPage = +DEFAULT_PAGE_OFFSET,
         countryCode,

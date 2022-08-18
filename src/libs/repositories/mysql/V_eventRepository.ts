@@ -7,7 +7,7 @@ const { DEFAULT_PAGE_OFFSET } = process.env
 
 export class V_eventRepository extends MySQLRepository<Database> {
     getRequests = async ({
-        last = 7,
+        last = -1,
         page = 1,
         perPage = 10,
         direction = 'asc',
@@ -15,6 +15,7 @@ export class V_eventRepository extends MySQLRepository<Database> {
         phase,
         priority,
         status,
+        orgs,
     }: {
         last?: number
         page?: number
@@ -24,6 +25,7 @@ export class V_eventRepository extends MySQLRepository<Database> {
         phase?: string
         priority?: number
         status?: string
+        orgs: number[]
     }) =>
         queryMiddleware(
             this._db
@@ -166,13 +168,14 @@ export class V_eventRepository extends MySQLRepository<Database> {
             .execute()
 
     getAllEvents = async ({
-        last = 7,
+        last = -1,
         page = 1,
         perPage = +DEFAULT_PAGE_OFFSET,
         sortBy = 'v_event.event_date',
         direction = 'desc',
         priority,
         status,
+        orgs,
     }: {
         last?: number
         page?: number
@@ -181,6 +184,7 @@ export class V_eventRepository extends MySQLRepository<Database> {
         direction?: 'asc' | 'desc'
         priority?: number
         status?: string
+        orgs: number[]
     }) =>
         queryMiddleware(
             this._db

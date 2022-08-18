@@ -21,6 +21,18 @@ export type UserInfo = {
         status: string
         tos_signed: boolean
     }
+    orgs: string[]
+}
+
+export type OrgsList = {
+    id: string
+    display_name: string
+    name: string
+    metadata: OrgsMetadata
+}
+
+type OrgsMetadata = {
+    org_id: string
 }
 
 export type Users = {

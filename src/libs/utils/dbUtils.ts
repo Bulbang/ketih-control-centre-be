@@ -4,15 +4,21 @@ export const queryMiddleware = <DB, TB extends keyof DB, O>(
     query: SelectQueryBuilder<DB, TB, O>,
     {
         timeLimitter,
-    }: { timeLimitter: { last: number; column: ReferenceExpression<DB, TB> } },
+        org,
+    }: {
+        timeLimitter?: { last: number; column: ReferenceExpression<DB, TB> }
+        org?: { orgs: number[]; column: ReferenceExpression<DB, TB> }
+    },
 ) => {
-    return query.if(timeLimitter?.last > 0, (qb) =>
-        qb.where(
-            timeLimitter.column,
-            '>=',
-            sql`DATE(NOW() - INTERVAL ${timeLimitter.last} DAY)`,
-        ),
-    )
+    return query
+        .if(timeLimitter?.last > 0, (qb) =>
+            qb.where(
+                timeLimitter?.column,
+                '>=',
+                sql`DATE(NOW() - INTERVAL ${timeLimitter?.last} DAY)`,
+            ),
+        )
+        .if(org?.orgs?.length > 0, (qb) => qb.where(org.column, 'in', org.orgs))
 }
 
 // export const queryExecutor = <T extends MySQLRepository<Database>>(obj: T) => {

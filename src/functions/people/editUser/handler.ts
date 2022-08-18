@@ -26,7 +26,9 @@ const editUser: ValidatedEventAPIGatewayProxyEvent<
         throw badRequest("Cant't update name without first or second name")
 
     if (
-        !body.phone_numbers.every((number) => numberTypes.includes(number.type))
+        !body.phone_numbers?.every((number) =>
+            numberTypes.includes(number.type),
+        )
     ) {
         throw badRequest('Invalid number type')
     }

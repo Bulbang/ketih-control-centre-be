@@ -2,13 +2,17 @@ import { middyfy } from '@libs/middlewares/middyfy'
 import { ValidatedEventAPIGatewayProxyEvent } from '@declarations/aws/api-gateway'
 import { UserInfo } from '@declarations/db/userinfo'
 
+const ifUndefinedThenFallback = (str: string) => {
+    return str ? str : 'Fallback'
+}
+
 const { AUTH0_CUSTOM_CLAIMS_NAMESPACE } = process.env
 type LambdaReturn = {
     user: {
         user_id: string
         first_name: string
         last_name: string
-        phone_number_mobile:
+        phone_numbers:
             | string
             | {
                   phone: string
@@ -33,7 +37,7 @@ const me: ValidatedEventAPIGatewayProxyEvent<undefined, LambdaReturn> = async (
         event.requestContext.authorizer.user,
     ) as UserInfo
 
-    const phone_number_mobile = auth0user[
+    const phone_numbers = auth0user[
         `${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/user_metadata`
     ]?.phone_number_mobile
         ? auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/user_metadata`]
@@ -42,24 +46,27 @@ const me: ValidatedEventAPIGatewayProxyEvent<undefined, LambdaReturn> = async (
               ?.phone_numbers
 
     const user = {
-        user_id: auth0user.sub,
-        first_name: auth0user.given_name,
-        last_name: auth0user.family_name,
-        phone_number_mobile,
+        user_id: ifUndefinedThenFallback(auth0user.sub),
+        first_name: ifUndefinedThenFallback(auth0user.given_name),
+        last_name: ifUndefinedThenFallback(auth0user.family_name),
+        phone_numbers: phone_numbers.length ? phone_numbers : [],
 
-        status: auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/user_metadata`]
-            ?.status,
-        business_unit:
+        status: ifUndefinedThenFallback(
+            auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/user_metadata`]?.status,
+        ),
+        business_unit: ifUndefinedThenFallback(
             auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/user_metadata`]
                 ?.business_unit,
-        country:
+        ),
+        country: ifUndefinedThenFallback(
             auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/user_metadata`]
                 ?.country,
-        email: auth0user.email,
+        ),
+        email: ifUndefinedThenFallback(auth0user.email),
         roles: auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/roles`]
             ? auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/roles`]
             : [],
-        picture: auth0user.picture,
+        picture: ifUndefinedThenFallback(auth0user.picture),
         tos_signed:
             auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/user_metadata`]
                 ?.tos_signed,

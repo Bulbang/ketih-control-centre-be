@@ -10,7 +10,7 @@ export default {
         email: {
             type: 'string',
         },
-        phone_number_mobile: {
+        phone_numbers: {
             type: 'string',
         },
         country: {

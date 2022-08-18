@@ -16,7 +16,7 @@ export const apiGatewayErrorHandler = <
     const onError: middy.MiddlewareFn<TEvent, TResponse> = async (handler) => {
         const { error } = handler
         if (typeof options.logger === 'function') {
-            await options.logger(JSON.stringify(error))
+            await options.logger(error)
         }
 
         if (isBoom(error)) {

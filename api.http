@@ -44,7 +44,7 @@ Authorization: {{auth0token}}
 #     phone_numbers: {
 #         phone: string;
 #         type: string;
-#     }[];
+#     }?[];
 #     country: string;
 #     password: string;
 #     business_unit: string;

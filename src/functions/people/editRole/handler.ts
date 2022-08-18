@@ -22,7 +22,11 @@ const editRole: ValidatedEventAPIGatewayProxyEvent<
         throw badRequest(`Unknown role ${role}`)
 
     const Auth0Instance = await getAuth0Instance()
+    console.log(role.toLowerCase())
+
     await Auth0Instance.updateUser(id, { role })
+
+    console.log(role.toLowerCase())
 }
 
 export const main = middyfy(editRole).use(

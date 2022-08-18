@@ -18,6 +18,7 @@ export class ItemDetailRepository extends MySQLRepository<Database> {
         perPage?: number
         sortBy?: any
         direction?: 'desc' | 'asc'
+        orgs: number[]
     }) =>
         queryMiddleware(
             this._db
@@ -56,7 +57,7 @@ export class ItemDetailRepository extends MySQLRepository<Database> {
             { timeLimitter: { last, column: 'item_detail.last_modified' } },
         ).execute()
 
-    getAssetsTotal = async ({ last = 7 }: { last: number }) =>
+    getAssetsTotal = async ({ last = -1 }: { last: number; orgs: number[] }) =>
         queryMiddleware(
             this._db
                 .selectFrom('item_detail')
@@ -66,7 +67,7 @@ export class ItemDetailRepository extends MySQLRepository<Database> {
             { timeLimitter: { last, column: 'item_detail.last_modified' } },
         ).execute()
 
-    getAssetsByMake = async ({ last = 7 }: { last: number }) =>
+    getAssetsByMake = async ({ last = -1 }: { last: number; orgs: number[] }) =>
         queryMiddleware(
             this._db
                 .selectFrom('item_detail')

@@ -23,7 +23,6 @@ export default {
                     },
                 },
                 additionalProperties: false,
-                required: ['phone', 'type'],
             },
         },
         // role: {

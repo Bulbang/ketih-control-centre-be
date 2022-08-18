@@ -65,7 +65,7 @@ export class EventRepository extends MySQLRepository<Database> {
             .execute()
 
     getEventStats = async ({
-        last = 7,
+        last = -1,
         priority,
         status,
         phase,

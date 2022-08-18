@@ -6,7 +6,13 @@ import { MySQLRepository } from './SQLRepository'
 const { DEFAULT_PAGE_OFFSET } = process.env
 
 export class WorkOrderRepository extends MySQLRepository<Database> {
-    getReqsByActionDateAndDeliveryStatus = ({ last = 7 }: { last: number }) =>
+    getReqsByActionDateAndDeliveryStatus = ({
+        last = -1,
+        orgs,
+    }: {
+        last: number
+        orgs: number[]
+    }) =>
         queryMiddleware(
             this._db
                 .selectFrom('work_order')
@@ -31,9 +37,10 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
         ).execute()
 
     getAdvancedReplacementsByItemType = async ({
-        last = 7,
+        last = -1,
     }: {
         last?: number
+        orgs: number[]
     }) =>
         queryMiddleware(
             this._db
@@ -54,9 +61,10 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
         ).execute()
 
     getAdvancedReplacementsByReasonCode = async ({
-        last = 7,
+        last = -1,
     }: {
         last: number
+        orgs: number[]
     }) =>
         queryMiddleware(
             this._db
@@ -88,7 +96,7 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
             .execute()
 
     getWorkOrders = async ({
-        last = 7,
+        last = -1,
         page = 1,
         perPage = +DEFAULT_PAGE_OFFSET,
         direction = 'asc',
@@ -99,6 +107,7 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
         perPage?: number
         sortBy?: any
         direction?: 'desc' | 'asc'
+        orgs: number[]
     }) =>
         queryMiddleware(
             this._db
@@ -143,7 +152,7 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
         ).execute()
 
     getWorkOrderStats = async ({
-        last = 7,
+        last = -1,
         priority,
         status,
         phase,
@@ -152,6 +161,7 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
         priority?: number
         status?: string
         phase?: string
+        orgs: number[]
     }) => {
         const orders = await queryMiddleware(
             this._db
@@ -206,7 +216,7 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
         }
     }
 
-    getRequestDetail = async (id: number) => {
+    getRequestDetail = async (id: number, orgs: number[]) => {
         return this._db
             .selectFrom('work_order')
             .select(['work_order.runbook', 'work_order.work_order_id'])
@@ -222,7 +232,12 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
             .execute()
     }
 
-    getItemOverview = async ({ last = 7 }: { last?: number }) =>
+    getItemOverview = async ({
+        last = -1,
+    }: {
+        last?: number
+        orgs: number[]
+    }) =>
         queryMiddleware(
             this._db
                 .selectFrom('work_order')
@@ -256,7 +271,12 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
             { timeLimitter: { last, column: 'work_order.last_modified' } },
         ).execute()
 
-    getReqsByCategory = async ({ last = 7 }: { last?: number }) =>
+    getReqsByCategory = async ({
+        last = -1,
+    }: {
+        last?: number
+        orgs: number[]
+    }) =>
         queryMiddleware(
             this._db
                 .selectFrom('work_order')
@@ -269,7 +289,12 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
             { timeLimitter: { last, column: 'work_order.last_modified' } },
         ).execute()
 
-    getReqsByService = async ({ last = 7 }: { last: number }) =>
+    getReqsByService = async ({
+        last = -1,
+    }: {
+        last: number
+        orgs: number[]
+    }) =>
         queryMiddleware(
             this._db
                 .selectFrom('work_order')
@@ -291,7 +316,12 @@ export class WorkOrderRepository extends MySQLRepository<Database> {
             { timeLimitter: { last, column: 'work_order.last_modified' } },
         ).execute()
 
-    getReqsByStatus = async ({ last = 7 }: { last?: number }) =>
+    getReqsByStatus = async ({
+        last = -1,
+    }: {
+        last?: number
+        orgs: number[]
+    }) =>
         queryMiddleware(
             this._db
                 .selectFrom('work_order')
