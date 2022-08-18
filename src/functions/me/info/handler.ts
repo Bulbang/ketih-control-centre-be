@@ -8,7 +8,12 @@ type LambdaReturn = {
         user_id: string
         first_name: string
         last_name: string
-        phone_number_mobile: string
+        phone_number_mobile:
+            | string
+            | {
+                  phone: string
+                  type: string
+              }[]
         // phone_number_home: string
         status: string
         business_unit: string
@@ -28,13 +33,20 @@ const me: ValidatedEventAPIGatewayProxyEvent<undefined, LambdaReturn> = async (
         event.requestContext.authorizer.user,
     ) as UserInfo
 
+    const phone_number_mobile = auth0user[
+        `${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/user_metadata`
+    ]?.phone_number_mobile
+        ? auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/user_metadata`]
+              ?.phone_number_mobile
+        : auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/user_metadata`]
+              ?.phone_numbers
+
     const user = {
         user_id: auth0user.sub,
         first_name: auth0user.given_name,
         last_name: auth0user.family_name,
-        phone_number_mobile:
-            auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/user_metadata`]
-                ?.phone_number_mobile,
+        phone_number_mobile,
+
         status: auth0user[`${AUTH0_CUSTOM_CLAIMS_NAMESPACE}/user_metadata`]
             ?.status,
         business_unit:

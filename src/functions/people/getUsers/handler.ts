@@ -32,13 +32,16 @@ const getUsers: ValidatedEventAPIGatewayProxyEvent<
     })
     return {
         users: users.map((user) => {
+            const phone_number_mobile = user.user_metadata?.phone_number_mobile
+                ? user.user_metadata?.phone_number_mobile
+                : user.user_metadata?.phone_numbers
             return {
                 user_id: user.user_id,
                 email: user.email,
                 first_name: user.given_name,
                 last_name: user.family_name,
                 picture: user.picture,
-                phone_number_mobile: user.user_metadata?.phone_number_mobile,
+                phone_number_mobile,
                 status: user.user_metadata?.status,
                 business_unit: user.user_metadata?.business_unit,
                 country: user.user_metadata?.country,

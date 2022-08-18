@@ -4,8 +4,7 @@ jspm_packages
 
 # Serverless directories
 .serverless
-
-yarn-error.log
+yarn*
 .env
 .env.prod
 # esbuild directories

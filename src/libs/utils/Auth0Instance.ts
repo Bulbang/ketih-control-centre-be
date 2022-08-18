@@ -14,6 +14,14 @@ const undefinedIfAllValuesUndefined = (obj: Object) => {
         : obj
 }
 
+const validateEmail = (email: string) => {
+    return !!email
+        .toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        )
+}
+
 class Auth0Instance {
     private _instance: AxiosInstance = axios.create({ baseURL })
     private _token: string
@@ -44,7 +52,7 @@ class Auth0Instance {
         first_name: string
         last_name: string
         email: string
-        phone_numbers: { type: string; phone: string }[]
+        phone_numbers?: { type: string; phone: string }[]
         role?: string
         country: string
         status: string
@@ -52,6 +60,10 @@ class Auth0Instance {
         password: string
         verify_email?: boolean
     }) => {
+        if (!validateEmail(email)) {
+            throw badRequest('Invalid email')
+        }
+
         if (role && !roles.includes(role.toLowerCase()))
             throw badRequest(`Unknown role ${role}`)
 
@@ -92,7 +104,7 @@ class Auth0Instance {
             first_name,
             last_name,
             email,
-            phone_number_mobile,
+            phone_numbers,
             role,
             country,
             status,
@@ -103,7 +115,7 @@ class Auth0Instance {
             first_name?: string
             last_name?: string
             email?: string
-            phone_number_mobile?: string
+            phone_numbers?: { type: string; phone: string }[]
             role?: string
             country?: string
             status?: string
@@ -112,6 +124,10 @@ class Auth0Instance {
             tos_signed?: boolean
         },
     ) => {
+        if (!validateEmail(email)) {
+            throw badRequest('Invalid email')
+        }
+
         if (role && !roles.includes(role.toLowerCase()))
             throw badRequest(`Unknown role ${role}`)
 
@@ -119,7 +135,7 @@ class Auth0Instance {
             country,
             status,
             business_unit,
-            phone_number_mobile,
+            phone_numbers,
             tos_signed,
         })
 
@@ -131,7 +147,7 @@ class Auth0Instance {
             {
                 email,
                 // phone_number: phone_number_mobile,
-                user_metadata: userMetadata,
+                user_metadata: { ...userMetadata },
                 app_metadata: role ? { roles: [role] } : undefined,
                 given_name: first_name,
                 family_name: last_name,

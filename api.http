@@ -75,7 +75,10 @@ Content-Type: application/json
 #   "first_name": string,             *** If you change one of names, you should put in request body the second
 #   "last_name": string,              *** If you change one of names, you should put in request body the second
 #   "email": string,                  *** You can't update email and password at the same time
-#   "phone_number_mobile": string,
+#   "phone_numbers": {
+#         phone: string;
+#         type: string;
+#     }[];
 #   "country": string,
 #   "status": string,
 #   "business_unit": string,
@@ -439,8 +442,10 @@ Authorization: {{auth0token}}
         # "user_id": number,
         # "first_name": string,
         # "last_name": string,
-        # "phone_number_mobile": string,
-        # "phone_number_home": string,
+        # "phone_number_mobile": {
+        #   phone: string;
+        #   type: string;
+        #  }[],
         # "status": string,
         # "business_unit": string,
         # "position_title": string,

@@ -23,14 +23,19 @@ const addUser: ValidatedEventAPIGatewayProxyEvent<
         throw badRequest('Invalid number type')
     }
 
-    const { data } = await Auth0Instance.createUser({
-        ...body,
-        status: body.status ? body.status : 'active',
-        role: 'user',
-    })
-
-    return {
-        user_id: data.user_id,
+    try {
+        const { data } = await Auth0Instance.createUser({
+            ...body,
+            status: body.status ? body.status : 'active',
+            role: 'user',
+        })
+        return {
+            user_id: data.user_id,
+        }
+    } catch (error) {
+        if (error.response?.status == 409) {
+            throw badRequest('User already exist')
+        } else throw error
     }
 }
 

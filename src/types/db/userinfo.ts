@@ -12,7 +12,11 @@ export type UserInfo = {
     [key: `${string}/roles`]: string[]
     [key: `${string}/user_metadata`]: {
         business_unit: string
-        phone_number_mobile: string
+        phone_number_mobile?: string
+        phone_numbers?: {
+            phone: string
+            type: string
+        }[]
         country: string
         status: string
         tos_signed: boolean
@@ -32,7 +36,11 @@ export type Users = {
     app_metadata: { roles: string[] }
     user_metadata: {
         business_unit: string
-        phone_number_mobile: string
+        phone_number_mobile?: string
+        phone_numbers?: {
+            phone: string
+            type: string
+        }[]
         country: string
         status: string
     }

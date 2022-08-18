@@ -13,8 +13,6 @@ export default {
         phone_numbers: {
             type: 'array',
             items: {
-                additionalProperties: false,
-                required: ['phone', 'type'],
                 type: 'object',
                 properties: {
                     phone: {
@@ -24,6 +22,8 @@ export default {
                         type: 'string',
                     },
                 },
+                additionalProperties: false,
+                required: ['phone', 'type'],
             },
         },
         // role: {
@@ -50,7 +50,7 @@ export default {
         'first_name',
         'last_name',
         'email',
-        'phone_numbers',
+
         'country',
         'password',
         'business_unit',
