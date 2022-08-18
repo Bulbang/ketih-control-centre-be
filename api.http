@@ -35,14 +35,20 @@ Authorization: {{auth0token}}
 
 ### User Admin
 # Body:
-#   "first_name": string,
-#   "last_name": string,
-#   "email": string
-#   "phone_number_mobile": string,
-#   "country": string,
-#   "status": string,
-#   "business_unit": string,
-#   "password": string
+# {
+#     status?: string;
+#     verify_email?: boolean;
+#     first_name: string;
+#     last_name: string;
+#     email: string;
+#     phone_numbers: {
+#         phone: string;
+#         type: string;
+#     }[];
+#     country: string;
+#     password: string;
+#     business_unit: string;
+# }
 # Response.data: 
 # {
   #     user_id: string

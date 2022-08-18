@@ -10,8 +10,21 @@ export default {
         email: {
             type: 'string',
         },
-        phone_number_mobile: {
-            type: 'string',
+        phone_numbers: {
+            type: 'array',
+            items: {
+                additionalProperties: false,
+                required: ['phone', 'type'],
+                type: 'object',
+                properties: {
+                    phone: {
+                        type: 'string',
+                    },
+                    type: {
+                        type: 'string',
+                    },
+                },
+            },
         },
         // role: {
         //     type: 'string',
@@ -37,9 +50,8 @@ export default {
         'first_name',
         'last_name',
         'email',
-        'phone_number_mobile',
+        'phone_numbers',
         'country',
-        'status',
         'password',
         'business_unit',
     ],

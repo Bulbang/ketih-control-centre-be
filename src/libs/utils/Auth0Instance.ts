@@ -33,7 +33,7 @@ class Auth0Instance {
         first_name,
         last_name,
         email,
-        phone_number_mobile,
+        phone_numbers,
         role,
         country,
         status,
@@ -44,7 +44,7 @@ class Auth0Instance {
         first_name: string
         last_name: string
         email: string
-        phone_number_mobile: string
+        phone_numbers: { type: string; phone: string }[]
         role?: string
         country: string
         status: string
@@ -66,7 +66,7 @@ class Auth0Instance {
                     country,
                     status,
                     business_unit,
-                    phone_number_mobile,
+                    phone_numbers,
                     tos_signed: false,
                 },
                 app_metadata: { roles: [role || 'user'] },
