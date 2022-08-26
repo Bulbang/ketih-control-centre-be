@@ -6,6 +6,10 @@
 #   perPage: number DEFAULT = 10
 # Response.data:
   # {
+    # "statistic": {
+      # "total": number,
+      # "active": number
+    # }
     # "users": {
         # "user_id": number,
         # "first_name": string,
@@ -122,6 +126,18 @@ Content-Type: application/json
     #     date_opened?: string
     #     date_closed: string
     #     impacted_user_id: string
+    #     "impacted_user": {
+    #        "first_name": "Mary",
+    #        "last_name": "Smith",
+    #        "address1": "17289 W. First Ave.",
+    #        "address2": "",
+    #        "city": "Phoenix",
+    #        "state_or_province": "AZ",
+    #        "postal_code": "85747",
+    #        "country": "USA",
+    #        "email": "mary.smith@gmail.com",
+    #        "phone": "+14084214222"
+    #     }
     #     location: string
     #     status: string
     #     category: string
@@ -166,7 +182,9 @@ Authorization: {{auth0token}}
 #         request_id: number,
 #         notes: any,
 #         impacted_user_id: string,
+#         "itsm_id": string 
 #         category: string,
+#         status: string
 #         date_opened: string,
 #         date_closed: string,
 #         location: string,
@@ -251,7 +269,7 @@ Authorization: {{auth0token}}
     #     event_date: string
     #     priority: number
     #     event_key: string
-    #     request: { request_id: string, notes: string, serial_numbers: string[] }
+    #     request: { request_id: string, notes: string, serial_numbers: string[], impacted_user_id: string, itsm_id:string}
     #     status: string
     #     long_desc: string
     #     event_type: string
@@ -363,11 +381,12 @@ GET {{base}}/items/peripherals
 Authorization: {{auth0token}}
 
 ### Items
-# Response.data: {
-    # total: number
-    # recieved_by_atnt: number
-    # in_transit: number
-    # not_shipped_by_employee: number
+# # Response.data: {
+#     total: number
+#     returns: {
+#         name: string
+#         total: number
+#     }[]
 # }
 GET {{base}}/items/returns
 Authorization: {{auth0token}}
@@ -379,6 +398,9 @@ Authorization: {{auth0token}}
 #   perPage: number DEFAULT = 10
 #   sortBy: keyof Response.data.assets[0] DEFAULT = 'item_detail_id'
 #   direction: 'asc' | 'desc' DEFAULT = 'asc'
+#   make_model: string
+#   asset_type: string
+#   status: string
 # Response.data: {
 #     assets: {
 #         asset_tag: string
@@ -587,4 +609,38 @@ Authorization: {{auth0token}}
 #     total: number
 # }
 GET {{base}}/requests/advanced-replacements/by-item-type
+Authorization: {{auth0token}}
+
+### Impacted PII
+# Request.body: {
+#   "itsm_id": string,
+#   "employee_id": string
+# }
+POST {{base}}/users/impacted
+Authorization: {{auth0token}}
+{
+   "itsm_id": "ITSM-3",
+   "employee_id": "CEKW123"
+}
+
+
+###
+# Request.body: {
+#   "itsm_id": string,
+#   "note": string
+# }
+POST {{base}}/requests/notes
+Authorization: {{auth0token}}
+{
+  "itsm_id": "ITSM-3",
+  "note": "Test note"
+}
+
+### Items
+# Response.data: {
+#     make_model: string[]
+#     asset_types: string[]
+#     statuses: string[]
+# }
+GET {{base}}/items/filters
 Authorization: {{auth0token}}
