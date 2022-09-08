@@ -107,6 +107,12 @@ Content-Type: application/json
     "role": "manager"
 }
 
+### User Admin
+# Path Parameters:
+#   id: string - id of user that should be deleted
+DELETE {{base}}/users/{id}
+Authorization: {{auth0token}}
+
 ### Requests
 # QueryString: 
 #   interval: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
@@ -127,17 +133,17 @@ Content-Type: application/json
     #     date_closed: string
     #     impacted_user_id: string
     #     "impacted_user": {
-    #        "first_name": "Mary",
-    #        "last_name": "Smith",
-    #        "address1": "17289 W. First Ave.",
-    #        "address2": "",
-    #        "city": "Phoenix",
-    #        "state_or_province": "AZ",
-    #        "postal_code": "85747",
-    #        "country": "USA",
-    #        "email": "mary.smith@gmail.com",
-    #        "phone": "+14084214222"
-    #     }
+    #         first_name: string;
+    #         last_name: string;
+    #         address1: string;
+    #         address2: string;
+    #         city: string;
+    #         state_or_province: string;
+    #         postal_code: string;
+    #         country: string;
+    #         email: string;
+    #         phone: string;
+    #      }
     #     location: string
     #     status: string
     #     category: string
@@ -178,18 +184,33 @@ Authorization: {{auth0token}}
 
 ### Requests
 # Response.data: {
-# request: {
-#         request_id: number,
-#         notes: any,
-#         impacted_user_id: string,
-#         "itsm_id": string 
-#         category: string,
-#         status: string
-#         date_opened: string,
-#         date_closed: string,
-#         location: string,
-#         serial_numbers: string[]
-#       }
+    # request: {
+    #     request_id: number
+    #     notes: any
+    #     agency: string
+    #     itsm_id: string
+    #     impacted_user_id: string
+    #     impacted_user: {
+    #         first_name: string
+    #         last_name: string
+    #         address1: string
+    #         address2: string
+    #         city: string
+    #         state_or_province: string
+    #         postal_code: string
+    #         country: string
+    #         email: string
+    #         phone: string
+    #     }
+    #     category: string
+    #     status: string
+    #     date_opened: number
+    #     date_closed: number
+    #     location: string
+    #     serial_numbers: string[]
+    #     tracking_number: string
+    #     return_tracking_number: string
+    # }
 #   }
 GET {{base}}/requests/events/:event_id
 Authorization: {{auth0token}}
@@ -213,7 +234,7 @@ Authorization: {{auth0token}}
 #   interval: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
 #   page: number DEFAULT = 1
 #   perPage: number DEFAULT = 10
-#   countryCode: string
+#   locations: string
 #   type: string
 # Response.data:
   # {
@@ -269,7 +290,23 @@ Authorization: {{auth0token}}
     #     event_date: string
     #     priority: number
     #     event_key: string
-    #     request: { request_id: string, notes: string, serial_numbers: string[], impacted_user_id: string, itsm_id:string}
+    #     request: {
+    #         request_id: string
+    #         notes: string
+    #         serial_numbers: string[]
+    #         impacted_user: {
+    #             first_name: string
+    #             last_name: string
+    #             address1: string
+    #             address2: string
+    #             city: string
+    #             state_or_province: string
+    #             postal_code: string
+    #             country: string
+    #             email: string
+    #             phone: string
+    #         }
+    #     }
     #     status: string
     #     long_desc: string
     #     event_type: string
@@ -408,7 +445,22 @@ Authorization: {{auth0token}}
 #         model: string
 #         status: string
 #         warranty_date: string
-#         requests: {reuqest_id: string}[]
+#         requests: {
+        #     request_id: number
+        #     itsm_id: string
+        #     impacted_user: {
+        #         first_name: string
+        #         last_name: string
+        #         address1: string
+        #         address2: string
+        #         city: string
+        #         state_or_province: string
+        #         postal_code: string
+        #         country: string
+        #         email: string
+        #         phone: string
+        #     }
+        # }[]
 #     }[]
 # }
 GET {{base}}/items/assets
@@ -643,4 +695,22 @@ Authorization: {{auth0token}}
 #     statuses: string[]
 # }
 GET {{base}}/items/filters
+Authorization: {{auth0token}}
+
+### Export - CSV
+GET {{base}}/requests/export/csv
+Authorization: {{auth0token}}
+
+### Exeptions Filters
+# Response.data: {
+#   locations: string[]
+# }
+GET {{base}}/events/incidents/filters
+Authorization: {{auth0token}}
+
+### Exeptions Total
+# Response.data: {
+#   total: number
+# }
+GET {{base}}/events/incidents/statistic
 Authorization: {{auth0token}}
