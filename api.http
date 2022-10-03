@@ -40,7 +40,7 @@ Authorization: {{auth0token}}
 ### User Admin
 # Body:
 # {
-#     status?: string;
+#     statuses?: string;
 #     verify_email?: boolean;
 #     first_name: string;
 #     last_name: string;
@@ -121,14 +121,18 @@ Authorization: {{auth0token}}
 #   sortBy: keyof Response.data.requests DEFAULT = 'request_id'
 #   direction: 'asc' | 'desc' DEFAULT = 'asc'
 #   phase?: string
-#   priority?: string
-#   status?: string
+#   priorities?: string
+#   statuses?: string
 # Response.data: 
 # {
     # requests: {
     #     request_id: any
     #     requestor: string
-    #     notes: string
+    #     notes: {
+                # user: string
+                # note: string
+                # created_date: string
+            # }[]   
     #     date_opened?: string
     #     date_closed: string
     #     impacted_user_id: string
@@ -149,10 +153,10 @@ Authorization: {{auth0token}}
     #     category: string
     #     serial_numbers: string[]
     #     incidents_count: unknown
-    #     priority: number
+    #     priorities: number
     #     events: {
     #         event_id: number
-    #         priority: number
+    #         priorities: number
     #         event_key: string
     #         long_desc: string
     #         event_date: string
@@ -177,7 +181,11 @@ Authorization: {{auth0token}}
 #     runbook: string
 #     events: number[]
 #     incidents: number[]
-#     notes: string[]
+#     notes: {
+                # user: string
+                # note: string
+                # created_date: string
+            # }[]
 # }
 GET {{base}}/requests/:id
 Authorization: {{auth0token}}
@@ -223,7 +231,7 @@ Authorization: {{auth0token}}
 # }
 # QueryString: 
 #   interval: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
-#   priority: string
+#   priorities: string
 #   status: string
 #   phase: string
 GET {{base}}/requests/statistic
@@ -263,14 +271,18 @@ Authorization: {{auth0token}}
 #     incident_id: number
 #     acknowledged_by: string
 #     closed_by: string
-#     priority: number
+#     priorities: number
 #     updated_by: string
 #     triggering_event: number
 #     last_modified: string
 #     start_date: number
 #     end_date: number
-#     notes: string
-#     work_order_id: number
+#     notes: {
+                # user: string
+                # note: string
+                # created_date: string
+            # }[]     
+            # work_order_id: number
 # }
 GET {{base}}/events/incidents/:id
 Authorization: {{auth0token}}
@@ -282,17 +294,21 @@ Authorization: {{auth0token}}
 #   sortBy: keyof Response.data
 #   direction: 'asc' | 'desc'
 #   status: string
-#   priority: number
+#   priorities: number
 # Response.data:
   # {
     # events: {
     #     event_id: number
     #     event_date: string
-    #     priority: number
+    #     priorities: number
     #     event_key: string
     #     request: {
     #         request_id: string
-    #         notes: string
+    #         notes: {
+                # user: string
+                # note: string
+                # created_date: string
+            # }[]   
     #         serial_numbers: string[]
     #         impacted_user: {
     #             first_name: string
@@ -327,7 +343,7 @@ Authorization: {{auth0token}}
 #   events: {
 #         event_id: number
 #         event_date: number
-#         priority: number
+#         priorities: number
 #         event_key: string
 #         status: string
 #         long_desc: string
@@ -360,16 +376,16 @@ Authorization: {{auth0token}}
 ### Events
 # Response.data:
   # {
-    # "status": string
+    # "statuses": string
   # }[]
 
-GET {{base}}/requests/statuses
+GET {{base}}/requests/filters
 Authorization: {{auth0token}}
 
 ### Events
 # QueryString: 
 #   interval: number DEFAULT = 7 - the number of days for which the data is received (set -1 to get all time data)
-#   priority: string
+#   priorities: string
 #   status: string
 #   phase: string
 # Response.data:
@@ -405,16 +421,31 @@ GET {{base}}/change-logs/:logId/:peopleId
 Authorization: {{auth0token}}
 
 ### Items
-# Response.data: {
-#     peripherals: {
-#         type: string
-#         model: string
-#         deployed: number
-#         in_stock: number
-#     }[]
-#     total: number
+# QueryString: {
+#     interval?: string
+#     page?: string
+#     perPage?: string
+#     sortBy?: string
+#     direction?: 'asc' | 'desc'
+# }
+# Response.data:
+#    peripherals: {
+#        type: string
+#        deployed: number
+#        in_stock: number
+#    }[]
 # }
 GET {{base}}/items/peripherals
+Authorization: {{auth0token}}
+
+### Items
+# QueryString: {
+#     interval?: string
+# }
+# Response.data:
+#    total: number
+# }
+GET {{base}}/items/peripherals/total
 Authorization: {{auth0token}}
 
 ### Items
@@ -445,22 +476,27 @@ Authorization: {{auth0token}}
 #         model: string
 #         status: string
 #         warranty_date: string
+#         serial_number: string
+#         make_model: {
+#             manufacturer: string
+#             model: string
+#         }
 #         requests: {
-        #     request_id: number
-        #     itsm_id: string
-        #     impacted_user: {
-        #         first_name: string
-        #         last_name: string
-        #         address1: string
-        #         address2: string
-        #         city: string
-        #         state_or_province: string
-        #         postal_code: string
-        #         country: string
-        #         email: string
-        #         phone: string
-        #     }
-        # }[]
+#             request_id: number
+#             itsm_id: string
+#             impacted_user: {
+#                 first_name: string
+#                 last_name: string
+#                 address1: string
+#                 address2: string
+#                 city: string
+#                 state_or_province: string
+#                 postal_code: string
+#                 country: string
+#                 email: string
+#                 phone: string
+#             }
+#         }[]
 #     }[]
 # }
 GET {{base}}/items/assets
@@ -576,15 +612,37 @@ Authorization: {{auth0token}}
 GET {{base}}/locations
 Authorization: {{auth0token}}
 
-### Items modal
-# Response.data: {
 # {
-#     device_make: string
-#     device_model: string
-#     device_status: string
-#     device_serial_number: string
+#     items: {
+#         asset_tag: string
+#         asset_type: string
+#         model: string
+#         status: string
+#         warranty_date: string
+#         serial_number: string
+#         make_model: {
+#             manufacturer: string
+#             model: string
+#         }
+#         requests: {
+#             request_id: number
+#             itsm_id: string
+#             impacted_user: {
+#                 first_name: string
+#                 last_name: string
+#                 address1: string
+#                 address2: string
+#                 city: string
+#                 state_or_province: string
+#                 postal_code: string
+#                 country: string
+#                 email: string
+#                 phone: string
+#             }
+#         }[]
+#     }[]
 # }
-GET {{base}}/items/{serial_number}
+GET {{base}}/items/{serial_numbers}
 Authorization: {{auth0token}}
 
 ### Requests data graphs
@@ -632,7 +690,7 @@ Authorization: {{auth0token}}
 # Response.data {
 #     total: number
 #     other: number
-#     top_item_types: {
+#     top_data: {
 #         name: string
 #         total: number
 #     }[]
@@ -713,4 +771,156 @@ Authorization: {{auth0token}}
 #   total: number
 # }
 GET {{base}}/events/incidents/statistic
+Authorization: {{auth0token}}
+
+### GlobalSearch
+# QueryString: 
+#   query: string - REQUIRED, CANNOT BE EMPTY
+# Response.data {
+#     events: {
+#         event_id: number
+#         event_date: string
+#         priority: number
+#         event_key: string
+#         request: {
+#             request_id: string
+#             notes: {
+                # user: string
+                # note: string
+                # created_date: string
+            # }[]             
+#             serial_numbers: string[]
+#             impacted_user: {
+#                 first_name: string
+#                 last_name: string
+#                 address1: string
+#                 address2: string
+#                 city: string
+#                 state_or_province: string
+#                 postal_code: string
+#                 country: string
+#                 email: string
+#                 phone: string
+#             }
+#         }
+#         status: string
+#         long_desc: string
+#         event_type: string
+#         incident_count: any
+#         incidents: {
+#             start_date: string
+#             incident_id: number
+#             last_modified: string
+#             response: string
+#         }[]
+#     }[]
+#     requests: {
+#         request_id: any
+#         action_date: string
+#         return_tracking_number: string
+#         tracking_number: string
+#         agency: string
+#         notes: {
+                # user: string
+                # note: string
+                # created_date: string
+            # }[]         
+        # itsm_id: string
+#         date_opened?: string
+#         date_closed: string
+#         impacted_user_id: string
+#         impacted_user: {
+#             first_name: string
+#             last_name: string
+#             address1: string
+#             address2: string
+#             city: string
+#             state_or_province: string
+#             postal_code: string
+#             country: string
+#             email: string
+#             phone: string
+#         }
+#         location: string
+#         status: string
+#         category: string
+#         serial_numbers: string[]
+#         incidents_count: unknown
+#         priority: number
+#         events: {
+#             event_id: number
+#             priority: number
+#             event_key: string
+#             long_desc: string
+#             event_date: string
+#             event_type: string
+#             short_desc: string
+#             incidents: {
+#                 incident_id: number
+#                 start_date: string
+#                 last_modified: string
+#             }[]
+#         }[]
+#     }[]
+#     assets: {
+#         asset_tag: string
+#         asset_type: string
+#         model: string
+#         status: string
+#         warranty_date: string
+#         serial_number: string
+#         make_model: {
+#             manufacturer: string
+#             model: string
+#         }
+#         requests: {
+#             request_id: number
+#             itsm_id: string
+#             impacted_user: {
+#                 first_name: string
+#                 last_name: string
+#                 address1: string
+#                 address2: string
+#                 city: string
+#                 state_or_province: string
+#                 postal_code: string
+#                 country: string
+#                 email: string
+#                 phone: string
+#             }
+#         }[]
+#     }[]
+# }
+
+GET {{base}}/search
+Authorization: {{auth0token}}
+
+### Events Filters
+# Response.data: {
+#   priorities: number[]
+# }
+GET {{base}}/events/filters
+Authorization: {{auth0token}}
+
+### Add work order override
+# Req.body: {
+#   "override_type": "override",
+#   "itsm_id": string,
+#   "xp_event_id": number,
+#   "work_order_id": number,
+#   "username": string
+# }
+POST {{base}}/requests/work_order
+Authorization: {{auth0token}}
+
+### Cancel work order
+# Req.body: {
+#   "override_type": "cancel",
+#   "itsm_id": string,
+#   "xp_event_id": number,
+#   "work_order_id": number,
+#   "username": string
+# }
+
+POST {{base}}/requests/cancel
 Authorization: {{auth0token}}
